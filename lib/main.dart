@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konstudy/pages/group_page.dart';
 
 void main() {
   runApp(const Konstudy());
@@ -30,7 +31,7 @@ class Konstudy extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const GroupPage(),
     );
   }
 }
