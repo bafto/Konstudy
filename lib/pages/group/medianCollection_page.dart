@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MedianCollectionPage extends StatelessWidget{
   const MedianCollectionPage({super.key});

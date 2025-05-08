@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/widgets/GroupCard.dart';
+import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/widgets/cards/GroupCard.dart';
 
 class GroupOverview extends StatelessWidget {
   const GroupOverview({super.key});
@@ -25,15 +26,6 @@ class GroupOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: const Text("Gruppen")),
-        actions: [
-          IconButton(
-            onPressed: () => debugPrint("here"),
-            icon: Icon(Icons.account_circle),
-          ),
-        ],
-      ),
       body: ListView(
         children: [
           _buildGroupCard("test name", "test"),
@@ -47,19 +39,6 @@ class GroupOverview extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => debugPrint("new group"),
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.today),
-            label: "Mein Kalender",
-          ),
-          NavigationDestination(icon: Icon(Icons.groups), label: "Gruppen"),
-          NavigationDestination(
-            icon: Icon(Icons.sticky_note_2_rounded),
-            label: "Schwarzes Brett",
-          ),
-        ],
       ),
     );
   }

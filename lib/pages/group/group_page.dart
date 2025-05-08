@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/groupCalendar_page.dart';
-import 'package:konstudy/pages/medianCollection_page.dart';
-import 'package:konstudy/pages/noteCollection_page.dart';
+import 'package:konstudy/pages/group/groupCalendar_page.dart';
+import 'package:konstudy/pages/group/medianCollection_page.dart';
+import 'package:konstudy/pages/group/noteCollection_page.dart';
 
 class GroupPage extends StatefulWidget{
-  const GroupPage({super.key});
+  const GroupPage({super.key, required this.groupName});
+  final String groupName;
 
   @override
   State<GroupPage> createState() => _GroupPageState();
 }
 
 class _GroupPageState extends State<GroupPage>{
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   // Liste der Seiten, die angezeigt werden
   static const List<Widget> _pages = <Widget>[
@@ -29,15 +30,15 @@ class _GroupPageState extends State<GroupPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(title: const Text('Meine App')),
+      appBar: AppBar(title: Text(widget.groupName)),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Gruppenkalender'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Notizen'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Median'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Gruppenkalender'),
+          BottomNavigationBarItem(icon: Icon(Icons.edit_note_outlined), label: 'Notizen'),
+          BottomNavigationBarItem(icon: Icon(Icons.perm_media_outlined), label: 'Median'),
         ],
       ),
     );

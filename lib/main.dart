@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/GroupOverview.dart';
+import 'package:konstudy/pages/home/GroupOverview.dart';
+import 'package:konstudy/routes/app_routes.dart';
 
 void main() {
   runApp(const Konstudy());
@@ -12,7 +13,7 @@ class Konstudy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'KonStudy',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +32,8 @@ class Konstudy extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const GroupOverview(),
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }
