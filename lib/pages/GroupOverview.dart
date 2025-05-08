@@ -7,7 +7,18 @@ class GroupOverview extends StatelessWidget {
   Widget _buildGroupCard(String name, String desc) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
-      child: GroupCard(name: name, description: desc),
+      child: GroupCard(
+        name: name,
+        description: desc,
+        members: [
+          Icon(Icons.account_circle),
+          Icon(Icons.account_circle),
+          Icon(Icons.account_circle),
+          Icon(Icons.account_circle),
+          Icon(Icons.account_circle),
+          Icon(Icons.account_circle),
+        ],
+      ),
     );
   }
 

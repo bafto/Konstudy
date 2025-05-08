@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:konstudy/widgets/InitialsIcon.dart';
 
 class GroupCard extends StatelessWidget {
-  const GroupCard({required this.name, required this.description, super.key});
+  const GroupCard({
+    required this.name,
+    required this.description,
+    required this.members,
+    super.key,
+  });
 
   final String name;
   final String description;
+  final List<Icon> members;
 
   String _getInitials() {
     const emptyDefault = "GR";
@@ -49,9 +55,19 @@ class GroupCard extends StatelessWidget {
                   Text(description),
                   Row(
                     children: [
-                      Icon(Icons.account_circle),
-                      Icon(Icons.account_circle),
-                      Icon(Icons.account_circle),
+                      ...members
+                          .map(
+                            (icon) => Padding(
+                              padding: EdgeInsets.only(right: 2.5),
+                              child: icon,
+                            ),
+                          )
+                          .take(5),
+                      if (members.length > 5)
+                        const Text(
+                          "...",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                     ],
                   ),
                 ],
