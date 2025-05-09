@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/group/groupCalendar_page.dart';
-import 'package:konstudy/pages/group/medianCollection_page.dart';
-import 'package:konstudy/pages/group/noteCollection_page.dart';
+import 'package:konstudy/view/pages/group/groupCalendar_page.dart';
+import 'package:konstudy/view/pages/group/medianCollection_page.dart';
+import 'package:konstudy/view/pages/group/noteCollection_page.dart';
 
 class GroupPage extends StatefulWidget{
   const GroupPage({super.key, required this.groupName});
@@ -30,7 +30,15 @@ class _GroupPageState extends State<GroupPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(title: Text(widget.groupName)),
+      appBar: AppBar(
+          title: Center(child: Text(widget.groupName)),
+          actions: [
+            IconButton(
+                onPressed: () => debugPrint("here"),
+                icon: Icon(Icons.group),
+            ),
+          ],
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

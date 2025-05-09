@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/widgets/cards/GroupCard.dart';
+import 'package:konstudy/view/widgets/cards/GroupCard.dart';
 
 class GroupOverview extends StatelessWidget {
   const GroupOverview({super.key});

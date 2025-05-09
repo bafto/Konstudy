@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/group/group_page.dart';
-import 'package:konstudy/pages/home/home_page.dart';
+import 'package:konstudy/view/pages/group/group_page.dart';
+import 'package:konstudy/view/pages/home/home_page.dart';
 
 
 class AppRoutes {

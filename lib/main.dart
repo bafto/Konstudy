@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/home/GroupOverview.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 void main() {
-  runApp(const Konstudy());
+  runApp(
+    ProviderScope(child: Konstudy()),
+  );
 }
 
 class Konstudy extends StatelessWidget {

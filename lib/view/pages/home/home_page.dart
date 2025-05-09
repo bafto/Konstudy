@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/pages/home/GroupOverview.dart';
-import 'package:konstudy/pages/home/blackBoard_page.dart';
-import 'package:konstudy/pages/home/calendar_page.dart';
+import 'package:konstudy/view/pages/home/GroupOverview.dart';
+import 'package:konstudy/view/pages/home/blackBoard_page.dart';
+import 'package:konstudy/view/pages/home/my_calendar_page.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage>{
   int _selectedIndex = 1;
 
   static const List<Widget> _pages = <Widget>[
-    CalendarPage(),
+    MyCalendarPage(),
     GroupOverview(),
     BlackBoardPage(),
   ];

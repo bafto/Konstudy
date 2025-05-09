@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/widgets/InitialsIcon.dart';
+import 'package:konstudy/view/widgets/InitialsIcon.dart';
 
 class GroupCard extends StatelessWidget {
   const GroupCard({
@@ -35,7 +35,11 @@ class GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, AppRoutes.group);
+        Navigator.pushNamed(
+            context,
+            AppRoutes.group,
+            arguments: name,
+        );
       }, //Aktion bei Klick
       child: Card(
         child: IntrinsicHeight(

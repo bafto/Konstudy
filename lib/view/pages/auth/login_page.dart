@@ -5,7 +5,6 @@ class LoginPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Center(child: Text('Log in'));
   }
 }
