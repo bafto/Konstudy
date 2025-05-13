@@ -7,4 +7,5 @@ abstract class ICalendarController extends ChangeNotifier{
   Future<void> loadEvents();
   Future<void> addEvent(CalendarEvent event);
   Future<void> deleteEvent(int eventId);
+  Future<void> updateEvent(CalendarEvent event);
 }

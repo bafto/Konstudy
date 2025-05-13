@@ -51,5 +51,11 @@ class CalendarControllerImpl extends ChangeNotifier implements ICalendarControll
     notifyListeners();
   }
 
+  @override
+  Future<void> updateEvent(CalendarEvent event) async{
+    await _service.updateEvent(event);
+    notifyListeners();
+  }
+
 
 }

@@ -43,6 +43,18 @@ class CalendarService implements ICalendarService{
   Future<void> deleteEvent(int eventId) async{
     await Future.delayed(Duration(seconds: 1));//Simuliert Netwerkaufruf
     _eventList.removeWhere((event) => event.id == eventId);
-
   }
+
+  @override
+  Future<void> updateEvent(CalendarEvent newEvent) async {
+    await Future.delayed(Duration(seconds: 1)); // Simuliert Netzwerkaufruf
+
+    final index = _eventList.indexWhere((event) => event.id == newEvent.id);
+    if (index != -1) {
+      _eventList[index] = newEvent;
+    } else {
+      throw Exception('Event mit ID ${newEvent.id} nicht gefunden');
+    }
+  }
+
 }

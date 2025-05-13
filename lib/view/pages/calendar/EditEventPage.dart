@@ -3,34 +3,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:intl/intl.dart';
 import 'package:konstudy/models/calendar/RepeatType.dart';
 
 
-class AddEventPage extends ConsumerStatefulWidget {
-  const AddEventPage({super.key});
+
+class EditEventPage extends ConsumerStatefulWidget {
+  final CalendarEventData event;
+
+  const EditEventPage({super.key, required this.event});
 
   @override
-  ConsumerState<AddEventPage> createState() => _AddEventPageState();
+  ConsumerState<EditEventPage> createState() => _EditEventPageState();
 }
 
-class _AddEventPageState extends ConsumerState<AddEventPage> {
+class _EditEventPageState extends ConsumerState<EditEventPage> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _startController = TextEditingController();
-  final _endController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _startController;
+  late TextEditingController _endController;
 
 
+  late CalendarEvent _myevent;
   DateTime? _startDateTime;
   DateTime? _endDateTime;
+  late RepeatType _selectedRepeat;
 
-  //Kombiniert schowDatePicker für Datum und dann schowTimePicker für die Uhrzeit
+  @override
+  void initState() {
+    super.initState();
+    _myevent = widget.event.event as CalendarEvent;
+
+
+    _titleController = TextEditingController(text: _myevent.title);
+    _descriptionController = TextEditingController(text: _myevent.description ?? '');
+    _startDateTime = _myevent.start;
+    _endDateTime = _myevent.end;
+    _selectedRepeat = _myevent.repeat ?? RepeatType.NONE;
+
+    _startController = TextEditingController(text: _formatDateTime(_startDateTime!));
+    _endController = TextEditingController(text: _formatDateTime(_endDateTime!));
+  }
+
+  String _formatDateTime(DateTime dt) {
+    final date = DateFormat.yMd().format(dt);
+    final time = DateFormat.Hm().format(dt);
+    return '$date $time';
+  }
+
   Future<void> _pickDateTime({
     required TextEditingController controller,
     required DateTime? initialDateTime,
     required ValueChanged<DateTime> onConfirmed,
   }) async {
-    // 1. Datum wählen
     final date = await showDatePicker(
       context: context,
       initialDate: initialDateTime ?? DateTime.now(),
@@ -39,139 +65,97 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
     );
     if (date == null) return;
 
-    // 2. Uhrzeit wählen
     final time = await showTimePicker(
       context: context,
-      initialTime: initialDateTime != null
-          ? TimeOfDay.fromDateTime(initialDateTime)
-          : TimeOfDay.now(),
+      initialTime: TimeOfDay.fromDateTime(initialDateTime ?? DateTime.now()),
     );
     if (time == null) return;
 
-    final combined = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
+    final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
     onConfirmed(combined);
-
-    // Feld-Text formatieren
-    controller.text = '${date.toLocal().toIso8601String().split('T')[0]} '
-        '${time.format(context)}';
+    controller.text = _formatDateTime(combined);
   }
-  RepeatType _selectedRepeat = RepeatType.NONE;
 
   @override
   Widget build(BuildContext context) {
-    final eventController = ref.watch(calendarControllerProvider);
+    final eventController = ref.read(calendarControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Neues Event hinzufügen")),
+      appBar: AppBar(title: const Text("Event bearbeiten")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
-              // Titel
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Titel',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte einen Titel eingeben' : null,
+                decoration: const InputDecoration(labelText: 'Titel'),
+                validator: (v) => v == null || v.isEmpty ? 'Titel erforderlich' : null,
               ),
               const SizedBox(height: 16),
-
-              // Start Datum + Uhrzeit
               TextFormField(
                 controller: _startController,
                 readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Start (Datum & Uhrzeit)',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(labelText: 'Startzeit'),
                 onTap: () => _pickDateTime(
                   controller: _startController,
                   initialDateTime: _startDateTime,
                   onConfirmed: (dt) => _startDateTime = dt,
                 ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte Start wählen' : null,
               ),
               const SizedBox(height: 16),
-
-              // End Datum + Uhrzeit
               TextFormField(
                 controller: _endController,
                 readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Ende (Datum & Uhrzeit)',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(labelText: 'Endzeit'),
                 onTap: () => _pickDateTime(
                   controller: _endController,
                   initialDateTime: _endDateTime,
                   onConfirmed: (dt) => _endDateTime = dt,
                 ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte Ende wählen' : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<RepeatType>(
                 value: _selectedRepeat,
-                decoration: const InputDecoration(
-                  labelText: 'Wiederholung',
-                  border: OutlineInputBorder(),
-                ),
                 items: RepeatType.values.map((type) {
                   return DropdownMenuItem(
                     value: type,
                     child: Text(_repeatTypeLabel(type)),
                   );
                 }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
+                onChanged: (val) {
+                  if (val != null) {
                     setState(() {
-                      _selectedRepeat = value;
+                      _selectedRepeat = val;
                     });
                   }
                 },
+                decoration: const InputDecoration(labelText: 'Wiederholung'),
               ),
               const SizedBox(height: 24),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Beschreibung',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(labelText: 'Beschreibung'),
                 maxLines: 3,
               ),
-              const SizedBox(height: 16),
-
-              // Speichern-Button
               ElevatedButton(
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
 
-                  // neues Event bauen
-                  final newEvent = CalendarEvent(
-                    id: 0,
+                  final updated = _myevent.copyWith(
                     title: _titleController.text,
+                    description: _descriptionController.text,
                     start: _startDateTime!,
                     end: _endDateTime!,
                     repeat: _selectedRepeat,
-                    description: _descriptionController.text,
                   );
 
-                  await eventController.addEvent(newEvent);
+                  await eventController.updateEvent(updated);
                   Navigator.pop(context);
                 },
-                child: const Text('Event speichern'),
+                child: const Text('Änderungen speichern'),
               ),
             ],
           ),

@@ -3,16 +3,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:konstudy/routes/app_routes.dart';
+import 'package:intl/intl.dart';
 
 
 
 class EventDetailsPage extends ConsumerWidget {
   final CalendarEventData event;
 
+
   const EventDetailsPage({super.key, required this.event});
+
+  String _getRepeatText(CalendarEventData event) {
+    final recurrence = event.recurrenceSettings;
+    if (recurrence == null || recurrence.frequency == RepeatFrequency.doNotRepeat) {
+      return 'Keine Wiederholung';
+    }
+
+    switch (recurrence.frequency) {
+      case RepeatFrequency.daily:
+        return 'Täglich';
+      case RepeatFrequency.weekly:
+        return 'Wöchentlich';
+      case RepeatFrequency.monthly:
+        return 'Monatlich';
+      case RepeatFrequency.yearly:
+        return 'Jährlich';
+      default:
+        return 'Wiederholt sich';
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    CalendarEvent _myevent = event.event as CalendarEvent;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Event Details"),
@@ -23,7 +50,11 @@ class EventDetailsPage extends ConsumerWidget {
               // Aktionen basierend auf der Auswahl durchführen
               if (value == 'Bearbeiten') {
                 // Logik zum Bearbeiten des Events
-                print("Edit Event");
+                Navigator.pushNamed(
+                    context,
+                    AppRoutes.editEvent,
+                    arguments: event
+                );
               } else if (value == 'Löschen') {
                 // Event löschen
                 _deleteEvent(context, ref);
@@ -44,18 +75,83 @@ class EventDetailsPage extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Titel: ${event.title}", style: const TextStyle(fontSize: 20)),
-            const SizedBox(height: 10),
-            Text("Start: ${event.startTime}"),
-            Text("Ende: ${event.endTime}"),
-            if (event.description != null) ...[
-              const SizedBox(height: 10),
-              Text("Beschreibung: ${event.description}"),
-            ],
-          ],
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.title, color: Colors.blue),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        event.title ?? 'Kein Titel',
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today, color: Colors.green),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Start: ${DateFormat.yMMMMd().add_Hm().format(event.startTime!)}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (event.endTime != null)
+                  Row(
+                    children: [
+                      const Icon(Icons.event, color: Colors.red),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Ende: ${DateFormat.yMMMMd().add_Hm().format(event.endTime!)}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.repeat, color: Colors.purple),
+                    const SizedBox(width: 8),
+                    Text(
+                      _getRepeatText(event),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Beschreibung:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _myevent.description ?? '',
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                  constraints: const BoxConstraints(minHeight: 80),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

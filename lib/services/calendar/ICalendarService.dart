@@ -6,4 +6,6 @@ abstract class ICalendarService{
   Future<void> saveEvent(CalendarEvent event);
 
   Future<void> deleteEvent(int eventId);
+
+  Future<void> updateEvent(CalendarEvent event);
 }

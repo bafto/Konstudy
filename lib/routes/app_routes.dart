@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/view/pages/calendar/AddEventPage.dart';
+import 'package:konstudy/view/pages/calendar/EditEventPage.dart';
 import 'package:konstudy/view/pages/calendar/EventDetailsPage.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
@@ -12,6 +13,7 @@ class AppRoutes {
   static const String group = '/group';
   static const String addEvent = '/addEvent';
   static const String detailsEvent = '/detailsEvent';
+  static const String editEvent = '/editEvent';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -31,6 +33,12 @@ class AppRoutes {
         final event = settings.arguments as CalendarEventData;
         return MaterialPageRoute(
             builder: (_) => EventDetailsPage(event: event)
+        );
+        
+      case editEvent:
+        final event = settings.arguments as CalendarEventData;
+        return MaterialPageRoute(
+            builder: (_) => EditEventPage(event: event)
         );
 
       default:

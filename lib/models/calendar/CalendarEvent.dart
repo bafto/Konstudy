@@ -6,6 +6,7 @@ class CalendarEvent {
   final DateTime start;
   final DateTime end;
   final RepeatType repeat;
+  final String description;
 
   CalendarEvent({
     required this.id,
@@ -13,6 +14,7 @@ class CalendarEvent {
     required this.start,
     required this.end,
     this.repeat = RepeatType.NONE,
+    this.description = "",
   });
 
   // Optional: Für JSON-Speicherung
@@ -26,6 +28,7 @@ class CalendarEvent {
             (e) => e.toString() == 'RepeatType.${json['repeat']}',
         orElse: () => RepeatType.NONE,
       ),
+      description: json['description'] as String,
     );
   }
 
@@ -35,6 +38,25 @@ class CalendarEvent {
       'start': start.toIso8601String(),
       'end': end.toIso8601String(),
       'repeat': repeat.name,
+      'description': description,
     };
+  }
+
+  CalendarEvent copyWith({
+    int? id,
+    String? title,
+    String? description,
+    DateTime? start,
+    DateTime? end,
+    RepeatType? repeat,
+  }) {
+    return CalendarEvent(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      start: start ?? this.start,
+      end: end ?? this.end,
+      repeat: repeat ?? this.repeat,
+    );
   }
 }
