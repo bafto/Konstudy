@@ -1,12 +1,14 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:konstudy/services/calendar/ICalendarService.dart';
 import 'package:konstudy/controllers/calendar/ICalendarController.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
 
 
 
-class CalendarControllerImpl implements ICalendarController {
+
+class CalendarControllerImpl extends ChangeNotifier implements ICalendarController {
   final ICalendarService _service;
 
   CalendarControllerImpl(this._service);
@@ -23,33 +25,31 @@ class CalendarControllerImpl implements ICalendarController {
   @override
   Future<void> loadEvents() async {
     _isLoading = true;
-    final fetched = await _service.fetchEvents();
-    _events.clear();
-    _events.addAll(fetched);
-    _isLoading = false;
+    notifyListeners();
+    try {
+      final fetched = await _service.fetchEvents();
+      _events.clear();
+      _events.addAll(fetched);
+    } catch (e) {
+      // Fehlerbehandlung falls Fetch fehlschlägt
+      print("Fehler beim Laden der Events: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners(); // Benachrichtige die UI, dass der Ladeprozess abgeschlossen ist.
+    }
   }
 
   @override
-  void addListener(VoidCallback listener) {
-    // TODO: implement addListener
+  Future<void> addEvent(CalendarEvent event) async{
+    await _service.saveEvent(event);
+    notifyListeners();
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
+  Future<void> deleteEvent(int eventId) async{
+    await _service.deleteEvent(eventId);
+    notifyListeners();
   }
 
-  @override
-  // TODO: implement hasListeners
-  bool get hasListeners => throw UnimplementedError();
 
-  @override
-  void notifyListeners() {
-    // TODO: implement notifyListeners
-  }
-
-  @override
-  void removeListener(VoidCallback listener) {
-    // TODO: implement removeListener
-  }
 }

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:konstudy/view/pages/group/groupCalendar_page.dart';
 import 'package:konstudy/view/pages/group/medianCollection_page.dart';
 import 'package:konstudy/view/pages/group/noteCollection_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+
+
 
 class GroupPage extends StatefulWidget{
   const GroupPage({super.key, required this.groupName});
@@ -26,6 +30,7 @@ class _GroupPageState extends State<GroupPage>{
       _selectedIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context){

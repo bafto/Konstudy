@@ -9,7 +9,7 @@ final calendarServiceProvider = Provider<ICalendarService>((ref) {
   return CalendarService(); //echte Implementierung
 });
 
-final calendarControllerProvider = ChangeNotifierProvider<ICalendarController>((ref) {
+final calendarControllerProvider = ChangeNotifierProvider.autoDispose<ICalendarController>((ref) {
   final service = ref.read(calendarServiceProvider);
   final controller = CalendarControllerImpl(service);
   controller.loadEvents(); // automatisch beim Erstellen laden
