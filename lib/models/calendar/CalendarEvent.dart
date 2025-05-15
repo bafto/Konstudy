@@ -25,7 +25,7 @@ class CalendarEvent {
       start: DateTime.parse(json['start'].toString()),
       end: DateTime.parse(json['end'].toString()),
       repeat: RepeatType.values.firstWhere(
-            (e) => e.toString() == 'RepeatType.${json['repeat']}',
+        (e) => e.toString() == 'RepeatType.${json['repeat']}',
         orElse: () => RepeatType.NONE,
       ),
       description: json['description'] as String,

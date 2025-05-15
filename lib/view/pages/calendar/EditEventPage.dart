@@ -1,12 +1,10 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendar_view/calendar_view.dart';
+import 'package:intl/intl.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
-import 'package:intl/intl.dart';
 import 'package:konstudy/models/calendar/RepeatType.dart';
-
-
 
 class EditEventPage extends ConsumerStatefulWidget {
   final CalendarEventData event;
@@ -24,7 +22,6 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
   late TextEditingController _startController;
   late TextEditingController _endController;
 
-
   late CalendarEvent _myevent;
   DateTime? _startDateTime;
   DateTime? _endDateTime;
@@ -35,15 +32,20 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
     super.initState();
     _myevent = widget.event.event as CalendarEvent;
 
-
     _titleController = TextEditingController(text: _myevent.title);
-    _descriptionController = TextEditingController(text: _myevent.description ?? '');
+    _descriptionController = TextEditingController(
+      text: _myevent.description ?? '',
+    );
     _startDateTime = _myevent.start;
     _endDateTime = _myevent.end;
     _selectedRepeat = _myevent.repeat ?? RepeatType.NONE;
 
-    _startController = TextEditingController(text: _formatDateTime(_startDateTime!));
-    _endController = TextEditingController(text: _formatDateTime(_endDateTime!));
+    _startController = TextEditingController(
+      text: _formatDateTime(_startDateTime!),
+    );
+    _endController = TextEditingController(
+      text: _formatDateTime(_endDateTime!),
+    );
   }
 
   String _formatDateTime(DateTime dt) {
@@ -71,7 +73,13 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
     );
     if (time == null) return;
 
-    final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    final combined = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
     onConfirmed(combined);
     controller.text = _formatDateTime(combined);
   }
@@ -91,39 +99,43 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Titel'),
-                validator: (v) => v == null || v.isEmpty ? 'Titel erforderlich' : null,
+                validator:
+                    (v) => v == null || v.isEmpty ? 'Titel erforderlich' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _startController,
                 readOnly: true,
                 decoration: const InputDecoration(labelText: 'Startzeit'),
-                onTap: () => _pickDateTime(
-                  controller: _startController,
-                  initialDateTime: _startDateTime,
-                  onConfirmed: (dt) => _startDateTime = dt,
-                ),
+                onTap:
+                    () => _pickDateTime(
+                      controller: _startController,
+                      initialDateTime: _startDateTime,
+                      onConfirmed: (dt) => _startDateTime = dt,
+                    ),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _endController,
                 readOnly: true,
                 decoration: const InputDecoration(labelText: 'Endzeit'),
-                onTap: () => _pickDateTime(
-                  controller: _endController,
-                  initialDateTime: _endDateTime,
-                  onConfirmed: (dt) => _endDateTime = dt,
-                ),
+                onTap:
+                    () => _pickDateTime(
+                      controller: _endController,
+                      initialDateTime: _endDateTime,
+                      onConfirmed: (dt) => _endDateTime = dt,
+                    ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<RepeatType>(
                 value: _selectedRepeat,
-                items: RepeatType.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(_repeatTypeLabel(type)),
-                  );
-                }).toList(),
+                items:
+                    RepeatType.values.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(_repeatTypeLabel(type)),
+                      );
+                    }).toList(),
                 onChanged: (val) {
                   if (val != null) {
                     setState(() {

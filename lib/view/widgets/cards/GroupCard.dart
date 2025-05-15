@@ -34,12 +34,8 @@ class GroupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(
-            context,
-            AppRoutes.group,
-            arguments: name,
-        );
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.group, arguments: name);
       }, //Aktion bei Klick
       child: Card(
         child: IntrinsicHeight(
@@ -59,7 +55,10 @@ class GroupCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                     Text(description),
                     Row(
@@ -67,10 +66,10 @@ class GroupCard extends StatelessWidget {
                         ...members
                             .map(
                               (icon) => Padding(
-                            padding: EdgeInsets.only(right: 2.5),
-                            child: icon,
-                          ),
-                        )
+                                padding: EdgeInsets.only(right: 2.5),
+                                child: icon,
+                              ),
+                            )
                             .take(5),
                         if (members.length > 5)
                           const Text(
@@ -85,8 +84,7 @@ class GroupCard extends StatelessWidget {
             ],
           ),
         ),
-      )
+      ),
     );
-
   }
 }

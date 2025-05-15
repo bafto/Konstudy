@@ -1,7 +1,1 @@
-enum RepeatType{
-  NONE,
-  DAILY,
-  WEEKLY,
-  MONTHLY,
-  YEARLY
-}
+enum RepeatType { NONE, DAILY, WEEKLY, MONTHLY, YEARLY }

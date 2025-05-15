@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GroupProfilePage extends StatelessWidget{
+class GroupProfilePage extends StatelessWidget {
   const GroupProfilePage({super.key});
 
   @override

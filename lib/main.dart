@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 void main() {
-  runApp(
-    ProviderScope(child: Konstudy()),
-  );
+  runApp(ProviderScope(child: Konstudy()));
 }
 
 class Konstudy extends StatelessWidget {

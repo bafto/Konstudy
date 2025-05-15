@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
 import 'package:konstudy/models/calendar/RepeatType.dart';
-
 
 class AddEventPage extends ConsumerStatefulWidget {
   const AddEventPage({super.key});
@@ -19,7 +17,6 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
   final _startController = TextEditingController();
   final _endController = TextEditingController();
   final _descriptionController = TextEditingController();
-
 
   DateTime? _startDateTime;
   DateTime? _endDateTime;
@@ -42,9 +39,10 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
     // 2. Uhrzeit wählen
     final time = await showTimePicker(
       context: context,
-      initialTime: initialDateTime != null
-          ? TimeOfDay.fromDateTime(initialDateTime)
-          : TimeOfDay.now(),
+      initialTime:
+          initialDateTime != null
+              ? TimeOfDay.fromDateTime(initialDateTime)
+              : TimeOfDay.now(),
     );
     if (time == null) return;
 
@@ -58,9 +56,11 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
     onConfirmed(combined);
 
     // Feld-Text formatieren
-    controller.text = '${date.toLocal().toIso8601String().split('T')[0]} '
+    controller.text =
+        '${date.toLocal().toIso8601String().split('T')[0]} '
         '${time.format(context)}';
   }
+
   RepeatType _selectedRepeat = RepeatType.NONE;
 
   @override
@@ -82,8 +82,11 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   labelText: 'Titel',
                   border: OutlineInputBorder(),
                 ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte einen Titel eingeben' : null,
+                validator:
+                    (v) =>
+                        v == null || v.isEmpty
+                            ? 'Bitte einen Titel eingeben'
+                            : null,
               ),
               const SizedBox(height: 16),
 
@@ -95,13 +98,14 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   labelText: 'Start (Datum & Uhrzeit)',
                   border: OutlineInputBorder(),
                 ),
-                onTap: () => _pickDateTime(
-                  controller: _startController,
-                  initialDateTime: _startDateTime,
-                  onConfirmed: (dt) => _startDateTime = dt,
-                ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte Start wählen' : null,
+                onTap:
+                    () => _pickDateTime(
+                      controller: _startController,
+                      initialDateTime: _startDateTime,
+                      onConfirmed: (dt) => _startDateTime = dt,
+                    ),
+                validator:
+                    (v) => v == null || v.isEmpty ? 'Bitte Start wählen' : null,
               ),
               const SizedBox(height: 16),
 
@@ -113,13 +117,14 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   labelText: 'Ende (Datum & Uhrzeit)',
                   border: OutlineInputBorder(),
                 ),
-                onTap: () => _pickDateTime(
-                  controller: _endController,
-                  initialDateTime: _endDateTime,
-                  onConfirmed: (dt) => _endDateTime = dt,
-                ),
-                validator: (v) =>
-                v == null || v.isEmpty ? 'Bitte Ende wählen' : null,
+                onTap:
+                    () => _pickDateTime(
+                      controller: _endController,
+                      initialDateTime: _endDateTime,
+                      onConfirmed: (dt) => _endDateTime = dt,
+                    ),
+                validator:
+                    (v) => v == null || v.isEmpty ? 'Bitte Ende wählen' : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<RepeatType>(
@@ -128,12 +133,13 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   labelText: 'Wiederholung',
                   border: OutlineInputBorder(),
                 ),
-                items: RepeatType.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(_repeatTypeLabel(type)),
-                  );
-                }).toList(),
+                items:
+                    RepeatType.values.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(_repeatTypeLabel(type)),
+                      );
+                    }).toList(),
                 onChanged: (value) {
                   if (value != null) {
                     setState(() {
@@ -169,7 +175,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   );
 
                   await eventController.addEvent(newEvent);
-                  Navigator.pop(context);
+                  if (context.mounted) Navigator.pop(context);
                 },
                 child: const Text('Event speichern'),
               ),

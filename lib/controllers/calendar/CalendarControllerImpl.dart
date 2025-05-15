@@ -1,14 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
-import 'package:konstudy/services/calendar/ICalendarService.dart';
 import 'package:konstudy/controllers/calendar/ICalendarController.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:konstudy/services/calendar/ICalendarService.dart';
 
-
-
-
-class CalendarControllerImpl extends ChangeNotifier implements ICalendarController {
+class CalendarControllerImpl extends ChangeNotifier
+    implements ICalendarController {
   final ICalendarService _service;
 
   CalendarControllerImpl(this._service);
@@ -40,22 +36,20 @@ class CalendarControllerImpl extends ChangeNotifier implements ICalendarControll
   }
 
   @override
-  Future<void> addEvent(CalendarEvent event) async{
+  Future<void> addEvent(CalendarEvent event) async {
     await _service.saveEvent(event);
     notifyListeners();
   }
 
   @override
-  Future<void> deleteEvent(int eventId) async{
+  Future<void> deleteEvent(int eventId) async {
     await _service.deleteEvent(eventId);
     notifyListeners();
   }
 
   @override
-  Future<void> updateEvent(CalendarEvent event) async{
+  Future<void> updateEvent(CalendarEvent event) async {
     await _service.updateEvent(event);
     notifyListeners();
   }
-
-
 }

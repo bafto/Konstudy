@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget{
+class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override

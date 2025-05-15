@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
-class MediaCard extends StatelessWidget{
+class MediaCard extends StatelessWidget {
   final String filename;
 
-  const MediaCard({
-    super.key,
-    required this.filename
-  });
+  const MediaCard({super.key, required this.filename});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,9 @@ class MediaCard extends StatelessWidget{
         },
         child: Card(
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           margin: const EdgeInsets.all(16),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -27,10 +26,7 @@ class MediaCard extends StatelessWidget{
               children: [
                 const Icon(Icons.download_rounded),
                 const SizedBox(width: 12),
-                Text(
-                  filename,
-                  style: const TextStyle(fontSize: 16),
-                ),
+                Text(filename, style: const TextStyle(fontSize: 16)),
               ],
             ),
           ),
