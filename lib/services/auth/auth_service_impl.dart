@@ -1,13 +1,20 @@
 import 'package:konstudy/services/auth/IAuthService.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthService extends IAuthService{
+class AuthService extends IAuthService {
   final SupabaseClient _client = Supabase.instance.client;
 
   @override
-  Future<AuthResponse> signUp(String email, String password, String name) async{
-    final response = await _client.auth.signUp(password: password, email: email);
-    if(response.user != null){
+  Future<AuthResponse> signUp(
+    String email,
+    String password,
+    String name,
+  ) async {
+    final response = await _client.auth.signUp(
+      password: password,
+      email: email,
+    );
+    if (response.user != null) {
       await _client.from('users').insert({
         'id': response.user!.id,
         'name': name,

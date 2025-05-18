@@ -3,7 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:konstudy/controllers/auth/IAuthController.dart';
 import 'package:konstudy/services/auth/IAuthService.dart';
 
-class AuthControllerImpl extends StateNotifier<AsyncValue<User?>> implements IAuthController {
+class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
+    implements IAuthController {
   final IAuthService _authService;
 
   AuthControllerImpl(this._authService) : super(const AsyncValue.data(null));

@@ -6,12 +6,12 @@ import 'IAuthController.dart';
 
 import 'AuthControllerImpl.dart';
 
-
-final authServiceProvider =Provider<IAuthService>((ref) {
+final authServiceProvider = Provider<IAuthService>((ref) {
   return AuthService();
 });
 
-final authControllerProvider = StateNotifierProvider<IAuthController, AsyncValue<User?>>((ref) {
-  final authService = ref.read(authServiceProvider);
-  return AuthControllerImpl(authService);
-});
+final authControllerProvider =
+    StateNotifierProvider<IAuthController, AsyncValue<User?>>((ref) {
+      final authService = ref.read(authServiceProvider);
+      return AuthControllerImpl(authService);
+    });

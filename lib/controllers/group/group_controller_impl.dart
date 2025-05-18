@@ -1,5 +1,5 @@
-import 'package:konstudy/controllers/group/IGroupController.dart';
-import 'package:konstudy/models/group/Median.dart';
+import 'package:konstudy/controllers/group/igroup_controller.dart';
+import 'package:konstudy/models/group/media.dart';
 import 'package:konstudy/models/group/Note.dart';
 import 'package:konstudy/services/group/IGroupService.dart';
 
@@ -9,13 +9,13 @@ class GroupControllerImpl implements IGroupController {
   GroupControllerImpl(this._service);
 
   List<Note> _notes = [];
-  List<Median> _medians = [];
+  List<Media> _medians = [];
 
   @override
   List<Note> get notes => _notes;
 
   @override
-  List<Median> get medians => _medians;
+  List<Media> get medians => _medians;
 
   @override
   Future<void> loadNotes() async {

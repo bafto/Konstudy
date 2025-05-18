@@ -1,4 +1,4 @@
-import 'package:konstudy/models/group/Median.dart';
+import 'package:konstudy/models/group/media.dart';
 import 'package:konstudy/models/group/Note.dart';
 import 'package:konstudy/services/group/IGroupService.dart';
 
@@ -16,13 +16,13 @@ class GroupService implements IGroupService {
   }
 
   @override
-  Future<List<Median>> fetchMedian() async {
+  Future<List<Media>> fetchMedian() async {
     await Future.delayed(
       Duration(seconds: 1),
     ); //simulation eines Netzwerkaufruf
     return [
-      Median(id: 1, fileName: "Zusammenfassung.pdf"),
-      Median(id: 2, fileName: "Tafelbild.png"),
+      Media(id: 1, fileName: "Zusammenfassung.pdf"),
+      Media(id: 2, fileName: "Tafelbild.png"),
     ];
   }
 }
