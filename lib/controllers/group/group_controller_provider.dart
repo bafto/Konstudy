@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/group/GroupControllerImpl.dart';
-import 'package:konstudy/controllers/group/IGroupController.dart';
-import 'package:konstudy/services/group/GroupService.dart';
-import 'package:konstudy/services/group/IGroupService.dart';
+import 'package:konstudy/controllers/group/group_controller_impl.dart';
+import 'package:konstudy/controllers/group/igroup_controller.dart';
+import 'package:konstudy/services/group/group_service.dart';
+import 'package:konstudy/services/group/igroup_service.dart';
 
 final groupServiceProvider = Provider<IGroupService>((ref) {
   return GroupService(); //echte Implementierung

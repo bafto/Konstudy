@@ -2,11 +2,11 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
-import 'package:konstudy/models/calendar/RepeatType.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/view/widgets/views/CustomDayView.dart';
-import 'package:konstudy/view/widgets/views/CustomMonthView.dart';
-import 'package:konstudy/view/widgets/views/CustomWeekView.dart';
+import 'package:konstudy/view/widgets/views/custom_day_view.dart';
+import 'package:konstudy/view/widgets/views/custom_month_view.dart';
+import 'package:konstudy/view/widgets/views/custom_week_view.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});
@@ -86,13 +86,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          final result = await Navigator.pushNamed(context, AppRoutes.addEvent);
-
-          // Wenn der result null ist, bedeutet es, dass wir zur Seite zurückgekehrt sind
-          // und einen neuen Fetch-Vorgang auslösen wollen.
-          if (result != null) {
-            await ref.read(calendarControllerProvider).loadEvents();
-          }
+          AddEventPageRoute().push<void>(context);
         },
       ),
     );

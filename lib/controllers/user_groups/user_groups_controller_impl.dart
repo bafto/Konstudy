@@ -1,6 +1,6 @@
-import 'package:konstudy/controllers/user_groups/IUserGroupsController.dart';
+import 'package:konstudy/controllers/user_groups/iuser_groups_controller.dart';
 import 'package:konstudy/models/user_groups/group.dart';
-import 'package:konstudy/services/user_groups/IUserGroupsService.dart';
+import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
 
 class UserGroupsControllerImpl implements IUserGroupsController {
   final IUserGroupsService _service;

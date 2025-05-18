@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/calendar/CalendarControllerImpl.dart';
-import 'package:konstudy/controllers/calendar/ICalendarController.dart';
-import 'package:konstudy/services/calendar/CalendarService.dart';
-import 'package:konstudy/services/calendar/ICalendarService.dart';
+import 'package:konstudy/controllers/calendar/calendar_controller_impl.dart';
+import 'package:konstudy/controllers/calendar/icalendar_controller.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/services/calendar/calendar_service.dart';
+import 'package:konstudy/services/calendar/icalendar_service.dart';
 
 final calendarServiceProvider = Provider<ICalendarService>((ref) {
   return CalendarService(); //echte Implementierung
@@ -15,3 +16,11 @@ final calendarControllerProvider =
       controller.loadEvents(); // automatisch beim Erstellen laden
       return controller;
     });
+
+final eventByIdProvider = FutureProvider.family<CalendarEvent?, int>((
+  ref,
+  eventId,
+) async {
+  final controller = ref.watch(calendarControllerProvider);
+  return await controller.getEventById(eventId);
+});

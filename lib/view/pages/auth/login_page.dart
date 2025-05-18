@@ -91,10 +91,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     );
 
                                 // Wenn kein Fehler: Zur HomePage weiterleiten
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppRoutes.home,
-                                );
+                                HomeScreenRoute().go(context);
                               } catch (e) {
                                 // Fehler abfangen und anzeigen
                                 scaffoldMessenger.showSnackBar(

@@ -1,60 +1,102 @@
-import 'package:calendar_view/calendar_view.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:konstudy/routes/AuthCheckWrapper.dart';
-import 'package:konstudy/view/pages/calendar/AddEventPage.dart';
-import 'package:konstudy/view/pages/calendar/EditEventPage.dart';
-import 'package:konstudy/view/pages/calendar/EventDetailsPage.dart';
+import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
+import 'package:konstudy/routes/auth_check_wrapper.dart';
+import 'package:konstudy/view/pages/calendar/add_event_page.dart';
+import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
+import 'package:konstudy/view/pages/calendar/event_details_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
 
-// TODO: use goroute
-class AppRoutes {
-  static const home = '/';
-  static const group = '/group';
-  static const addEvent = '/addEvent';
-  static const detailsEvent = '/detailsEvent';
-  static const editEvent = '/editEvent';
-  static const String auth = '/auth';
+part 'app_routes.g.dart';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case home:
-        return MaterialPageRoute(
-          builder: (_) => const AuthCheckWrapper(child: HomePage()),
-        );
+@TypedGoRoute<HomeScreenRoute>(
+  path: '/',
+  routes: [
+    TypedGoRoute<GroupPageRoute>(path: 'group/:groupName'),
+    TypedGoRoute<AddEventPageRoute>(path: 'addEvent'),
+    TypedGoRoute<EventDetailsPageRoute>(path: 'detailsEvent'),
+    TypedGoRoute<EditEventPageRoute>(path: 'editEvent'),
+    TypedGoRoute(path: 'auth'),
+  ],
+)
+class HomeScreenRoute extends GoRouteData {
+  const HomeScreenRoute();
 
-      case group:
-        final groupName = settings.arguments as String;
-        return MaterialPageRoute(
-          builder:
-              (_) => AuthCheckWrapper(child: GroupPage(groupName: groupName)),
-        );
-
-      case addEvent:
-        return MaterialPageRoute(
-          builder: (_) => const AuthCheckWrapper(child: AddEventPage()),
-        );
-
-      case detailsEvent:
-        final event = settings.arguments as CalendarEventData;
-        return MaterialPageRoute(
-          builder:
-              (_) => AuthCheckWrapper(child: EventDetailsPage(event: event)),
-        );
-
-      case editEvent:
-        final event = settings.arguments as CalendarEventData;
-        return MaterialPageRoute(
-          builder: (_) => AuthCheckWrapper(child: EditEventPage(event: event)),
-        );
-
-      default:
-        return MaterialPageRoute(
-          builder:
-              (_) => const Scaffold(
-                body: Center(child: Text('Seite nicht gefunden')),
-              ),
-        );
-    }
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AuthCheckWrapper(child: HomePage());
   }
 }
+
+class GroupPageRoute extends GoRouteData {
+  final String groupName;
+  const GroupPageRoute({required this.groupName});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return AuthCheckWrapper(child: GroupPage(groupName: groupName));
+  }
+}
+
+class AddEventPageRoute extends GoRouteData {
+  const AddEventPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AuthCheckWrapper(child: AddEventPage());
+  }
+}
+
+class EventDetailsPageRoute extends GoRouteData {
+  final int eventId;
+  const EventDetailsPageRoute({required this.eventId});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return AuthCheckWrapper(
+      child: Consumer(
+        builder: (context, ref, child) {
+          final event = ref.watch(eventByIdProvider(eventId));
+          return event.when(
+            data: (event) => EventDetailsPage(event: event!),
+            error: (error, stack) => const Center(child: Text('Fehler')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class EditEventPageRoute extends GoRouteData {
+  final int eventId;
+  const EditEventPageRoute({required this.eventId});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return AuthCheckWrapper(
+      child: Consumer(
+        builder: (context, ref, child) {
+          final event = ref.watch(eventByIdProvider(eventId));
+          return event.when(
+            data: (event) => EditEventPage(event: event!),
+            error: (error, stack) => const Center(child: Text('Fehler')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          );
+        },
+      ),
+    );
+  }
+}
+
+final GoRouter router = GoRouter(
+  initialLocation: '/',
+  routes: $appRoutes,
+  errorBuilder: (context, state) {
+    return const Scaffold(
+      body: Center(child: Text('Fehler: Seite nicht gefunden')),
+    );
+  },
+);

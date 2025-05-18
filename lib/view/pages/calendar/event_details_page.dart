@@ -3,39 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class EventDetailsPage extends ConsumerWidget {
-  final CalendarEventData event;
+  final CalendarEvent event;
 
   const EventDetailsPage({super.key, required this.event});
 
-  String _getRepeatText(CalendarEventData event) {
-    final recurrence = event.recurrenceSettings;
-    if (recurrence == null ||
-        recurrence.frequency == RepeatFrequency.doNotRepeat) {
-      return 'Keine Wiederholung';
-    }
-
-    switch (recurrence.frequency) {
-      case RepeatFrequency.daily:
+  String _getRepeatText(CalendarEvent event) {
+    switch (event.repeat) {
+      case RepeatType.DAILY:
         return 'Täglich';
-      case RepeatFrequency.weekly:
+      case RepeatType.WEEKLY:
         return 'Wöchentlich';
-      case RepeatFrequency.monthly:
+      case RepeatType.MONTHLY:
         return 'Monatlich';
-      case RepeatFrequency.yearly:
+      case RepeatType.YEARLY:
         return 'Jährlich';
-      default:
-        return 'Wiederholt sich';
+      case RepeatType.NONE:
+        return 'Einmalig';
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CalendarEvent myevent = event.event as CalendarEvent;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Event Details"),
@@ -46,11 +39,7 @@ class EventDetailsPage extends ConsumerWidget {
               // Aktionen basierend auf der Auswahl durchführen
               if (value == 'Bearbeiten') {
                 // Logik zum Bearbeiten des Events
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.editEvent,
-                  arguments: event,
-                );
+                EditEventPageRoute(eventId: event.id).push<void>(context);
               } else if (value == 'Löschen') {
                 // Event löschen
                 _deleteEvent(context, ref);
@@ -87,7 +76,7 @@ class EventDetailsPage extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        event.title ?? 'Kein Titel',
+                        event.title,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -102,23 +91,22 @@ class EventDetailsPage extends ConsumerWidget {
                     const Icon(Icons.calendar_today, color: Colors.green),
                     const SizedBox(width: 8),
                     Text(
-                      'Start: ${DateFormat.yMMMMd().add_Hm().format(event.startTime!)}',
+                      'Start: ${DateFormat.yMMMMd().add_Hm().format(event.start)}',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (event.endTime != null)
-                  Row(
-                    children: [
-                      const Icon(Icons.event, color: Colors.red),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Ende: ${DateFormat.yMMMMd().add_Hm().format(event.endTime!)}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Icon(Icons.event, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Ende: ${DateFormat.yMMMMd().add_Hm().format(event.end)}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -146,7 +134,7 @@ class EventDetailsPage extends ConsumerWidget {
                   ),
                   constraints: const BoxConstraints(minHeight: 80),
                   child: Text(
-                    myevent.description ?? '',
+                    event.description,
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ),
@@ -160,7 +148,7 @@ class EventDetailsPage extends ConsumerWidget {
 
   // Methode zum Löschen des Events
   void _deleteEvent(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -174,10 +162,8 @@ class EventDetailsPage extends ConsumerWidget {
                 // Hole den CalendarController aus dem Riverpod-Provider
                 final controller = ref.read(calendarControllerProvider);
 
-                CalendarEvent myevent = event.event as CalendarEvent;
-
                 // Event löschen
-                await controller.deleteEvent(myevent.id);
+                await controller.deleteEvent(event.id);
 
                 // Optional: Zurück zur vorherigen Seite navigieren, wenn Event gelöscht wurde
                 Navigator.pop(context);

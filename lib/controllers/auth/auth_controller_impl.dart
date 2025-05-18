@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:konstudy/controllers/auth/IAuthController.dart';
-import 'package:konstudy/services/auth/IAuthService.dart';
+import 'package:konstudy/controllers/auth/iauth_controller.dart';
+import 'package:konstudy/services/auth/iauth_service.dart';
 
 class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
     implements IAuthController {

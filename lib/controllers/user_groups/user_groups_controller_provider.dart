@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/user_groups/IUserGroupsController.dart';
-import 'package:konstudy/controllers/user_groups/UserGroupsControllerImpl.dart';
-import 'package:konstudy/services/user_groups/IUserGroupsService.dart';
-import 'package:konstudy/services/user_groups/UserGroupsService.dart';
+import 'package:konstudy/controllers/user_groups/iuser_groups_controller.dart';
+import 'package:konstudy/controllers/user_groups/user_groups_controller_impl.dart';
+import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
+import 'package:konstudy/services/user_groups/user_groups_service.dart';
 
 final userGroupsServiceProvider = Provider<IUserGroupsService>((ref) {
   return UserGroupsService(); //echte Implementierung

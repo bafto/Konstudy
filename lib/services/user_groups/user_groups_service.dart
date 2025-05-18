@@ -1,5 +1,5 @@
 import 'package:konstudy/models/user_groups/group.dart';
-import 'package:konstudy/services/user_groups/IUserGroupsService.dart';
+import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
 
 class UserGroupsService implements IUserGroupsService {
   @override

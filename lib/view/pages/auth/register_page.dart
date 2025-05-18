@@ -110,10 +110,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     );
 
                                 // Wenn kein Fehler: Zur HomePage weiterleiten
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppRoutes.home,
-                                );
+                                HomeScreenRoute().go(context);
                               } catch (e) {
                                 // Fehler anzeigen
                                 scaffoldMessenger.showSnackBar(

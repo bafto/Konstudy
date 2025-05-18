@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/view/pages/group/groupCalendar_page.dart';
-import 'package:konstudy/view/pages/group/medianCollection_page.dart';
-import 'package:konstudy/view/pages/group/noteCollection_page.dart';
+import 'package:konstudy/view/pages/group/group_calendar_page.dart';
+import 'package:konstudy/view/pages/group/media_collection_page.dart';
+import 'package:konstudy/view/pages/group/note_collection_page.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key, required this.groupName});

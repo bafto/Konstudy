@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
-import 'package:konstudy/models/calendar/RepeatType.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 
 class AddEventPage extends ConsumerStatefulWidget {
   const AddEventPage({super.key});

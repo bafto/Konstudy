@@ -1,4 +1,4 @@
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
 
 abstract class ICalendarService {
   Future<List<CalendarEvent>> fetchEvents();

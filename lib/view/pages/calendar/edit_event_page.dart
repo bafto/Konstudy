@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
-import 'package:konstudy/models/calendar/RepeatType.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 
 class EditEventPage extends ConsumerStatefulWidget {
-  final CalendarEventData event;
+  final CalendarEvent event;
 
   const EditEventPage({super.key, required this.event});
 
@@ -22,7 +22,6 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
   late TextEditingController _startController;
   late TextEditingController _endController;
 
-  late CalendarEvent _myevent;
   DateTime? _startDateTime;
   DateTime? _endDateTime;
   late RepeatType _selectedRepeat;
@@ -30,15 +29,14 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
   @override
   void initState() {
     super.initState();
-    _myevent = widget.event.event as CalendarEvent;
 
-    _titleController = TextEditingController(text: _myevent.title);
+    _titleController = TextEditingController(text: widget.event.title);
     _descriptionController = TextEditingController(
-      text: _myevent.description ?? '',
+      text: widget.event.description,
     );
-    _startDateTime = _myevent.start;
-    _endDateTime = _myevent.end;
-    _selectedRepeat = _myevent.repeat ?? RepeatType.NONE;
+    _startDateTime = widget.event.start;
+    _endDateTime = widget.event.end;
+    _selectedRepeat = widget.event.repeat;
 
     _startController = TextEditingController(
       text: _formatDateTime(_startDateTime!),
@@ -156,7 +154,7 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
 
-                  final updated = _myevent.copyWith(
+                  final updated = widget.event.copyWith(
                     title: _titleController.text,
                     description: _descriptionController.text,
                     start: _startDateTime!,

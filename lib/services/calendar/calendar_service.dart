@@ -1,5 +1,5 @@
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
-import 'package:konstudy/services/calendar/ICalendarService.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/services/calendar/icalendar_service.dart';
 
 class CalendarService implements ICalendarService {
   //In-Memory-Liste als Datenbank
