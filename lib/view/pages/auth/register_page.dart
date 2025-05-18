@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
+
 
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -108,7 +110,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             );
 
                             // Wenn kein Fehler: Zur HomePage weiterleiten
-                            Navigator.pushReplacementNamed(context, AppRoutes.home);
+                            //Navigator.pushReplacementNamed(context, AppRoutes.home);
+                            context.go(AppRoutes.verifyEmail);
                           } catch (e) {
                             // Fehler anzeigen
                             scaffoldMessenger.showSnackBar(

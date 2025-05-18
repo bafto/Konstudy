@@ -7,5 +7,7 @@ abstract class IAuthService{
 
   Future<void> signOut();
 
+  Future<void> exchangeSession(Uri uri);
+
   User? getCurrentUser();
 }

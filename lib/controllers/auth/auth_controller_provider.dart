@@ -7,7 +7,7 @@ import 'IAuthController.dart';
 import 'AuthControllerImpl.dart';
 
 
-final authServiceProvider =Provider<IAuthService>((ref) {
+final authServiceProvider = Provider<IAuthService>((ref) {
   return AuthService();
 });
 

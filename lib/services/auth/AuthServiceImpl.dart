@@ -26,5 +26,10 @@ class AuthService extends IAuthService{
   Future<void> signOut() => _client.auth.signOut();
 
   @override
+  Future<void> exchangeSession(Uri uri) async{
+    await Supabase.instance.client.auth.exchangeCodeForSession(uri.toString());
+  }
+
+  @override
   User? getCurrentUser() => _client.auth.currentUser;
 }

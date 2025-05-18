@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,10 +19,11 @@ void main() async{
 class Konstudy extends StatelessWidget {
   const Konstudy({super.key});
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'KonStudy',
       theme: ThemeData(
         // This is the theme of your application.
@@ -41,8 +43,7 @@ class Konstudy extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: AppRoutes.home,
-      onGenerateRoute: AppRoutes.generateRoute,
+      routerConfig: AppRoutes().router,
     );
   }
 }
