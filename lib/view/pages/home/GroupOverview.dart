@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
+import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/view/widgets/cards/GroupCard.dart';
 
-class GroupOverview extends StatelessWidget {
-  const GroupOverview({super.key});
+class Groupoverview extends ConsumerStatefulWidget {
+  const Groupoverview({super.key});
 
-  Widget _buildGroupCard(String name, String desc) {
+  @override
+  ConsumerState<Groupoverview> createState() => _GroupoverviewState();
+}
+
+class _GroupoverviewState extends ConsumerState<Groupoverview> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(ref.read(userGroupsControllerProvider).loadGroups);
+  }
+
+  Widget _buildGroupCard(final Group group) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
       child: GroupCard(
-        name: name,
-        description: desc,
-        members: [
-          Icon(Icons.account_circle),
-          Icon(Icons.account_circle),
-          Icon(Icons.account_circle),
-          Icon(Icons.account_circle),
-          Icon(Icons.account_circle),
-          Icon(Icons.account_circle),
-        ],
+        name: group.name,
+        description: group.description,
+        members: List.generate(
+          group.memberNames.length,
+          (w) => Icon(Icons.account_circle),
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final groupsController = ref.watch(userGroupsControllerProvider);
     return Scaffold(
       body: ListView(
-        children: [
-          _buildGroupCard("test name", "test"),
-          _buildGroupCard("hallo", "desc"),
-          ...List.generate(
-            10,
-            (_) => _buildGroupCard("Embedded Systems", "Beschreibung"),
-          ),
-        ],
+        children: groupsController.groups.map(_buildGroupCard).toList(),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

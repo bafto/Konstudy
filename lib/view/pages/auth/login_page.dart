@@ -4,7 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
-
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -17,8 +16,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,29 +75,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     state.isLoading
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final scaffoldMessenger = ScaffoldMessenger.of(context);
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final scaffoldMessenger = ScaffoldMessenger.of(
+                                context,
+                              );
 
-                          try {
-                            // Login-Methode, die Future<void> zurückgibt und bei Fehler wirft
-                            await ref.read(authControllerProvider.notifier).login(
-                              _emailController.text.trim(),
-                              _passwordController.text.trim(),
-                            );
+                              try {
+                                // Login-Methode, die Future<void> zurückgibt und bei Fehler wirft
+                                await ref
+                                    .read(authControllerProvider.notifier)
+                                    .login(
+                                      _emailController.text.trim(),
+                                      _passwordController.text.trim(),
+                                    );
 
-                            // Wenn kein Fehler: Zur HomePage weiterleiten
-                            Navigator.pushReplacementNamed(context, AppRoutes.home);
-                          } catch (e) {
-                            // Fehler abfangen und anzeigen
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(content: Text('Fehler: ${e.toString()}')),
-                            );
-                          }
-                        }
-                      },
-                      child: const Text("Login"),
-                    ),
+                                // Wenn kein Fehler: Zur HomePage weiterleiten
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  AppRoutes.home,
+                                );
+                              } catch (e) {
+                                // Fehler abfangen und anzeigen
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Fehler: ${e.toString()}'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text("Login"),
+                        ),
                   ],
                 ),
               ),

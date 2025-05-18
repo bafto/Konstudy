@@ -1,22 +1,20 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendar_view/calendar_view.dart';
+import 'package:intl/intl.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:intl/intl.dart';
-
-
 
 class EventDetailsPage extends ConsumerWidget {
   final CalendarEventData event;
-
 
   const EventDetailsPage({super.key, required this.event});
 
   String _getRepeatText(CalendarEventData event) {
     final recurrence = event.recurrenceSettings;
-    if (recurrence == null || recurrence.frequency == RepeatFrequency.doNotRepeat) {
+    if (recurrence == null ||
+        recurrence.frequency == RepeatFrequency.doNotRepeat) {
       return 'Keine Wiederholung';
     }
 
@@ -34,11 +32,9 @@ class EventDetailsPage extends ConsumerWidget {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CalendarEvent _myevent = event.event as CalendarEvent;
+    CalendarEvent myevent = event.event as CalendarEvent;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,9 +47,9 @@ class EventDetailsPage extends ConsumerWidget {
               if (value == 'Bearbeiten') {
                 // Logik zum Bearbeiten des Events
                 Navigator.pushNamed(
-                    context,
-                    AppRoutes.editEvent,
-                    arguments: event
+                  context,
+                  AppRoutes.editEvent,
+                  arguments: event,
                 );
               } else if (value == 'Löschen') {
                 // Event löschen
@@ -77,7 +73,9 @@ class EventDetailsPage extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: Card(
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -90,7 +88,10 @@ class EventDetailsPage extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         event.title ?? 'Kein Titel',
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -143,11 +144,11 @@ class EventDetailsPage extends ConsumerWidget {
                     border: Border.all(color: Colors.grey.shade300),
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  constraints: const BoxConstraints(minHeight: 80),
                   child: Text(
-                    _myevent.description ?? '',
+                    myevent.description ?? '',
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
-                  constraints: const BoxConstraints(minHeight: 80),
                 ),
               ],
             ),

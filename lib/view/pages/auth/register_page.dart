@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
-
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -17,7 +16,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,30 +93,39 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     state.isLoading
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final scaffoldMessenger = ScaffoldMessenger.of(context);
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final scaffoldMessenger = ScaffoldMessenger.of(
+                                context,
+                              );
 
-                          try {
-                            // Registrierung, ebenfalls Future<void> und Exception bei Fehler
-                            await ref.read(authControllerProvider.notifier).signUp(
-                              _emailController.text.trim(),
-                              _passwordController.text.trim(),
-                              _nameController.text.trim(),
-                            );
+                              try {
+                                // Registrierung, ebenfalls Future<void> und Exception bei Fehler
+                                await ref
+                                    .read(authControllerProvider.notifier)
+                                    .signUp(
+                                      _emailController.text.trim(),
+                                      _passwordController.text.trim(),
+                                      _nameController.text.trim(),
+                                    );
 
-                            // Wenn kein Fehler: Zur HomePage weiterleiten
-                            Navigator.pushReplacementNamed(context, AppRoutes.home);
-                          } catch (e) {
-                            // Fehler anzeigen
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(content: Text('Fehler: ${e.toString()}')),
-                            );
-                          }
-                        }
-                      },
-                      child: const Text("Registrieren"),
-                    ),
+                                // Wenn kein Fehler: Zur HomePage weiterleiten
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  AppRoutes.home,
+                                );
+                              } catch (e) {
+                                // Fehler anzeigen
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Fehler: ${e.toString()}'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text("Registrieren"),
+                        ),
                   ],
                 ),
               ),

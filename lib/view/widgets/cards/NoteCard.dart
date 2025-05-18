@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
-class NoteCard extends StatelessWidget{
-  const NoteCard({
-    required this.name,
-    required this.description,
-    super.key,
-  });
+class NoteCard extends StatelessWidget {
+  const NoteCard({required this.name, required this.description, super.key});
 
   final String name;
   final String description;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return GestureDetector(
       child: Card(
         child: IntrinsicHeight(
@@ -24,7 +20,10 @@ class NoteCard extends StatelessWidget{
                   children: [
                     Text(
                       name,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                     Text(description),
                   ],

@@ -1,9 +1,9 @@
 import 'package:konstudy/controllers/group/IGroupController.dart';
-import 'package:konstudy/services/group/IGroupService.dart';
-import 'package:konstudy/models/group/Note.dart';
 import 'package:konstudy/models/group/Median.dart';
+import 'package:konstudy/models/group/Note.dart';
+import 'package:konstudy/services/group/IGroupService.dart';
 
-class GroupControllerImpl implements IGroupController{
+class GroupControllerImpl implements IGroupController {
   final IGroupService _service;
 
   GroupControllerImpl(this._service);
@@ -23,7 +23,7 @@ class GroupControllerImpl implements IGroupController{
   }
 
   @override
-  Future<void> loadMedians() async{
+  Future<void> loadMedians() async {
     _medians = await _service.fetchMedian();
   }
 }
