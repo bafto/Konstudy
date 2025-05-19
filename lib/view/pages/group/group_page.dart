@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/pages/group/groupCalendar_page.dart';
 import 'package:konstudy/view/pages/group/medianCollection_page.dart';
 import 'package:konstudy/view/pages/group/noteCollection_page.dart';
@@ -31,6 +33,11 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              context.go(AppRoutes.home);
+            },
+            icon: Icon(Icons.arrow_back)),
         title: Center(child: Text(widget.groupName)),
         actions: [
           IconButton(

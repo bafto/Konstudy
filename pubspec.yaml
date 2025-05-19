@@ -38,6 +38,7 @@ dependencies:
   calendar_view: ^1.4.0
   appflowy_editor: ^5.2.0
   supabase_flutter: ^2.9.0
+  go_router: ^15.1.2
 
 dev_dependencies:
   flutter_test:

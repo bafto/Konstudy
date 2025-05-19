@@ -2,6 +2,8 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
 import 'package:konstudy/routes/app_routes.dart';
@@ -46,10 +48,9 @@ class EventDetailsPage extends ConsumerWidget {
               // Aktionen basierend auf der Auswahl durchführen
               if (value == 'Bearbeiten') {
                 // Logik zum Bearbeiten des Events
-                Navigator.pushNamed(
-                  context,
+                context.push(
                   AppRoutes.editEvent,
-                  arguments: event,
+                  extra: event,
                 );
               } else if (value == 'Löschen') {
                 // Event löschen
@@ -180,7 +181,7 @@ class EventDetailsPage extends ConsumerWidget {
                 await controller.deleteEvent(myevent.id);
 
                 // Optional: Zurück zur vorherigen Seite navigieren, wenn Event gelöscht wurde
-                Navigator.pop(context);
+                context.pop();
               },
               child: const Text('Ja'),
             ),

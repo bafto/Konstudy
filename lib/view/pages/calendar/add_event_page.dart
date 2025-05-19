@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/CalendarEvent.dart';
 import 'package:konstudy/models/calendar/RepeatType.dart';
@@ -175,7 +177,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                   );
 
                   await eventController.addEvent(newEvent);
-                  if (context.mounted) Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Text('Event speichern'),
               ),
