@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 import 'package:konstudy/view/pages/home/group_overview.dart';
 import 'package:konstudy/view/pages/home/black_board_page.dart';
 import 'package:konstudy/view/pages/home/my_calendar_page.dart';
@@ -39,7 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         title: Center(child: Text(_titles[_selectedIndex])),
         actions: [
           IconButton(
-            onPressed: () => debugPrint("here"),
+            onPressed: () => context.push(RoutesPaths.userProfil),
             icon: Icon(Icons.account_circle),
           ),
         ],

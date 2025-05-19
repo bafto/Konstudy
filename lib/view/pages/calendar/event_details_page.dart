@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/calendar_event.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 
 class EventDetailsPage extends ConsumerWidget {
   final CalendarEventData event;
@@ -48,7 +48,7 @@ class EventDetailsPage extends ConsumerWidget {
               if (value == 'Bearbeiten') {
                 // Logik zum Bearbeiten des Events
                 context.push(
-                  AppRoutes.editEvent,
+                  RoutesPaths.editEvent,
                   extra: event,
                 );
               } else if (value == 'Löschen') {

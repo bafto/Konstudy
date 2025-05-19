@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 import 'package:konstudy/view/widgets/views/custom_day_view.dart';
 import 'package:konstudy/view/widgets/views/custom_month_view.dart';
 import 'package:konstudy/view/widgets/views/custom_week_view.dart';
@@ -87,7 +87,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          final result = await context.push(AppRoutes.addEvent);
+          final result = await context.push(RoutesPaths.addEvent);
 
           // Wenn der result null ist, bedeutet es, dass wir zur Seite zurückgekehrt sind
           // und einen neuen Fetch-Vorgang auslösen wollen.

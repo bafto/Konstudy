@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_notifier.dart';
+import 'package:konstudy/view/pages/profile/user_profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:calendar_view/calendar_view.dart';
 
@@ -12,43 +13,36 @@ import 'package:konstudy/view/pages/home/home_page.dart';
 import 'package:konstudy/view/pages/auth/auth_page.dart';
 import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
 import 'package:konstudy/view/pages/auth/verify_email_page.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 
 
 
 class AppRoutes {
-  static const String home = '/';
-  static const String group = '/group';
-  static const String addEvent = '/addEvent';
-  static const String detailsEvent = '/detailsEvent';
-  static const String editEvent = '/editEvent';
-  static const String auth = '/auth';
-  static const String verificationCallback = '/verification-callback';
-  static const String verifyEmail = '/verifyEmail';
 
   final GoRouter router = GoRouter(
     refreshListenable: AuthNotifier(),
-    initialLocation: home,
+    initialLocation: RoutesPaths.home,
     redirect: (context, state) {
       final user = Supabase.instance.client.auth.currentUser;
       final loggedIn = user != null;
-      final loggingIn = state.path == auth;
+      final loggingIn = state.path == RoutesPaths.auth;
 
       if(!loggedIn && !loggingIn){
-        return auth;
+        return RoutesPaths.auth;
       }
       if(loggedIn && loggingIn){
-        return home;
+        return RoutesPaths.home;
       }
       return null;
     },
     routes: [
       GoRoute(
-        path: home,
+        path: RoutesPaths.home,
         name: 'home',
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: '$group/:groupName',
+        path: '${RoutesPaths.group}/:groupName',
         name: 'group',
         builder: (context, state) {
           final groupName = state.pathParameters['groupName']!;
@@ -56,12 +50,12 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: addEvent,
+        path: RoutesPaths.addEvent,
         name: 'addEvent',
         builder: (context, state) => const AddEventPage(),
       ),
       GoRoute(
-        path: detailsEvent,
+        path: RoutesPaths.detailsEvent,
         name: 'detailsEvent',
         builder: (context, state) {
           final event = state.extra as CalendarEventData;
@@ -69,7 +63,7 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: editEvent,
+        path: RoutesPaths.editEvent,
         name: 'editEvent',
         builder: (context, state) {
           final event = state.extra as CalendarEventData;
@@ -77,19 +71,24 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: auth,
+        path: RoutesPaths.auth,
         name: 'auth',
         builder: (context, state) => const AuthPage(),
       ),
       GoRoute(
-          path: verificationCallback,
+          path: RoutesPaths.verificationCallback,
         name: 'verificationCallback',
         builder: (context, state) => const VerificationCallBackPage(),
       ),
       GoRoute(
-        path: verifyEmail,
+        path: RoutesPaths.verifyEmail,
         name: 'verifyEmail',
         builder: (context, state) => const VerifyEmailPage(),
+      ),
+      GoRoute(
+        path: RoutesPaths.userProfil,
+        name: 'userProfil',
+        builder: (context, state) => const UserProfilePage(),
       ),
     ],
     errorBuilder: (context, state) => const Scaffold(

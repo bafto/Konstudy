@@ -1,6 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 
 class CustomWeekView extends StatelessWidget {
   final EventController controller;
@@ -18,7 +18,7 @@ class CustomWeekView extends StatelessWidget {
 
         Navigator.pushNamed(
           context,
-          AppRoutes.detailsEvent,
+          RoutesPaths.detailsEvent,
           arguments: tappedEvent,
         );
       },

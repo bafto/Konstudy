@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/iauth_controller.dart';
 import 'package:konstudy/services/auth/iauth_service.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 
 class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
     implements IAuthController {
@@ -60,7 +60,7 @@ class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
 
       // Nach erfolgreichem Login weiterleiten
       if (context.mounted) {
-        context.go(AppRoutes.home);
+        context.go(RoutesPaths.home);
       }
     } catch (e, st) {
       // Fehler setzen

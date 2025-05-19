@@ -1,6 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 
 class CustomDayView extends StatelessWidget {
   final EventController controller;
@@ -17,7 +17,7 @@ class CustomDayView extends StatelessWidget {
                 .first; //die Lösung ist nicht 100%sicher das es wirklich immer die ist auf die geklicked wurde
         Navigator.pushNamed(
           context,
-          AppRoutes.detailsEvent,
+          RoutesPaths.detailsEvent,
           arguments: tappedEvent,
         );
       },
