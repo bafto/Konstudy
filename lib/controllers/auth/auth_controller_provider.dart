@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/services/auth/AuthServiceImpl.dart';
-import 'package:konstudy/services/auth/IAuthService.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'IAuthController.dart';
+import 'package:konstudy/services/auth/auth_service_impl.dart';
+import 'package:konstudy/services/auth/iauth_service.dart';
+import 'package:konstudy/controllers/auth/iauth_controller.dart';
+import 'package:konstudy/controllers/auth/auth_controller_impl.dart';
 
-import 'AuthControllerImpl.dart';
 
 final authServiceProvider = Provider<IAuthService>((ref) {
   return AuthService();

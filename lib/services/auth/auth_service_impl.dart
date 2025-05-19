@@ -1,5 +1,6 @@
-import 'package:konstudy/services/auth/IAuthService.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:konstudy/services/auth/iauth_service.dart';
+
 
 class AuthService extends IAuthService {
   final SupabaseClient _client = Supabase.instance.client;

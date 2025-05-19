@@ -1,6 +1,6 @@
 import 'package:konstudy/models/group/media.dart';
 import 'package:konstudy/models/group/Note.dart';
-import 'package:konstudy/services/group/IGroupService.dart';
+import 'package:konstudy/services/group/igroup_service.dart';
 
 class GroupService implements IGroupService {
   @override

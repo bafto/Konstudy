@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:konstudy/controllers/calendar/ICalendarController.dart';
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
-import 'package:konstudy/services/calendar/ICalendarService.dart';
+import 'package:konstudy/controllers/calendar/icalendar_controller.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
+import 'package:konstudy/services/calendar/icalendar_service.dart';
 
 class CalendarControllerImpl extends ChangeNotifier
     implements ICalendarController {

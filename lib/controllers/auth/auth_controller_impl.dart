@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konstudy/controllers/auth/IAuthController.dart';
-import 'package:konstudy/services/auth/IAuthService.dart';
+import 'package:konstudy/controllers/auth/iauth_controller.dart';
+import 'package:konstudy/services/auth/iauth_service.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>

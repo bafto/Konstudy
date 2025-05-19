@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/group/group_controller_provider.dart';
-import 'package:konstudy/view/widgets/cards/MediaCard.dart';
+import 'package:konstudy/view/widgets/cards/media_card.dart';
 
 class MedianCollectionPage extends ConsumerStatefulWidget {
   const MedianCollectionPage({super.key});

@@ -1,7 +1,7 @@
 import 'package:konstudy/controllers/group/igroup_controller.dart';
 import 'package:konstudy/models/group/media.dart';
 import 'package:konstudy/models/group/Note.dart';
-import 'package:konstudy/services/group/IGroupService.dart';
+import 'package:konstudy/services/group/igroup_service.dart';
 
 class GroupControllerImpl implements IGroupController {
   final IGroupService _service;

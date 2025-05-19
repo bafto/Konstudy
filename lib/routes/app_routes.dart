@@ -4,9 +4,9 @@ import 'package:konstudy/controllers/auth/auth_notifier.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:calendar_view/calendar_view.dart';
 
-import 'package:konstudy/view/pages/calendar/AddEventPage.dart';
-import 'package:konstudy/view/pages/calendar/EditEventPage.dart';
-import 'package:konstudy/view/pages/calendar/EventDetailsPage.dart';
+import 'package:konstudy/view/pages/calendar/add_event_page.dart';
+import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
+import 'package:konstudy/view/pages/calendar/event_details_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
 import 'package:konstudy/view/pages/auth/auth_page.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/models/calendar/CalendarEvent.dart';
+import 'package:konstudy/models/calendar/calendar_event.dart';
 
 abstract class ICalendarController extends ChangeNotifier {
   List<CalendarEvent> get events;

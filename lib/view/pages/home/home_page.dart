@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/view/pages/home/GroupOverview.dart';
-import 'package:konstudy/view/pages/home/blackBoard_page.dart';
+import 'package:konstudy/view/pages/home/group_overview.dart';
+import 'package:konstudy/view/pages/home/black_board_page.dart';
 import 'package:konstudy/view/pages/home/my_calendar_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:konstudy/models/calendar/RepeatType.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 
 class CalendarEvent {
   final int id;

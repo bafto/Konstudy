@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konstudy/view/widgets/InitialsIcon.dart';
+import 'package:konstudy/view/widgets/initials_icon.dart';
 
 class GroupCard extends StatelessWidget {
   const GroupCard({

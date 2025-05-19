@@ -2,13 +2,12 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
-import 'package:konstudy/models/calendar/RepeatType.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/view/widgets/views/CustomDayView.dart';
-import 'package:konstudy/view/widgets/views/CustomMonthView.dart';
-import 'package:konstudy/view/widgets/views/CustomWeekView.dart';
+import 'package:konstudy/view/widgets/views/custom_day_view.dart';
+import 'package:konstudy/view/widgets/views/custom_month_view.dart';
+import 'package:konstudy/view/widgets/views/custom_week_view.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});
