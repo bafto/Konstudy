@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-
-import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/controllers/profile/user_profil_controller_provider.dart';
+import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/routes/routes_paths.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
@@ -29,10 +28,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              context.pop();
-            },
-            icon: Icon(Icons.arrow_back)),
+          onPressed: () {
+            context.pop();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Center(child: Text("UserProfil")),
         actions: [
           // Dropdown-Menü in der AppBar
@@ -45,27 +45,30 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               } else if (value == 'Ausloggen') {
                 // Event Ausloggen
                 debugPrint("User logt sich aus");
-                final authController = ref.read(authControllerProvider.notifier);
+                final authController = ref.read(
+                  authControllerProvider.notifier,
+                );
 
-                try{
+                try {
                   await authController.logout();
-                  if(context.mounted){
+                  if (context.mounted) {
                     context.go(RoutesPaths.auth);
                   }
-                }catch(e){
+                } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Fehler beim Ausloggen: $e")),
                   );
                 }
-
-              }else if (value == 'Löschen'){
+              } else if (value == 'Löschen') {
                 //Event Löschen
                 //fenster muss nach Löschen sich selber schließen
                 debugPrint("Account Löschen");
               }
             },
             itemBuilder: (BuildContext context) {
-              return ['Bearbeiten', 'Ausloggen', 'Löschen'].map((String choice) {
+              return ['Bearbeiten', 'Ausloggen', 'Löschen'].map((
+                String choice,
+              ) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -108,21 +111,18 @@ class _UserProfileContent extends StatelessWidget {
           CircleAvatar(
             radius: 50,
             backgroundImage:
-            user.profileImageUrl != null ? NetworkImage(user.profileImageUrl!) : null,
-            child: user.profileImageUrl == null
-                ? const Icon(Icons.person, size: 50)
-                : null,
+                user.profileImageUrl != null
+                    ? NetworkImage(user.profileImageUrl!)
+                    : null,
+            child:
+                user.profileImageUrl == null
+                    ? const Icon(Icons.person, size: 50)
+                    : null,
           ),
           const SizedBox(height: 20),
-          Text(
-            user.name,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          Text(user.name, style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 8),
-          Text(
-            user.email,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          Text(user.email, style: Theme.of(context).textTheme.bodyLarge),
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerLeft,
@@ -152,5 +152,3 @@ class _UserProfileContent extends StatelessWidget {
     );
   }
 }
-
-

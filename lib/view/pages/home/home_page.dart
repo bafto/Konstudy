@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/view/pages/home/group_overview.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/pages/home/black_board_page.dart';
+import 'package:konstudy/view/pages/home/group_overview.dart';
 import 'package:konstudy/view/pages/home/my_calendar_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -39,7 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         title: Center(child: Text(_titles[_selectedIndex])),
         actions: [
           IconButton(
-            onPressed: () => context.push(RoutesPaths.userProfil),
+            onPressed: () => UserProfilePageRoute().push<void>(context),
             icon: Icon(Icons.account_circle),
           ),
         ],

@@ -1,7 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
@@ -104,27 +103,27 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
     DateTime start,
   ) {
     switch (repeatType) {
-      case RepeatType.NONE:
+      case RepeatType.none:
         return null;
-      case RepeatType.DAILY:
+      case RepeatType.daily:
         return RecurrenceSettings(
           startDate: start,
           frequency: RepeatFrequency.daily,
           recurrenceEndOn: RecurrenceEnd.never,
         );
-      case RepeatType.WEEKLY:
+      case RepeatType.weekly:
         return RecurrenceSettings(
           startDate: start,
           frequency: RepeatFrequency.weekly,
           recurrenceEndOn: RecurrenceEnd.never,
         );
-      case RepeatType.MONTHLY:
+      case RepeatType.monthly:
         return RecurrenceSettings(
           startDate: start,
           frequency: RepeatFrequency.monthly,
           recurrenceEndOn: RecurrenceEnd.never,
         );
-      case RepeatType.YEARLY:
+      case RepeatType.yearly:
         return RecurrenceSettings(
           startDate: start,
           frequency: RepeatFrequency.yearly,

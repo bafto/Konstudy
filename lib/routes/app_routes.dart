@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_notifier.dart';
-import 'package:konstudy/view/pages/profile/user_profile_page.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:calendar_view/calendar_view.dart';
-
+import 'package:konstudy/view/pages/auth/auth_page.dart';
+import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
+import 'package:konstudy/view/pages/auth/verify_email_page.dart';
 import 'package:konstudy/view/pages/calendar/add_event_page.dart';
 import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
 import 'package:konstudy/view/pages/calendar/event_details_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
+import 'package:konstudy/view/pages/profile/user_profile_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'app_routes.g.dart';
 
@@ -20,7 +21,10 @@ part 'app_routes.g.dart';
     TypedGoRoute<AddEventPageRoute>(path: 'addEvent'),
     TypedGoRoute<EventDetailsPageRoute>(path: 'detailsEvent'),
     TypedGoRoute<EditEventPageRoute>(path: 'editEvent'),
-    TypedGoRoute(path: 'auth'),
+    TypedGoRoute<AuthPageRoute>(path: 'auth'),
+    TypedGoRoute<VerificationCallBackPageRoute>(path: 'verificationCallback'),
+    TypedGoRoute<VerifyEmailPageRoute>(path: 'verifyEmail'),
+    TypedGoRoute<UserProfilePageRoute>(path: 'userProfile'),
   ],
 )
 class HomeScreenRoute extends GoRouteData {
@@ -28,7 +32,7 @@ class HomeScreenRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AuthCheckWrapper(child: HomePage());
+    return const HomePage();
   }
 }
 
@@ -38,7 +42,7 @@ class GroupPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return AuthCheckWrapper(child: GroupPage(groupName: groupName));
+    return GroupPage(groupName: groupName);
   }
 }
 
@@ -47,7 +51,7 @@ class AddEventPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AuthCheckWrapper(child: AddEventPage());
+    return const AddEventPage();
   }
 }
 
@@ -57,18 +61,7 @@ class EventDetailsPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return AuthCheckWrapper(
-      child: Consumer(
-        builder: (context, ref, child) {
-          final event = ref.watch(eventByIdProvider(eventId));
-          return event.when(
-            data: (event) => EventDetailsPage(event: event!),
-            error: (error, stack) => const Center(child: Text('Fehler')),
-            loading: () => const Center(child: CircularProgressIndicator()),
-          );
-        },
-      ),
-    );
+    return EventDetailsPage(eventId: eventId);
   }
 }
 
@@ -78,24 +71,61 @@ class EditEventPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return AuthCheckWrapper(
-      child: Consumer(
-        builder: (context, ref, child) {
-          final event = ref.watch(eventByIdProvider(eventId));
-          return event.when(
-            data: (event) => EditEventPage(event: event!),
-            error: (error, stack) => const Center(child: Text('Fehler')),
-            loading: () => const Center(child: CircularProgressIndicator()),
-          );
-        },
-      ),
-    );
+    return EditEventPage(eventId: eventId);
+  }
+}
+
+class AuthPageRoute extends GoRouteData {
+  const AuthPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AuthPage();
+  }
+}
+
+class VerificationCallBackPageRoute extends GoRouteData {
+  const VerificationCallBackPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const VerificationCallBackPage();
+  }
+}
+
+class VerifyEmailPageRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const VerifyEmailPage();
+  }
+}
+
+class UserProfilePageRoute extends GoRouteData {
+  const UserProfilePageRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const UserProfilePage();
   }
 }
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
+  refreshListenable: AuthNotifier(),
   routes: $appRoutes,
+  redirect: (context, state) {
+    final user = Supabase.instance.client.auth.currentUser;
+    final loggedIn = user != null;
+    const authRoute = AuthPageRoute();
+    final loggingIn = state.fullPath == authRoute.location;
+
+    if (!loggedIn && !loggingIn) {
+      return authRoute.location;
+    }
+    if (loggedIn && loggingIn) {
+      return const HomeScreenRoute().location;
+    }
+    return null;
+  },
   errorBuilder: (context, state) {
     return const Scaffold(
       body: Center(child: Text('Fehler: Seite nicht gefunden')),

@@ -36,8 +36,17 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
     return Scaffold(
-      body: ListView(
-        children: groupsController.groups.map(_buildGroupCard).toList(),
+      body: FutureBuilder(
+        future: ref.read(userGroupsControllerProvider).loadGroups(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return ListView(
+            children: groupsController.groups.map(_buildGroupCard).toList(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

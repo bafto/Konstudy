@@ -15,11 +15,3 @@ final calendarControllerProvider =
       controller.loadEvents(); // automatisch beim Erstellen laden
       return controller;
     });
-
-final eventByIdProvider = FutureProvider.family<CalendarEvent?, int>((
-  ref,
-  eventId,
-) async {
-  final controller = ref.watch(calendarControllerProvider);
-  return await controller.getEventById(eventId);
-});

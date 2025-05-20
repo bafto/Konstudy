@@ -28,7 +28,7 @@ class CalendarControllerImpl extends ChangeNotifier
       _events.addAll(fetched);
     } catch (e) {
       // Fehlerbehandlung falls Fetch fehlschlägt
-      print("Fehler beim Laden der Events: $e");
+      debugPrint("Fehler beim Laden der Events: $e");
     } finally {
       _isLoading = false;
       notifyListeners(); // Benachrichtige die UI, dass der Ladeprozess abgeschlossen ist.

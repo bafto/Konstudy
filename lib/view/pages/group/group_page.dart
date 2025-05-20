@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/pages/group/group_calendar_page.dart';
 import 'package:konstudy/view/pages/group/media_collection_page.dart';
 import 'package:konstudy/view/pages/group/note_collection_page.dart';
@@ -33,7 +34,7 @@ class _GroupPageState extends State<GroupPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.go(RoutesPaths.home);
+            HomeScreenRoute().go(context);
           },
           icon: Icon(Icons.arrow_back),
         ),
