@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/controllers/profile/user_profil_controller_provider.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
-import 'package:konstudy/routes/routes_paths.dart';
+import 'package:konstudy/routes/app_routes.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   const UserProfilePage({super.key});
@@ -52,7 +52,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                 try {
                   await authController.logout();
                   if (context.mounted) {
-                    context.go(RoutesPaths.auth);
+                    AuthPageRoute().go(context);
                   }
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
