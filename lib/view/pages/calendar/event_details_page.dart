@@ -2,6 +2,7 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
@@ -166,7 +167,7 @@ class EventDetailsPage extends ConsumerWidget {
                 await controller.deleteEvent(event.id);
 
                 // Optional: Zurück zur vorherigen Seite navigieren, wenn Event gelöscht wurde
-                Navigator.pop(context);
+                context.pop();
               },
               child: const Text('Ja'),
             ),

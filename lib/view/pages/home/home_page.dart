@@ -39,7 +39,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         title: Center(child: Text(_titles[_selectedIndex])),
         actions: [
           IconButton(
-            onPressed: () => debugPrint("here"),
+            onPressed: () => context.push(RoutesPaths.userProfil),
             icon: Icon(Icons.account_circle),
           ),
         ],

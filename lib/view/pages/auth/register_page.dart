@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/routes/routes_paths.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});

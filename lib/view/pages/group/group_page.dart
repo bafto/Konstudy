@@ -31,6 +31,12 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.go(RoutesPaths.home);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: Center(child: Text(widget.groupName)),
         actions: [
           IconButton(

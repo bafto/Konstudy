@@ -2,6 +2,8 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
@@ -163,7 +165,7 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                   );
 
                   await eventController.updateEvent(updated);
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Text('Änderungen speichern'),
               ),
