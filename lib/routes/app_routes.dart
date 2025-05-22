@@ -8,7 +8,7 @@ import 'package:konstudy/view/pages/calendar/add_event_page.dart';
 import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
 import 'package:konstudy/view/pages/calendar/event_details_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
-import 'package:konstudy/view/pages/home/create_group_page.dart';
+import 'package:konstudy/view/pages/home/group_create_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
 import 'package:konstudy/view/pages/profile/user_profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

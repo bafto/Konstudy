@@ -1,20 +1,28 @@
+import 'package:konstudy/models/user_groups/group_member.dart';
+
 class Group {
-  final int id;
+  final String id;
   final String name;
-  final String description;
-  final List<String> memberNames; // TODO: make this a User ref
+  final String? description;
+  final List<GroupMember> members;
 
   Group({
     required this.id,
     required this.name,
-    required this.description,
-    required this.memberNames,
+    this.description,
+    required this.members,
   });
 
-  factory Group.fromJson(Map<String, dynamic> json) => Group(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    description: json['description'] as String,
-    memberNames: json['memberNames'] as List<String>,
-  );
+  factory Group.fromJson(Map<String, dynamic> json) {
+    final members = (json['group_members'] as List)
+        .map((m) => GroupMember.fromJson(m as Map<String, dynamic>))
+        .toList();
+
+    return Group(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String?, // 👈 hier kann null stehen
+      members: members,
+    );
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/user_groups/group.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/group_card.dart';
 
@@ -18,9 +20,9 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
       child: GroupCard(
         name: group.name,
-        description: group.description,
+        description: group.description ?? '',
         members: List.generate(
-          group.memberNames.length,
+          group.members.length,
           (w) => Icon(Icons.account_circle),
         ),
       ),
