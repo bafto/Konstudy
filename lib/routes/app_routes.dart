@@ -14,6 +14,7 @@ import 'package:konstudy/view/pages/auth/auth_page.dart';
 import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
 import 'package:konstudy/view/pages/auth/verify_email_page.dart';
 import 'package:konstudy/routes/routes_paths.dart';
+import 'package:konstudy/view/pages/home/group_create_page.dart';
 
 
 
@@ -89,6 +90,11 @@ class AppRoutes {
         path: RoutesPaths.userProfil,
         name: 'userProfil',
         builder: (context, state) => const UserProfilePage(),
+      ),
+      GoRoute(
+        path: RoutesPaths.createGroup,
+        name: 'createGroup',
+        builder: (context, state) => const CreateGroupPage(),
       ),
     ],
     errorBuilder: (context, state) => const Scaffold(

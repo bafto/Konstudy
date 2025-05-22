@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/user_groups/group.dart';
+import 'package:konstudy/routes/routes_paths.dart';
 import 'package:konstudy/view/widgets/cards/group_card.dart';
 
 class Groupoverview extends ConsumerStatefulWidget {
@@ -41,7 +43,7 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => debugPrint("new group"),
+        onPressed: () => context.push(RoutesPaths.createGroup),
       ),
     );
   }

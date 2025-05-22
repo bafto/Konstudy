@@ -8,4 +8,5 @@ class RoutesPaths{
   static const String verificationCallback = '/verification-callback';
   static const String verifyEmail = '/verifyEmail';
   static const String userProfil = '/userProfil';
+  static const String createGroup = '/createGroup';
 }
