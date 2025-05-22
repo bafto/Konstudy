@@ -8,6 +8,7 @@ import 'package:konstudy/view/pages/calendar/add_event_page.dart';
 import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
 import 'package:konstudy/view/pages/calendar/event_details_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
+import 'package:konstudy/view/pages/home/create_group_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
 import 'package:konstudy/view/pages/profile/user_profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,6 +26,7 @@ part 'app_routes.g.dart';
     TypedGoRoute<VerificationCallBackPageRoute>(path: 'verificationCallback'),
     TypedGoRoute<VerifyEmailPageRoute>(path: 'verifyEmail'),
     TypedGoRoute<UserProfilePageRoute>(path: 'userProfile'),
+    TypedGoRoute<CreateGroupPageRoute>(path: 'createGroup'),
   ],
 )
 class HomeScreenRoute extends GoRouteData {
@@ -43,6 +45,15 @@ class GroupPageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return GroupPage(groupName: groupName);
+  }
+}
+
+class CreateGroupPageRoute extends GoRouteData {
+  const CreateGroupPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateGroupPage();
   }
 }
 

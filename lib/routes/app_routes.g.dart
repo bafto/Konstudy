@@ -53,6 +53,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
 
       factory: $UserProfilePageRouteExtension._fromState,
     ),
+    GoRouteData.$route(
+      path: 'createGroup',
+
+      factory: $CreateGroupPageRouteExtension._fromState,
+    ),
   ],
 );
 
@@ -108,7 +113,7 @@ extension $AddEventPageRouteExtension on AddEventPageRoute {
 extension $EventDetailsPageRouteExtension on EventDetailsPageRoute {
   static EventDetailsPageRoute _fromState(GoRouterState state) =>
       EventDetailsPageRoute(
-        eventId: int.parse(state.uri.queryParameters['event-id']!),
+        eventId: int.parse(state.uri.queryParameters['event-id']!)!,
       );
 
   String get location => GoRouteData.$location(
@@ -129,7 +134,7 @@ extension $EventDetailsPageRouteExtension on EventDetailsPageRoute {
 extension $EditEventPageRouteExtension on EditEventPageRoute {
   static EditEventPageRoute _fromState(GoRouterState state) =>
       EditEventPageRoute(
-        eventId: int.parse(state.uri.queryParameters['event-id']!),
+        eventId: int.parse(state.uri.queryParameters['event-id']!)!,
       );
 
   String get location => GoRouteData.$location(
@@ -200,6 +205,22 @@ extension $UserProfilePageRouteExtension on UserProfilePageRoute {
       const UserProfilePageRoute();
 
   String get location => GoRouteData.$location('/userProfile');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateGroupPageRouteExtension on CreateGroupPageRoute {
+  static CreateGroupPageRoute _fromState(GoRouterState state) =>
+      const CreateGroupPageRoute();
+
+  String get location => GoRouteData.$location('/createGroup');
 
   void go(BuildContext context) => context.go(location);
 
