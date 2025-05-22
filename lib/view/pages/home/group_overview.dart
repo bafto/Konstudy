@@ -20,9 +20,9 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
       child: GroupCard(
         name: group.name,
-        description: group.description,
+        description: group.description ?? '',
         members: List.generate(
-          group.memberNames.length,
+          group.members.length,
           (w) => Icon(Icons.account_circle),
         ),
       ),

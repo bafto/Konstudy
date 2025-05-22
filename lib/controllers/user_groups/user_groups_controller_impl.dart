@@ -10,19 +10,11 @@ class UserGroupsControllerImpl extends ChangeNotifier
 
   UserGroupsControllerImpl(this._service);
 
-  List<Group> _groups = [];
   List<Map<String, dynamic>> searchResult = [];
   List<Map<String, dynamic>> selectedUsers = [];
 
-
   @override
   Future<List<Group>> getGroups() => _service.fetchGroups();
-
-  @override
-  Future<void> loadGroups() async {
-    _groups = await _service.fetchGroups();
-    notifyListeners();
-  }
 
   @override
   Future<bool> groupCreate({
@@ -60,16 +52,6 @@ class UserGroupsControllerImpl extends ChangeNotifier
   void removeUser(Map<String, dynamic> user) {
     selectedUsers.removeWhere((n) => n['id'] == user['id']);
     notifyListeners();
-  Future<Group> addGroup(Group g) async {
-    final user = Supabase.instance.client.auth.currentUser!;
-    return _service.addGroup(
-      Group(
-        id: g.id,
-        name: g.name,
-        description: g.description,
-        memberNames: [user.email!],
-      ),
-    );
-    notifyListeners();
   }
+
 }

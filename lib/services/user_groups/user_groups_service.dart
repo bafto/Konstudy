@@ -7,23 +7,33 @@ class UserGroupsService implements IUserGroupsService {
 
   @override
   Future<List<Group>> fetchGroups() async {
-    await Future.delayed(
-      Duration(seconds: 1),
-    ); //simulation eines Netzwerkaufruf
-    return [
-      Group(
-        id: 1,
-        name: "Embedded Systems",
-        description: "Embedded Systems",
-        memberNames: ["Hendrik", "Leon"],
-      ),
-      Group(
-        id: 1,
-        name: "Mobile Anwendungen",
-        description: "Mobile Anwendungen",
-        memberNames: ["Hendrik", "Konstantin"],
-      ),
-    ];
+    final userId = _client.auth.currentUser!.id;
+
+    //1. Hole die group_ids des Nutzers
+    final groupIdResult = await _client
+        .from('group_members')
+        .select('group_id')
+        .eq('user_id', userId);
+
+    //2. Extrahiere die Ids
+    final groupIds = (groupIdResult as List)
+        .map((e) => e['group_id'] as String)
+        .toList();
+
+    if(groupIds.isEmpty){
+      return [];
+    }
+
+    // 3. Hole die vollständigen Gruppen
+    final groupData = await _client
+        .from('groups')
+        .select('*, group_members(*)')
+        .inFilter('id', groupIds);
+
+    // 4. Daten in Group umwandeln
+    return List<Group>.from(
+        (groupData as List).map((e) => Group.fromJson(e as Map<String, dynamic>))
+    );
   }
 
   @override
