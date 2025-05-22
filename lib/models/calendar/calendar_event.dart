@@ -13,7 +13,7 @@ class CalendarEvent {
     required this.title,
     required this.start,
     required this.end,
-    this.repeat = RepeatType.NONE,
+    this.repeat = RepeatType.none,
     this.description = "",
   });
 
@@ -26,7 +26,7 @@ class CalendarEvent {
       end: DateTime.parse(json['end'].toString()),
       repeat: RepeatType.values.firstWhere(
         (e) => e.toString() == 'RepeatType.${json['repeat']}',
-        orElse: () => RepeatType.NONE,
+        orElse: () => RepeatType.none,
       ),
       description: json['description'] as String,
     );

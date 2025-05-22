@@ -9,30 +9,12 @@ class CalendarControllerImpl extends ChangeNotifier
 
   CalendarControllerImpl(this._service);
 
-  final List<CalendarEvent> _events = [];
-  bool _isLoading = false;
+  List<CalendarEvent> _events = [];
 
   @override
-  List<CalendarEvent> get events => _events;
-
-  @override
-  bool get isLoading => _isLoading;
-
-  @override
-  Future<void> loadEvents() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      final fetched = await _service.fetchEvents();
-      _events.clear();
-      _events.addAll(fetched);
-    } catch (e) {
-      // Fehlerbehandlung falls Fetch fehlschlägt
-      print("Fehler beim Laden der Events: $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners(); // Benachrichtige die UI, dass der Ladeprozess abgeschlossen ist.
-    }
+  Future<List<CalendarEvent>> getEvents() async {
+    _events = await _service.fetchEvents();
+    return _events;
   }
 
   @override
@@ -51,5 +33,13 @@ class CalendarControllerImpl extends ChangeNotifier
   Future<void> updateEvent(CalendarEvent event) async {
     await _service.updateEvent(event);
     notifyListeners();
+  }
+
+  @override
+  Future<CalendarEvent> getEventById(int eventId) async {
+    if (_events.isEmpty) {
+      await getEvents();
+    }
+    return _events.firstWhere((event) => event.id == eventId);
   }
 }

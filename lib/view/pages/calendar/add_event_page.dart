@@ -62,7 +62,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
         '${time.format(context)}';
   }
 
-  RepeatType _selectedRepeat = RepeatType.NONE;
+  RepeatType _selectedRepeat = RepeatType.none;
 
   @override
   Widget build(BuildContext context) {
@@ -189,15 +189,15 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
 
   String _repeatTypeLabel(RepeatType type) {
     switch (type) {
-      case RepeatType.NONE:
+      case RepeatType.none:
         return 'Keine Wiederholung';
-      case RepeatType.DAILY:
+      case RepeatType.daily:
         return 'Täglich';
-      case RepeatType.WEEKLY:
+      case RepeatType.weekly:
         return 'Wöchentlich';
-      case RepeatType.MONTHLY:
+      case RepeatType.monthly:
         return 'Monatlich';
-      case RepeatType.YEARLY:
+      case RepeatType.yearly:
         return 'Jährlich';
     }
   }

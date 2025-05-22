@@ -1,6 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:konstudy/models/user_groups/group.dart';
 
+abstract class IUserGroupsController extends ChangeNotifier {
+  Future<List<Group>> getGroups();
+  Future<Group> addGroup(Group g);
 abstract class IUserGroupsController extends ChangeNotifier {
   List<Group> get groups;
   List<Map<String, dynamic>> get searchResult;

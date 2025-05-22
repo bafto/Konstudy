@@ -8,7 +8,9 @@ final userGroupsServiceProvider = Provider<IUserGroupsService>((ref) {
   return UserGroupsService(); //echte Implementierung
 });
 
-final userGroupsControllerProvider = Provider<IUserGroupsController>((ref) {
-  final service = ref.read(userGroupsServiceProvider);
-  return UserGroupsControllerImpl(service);
-});
+final userGroupsControllerProvider =
+    ChangeNotifierProvider.autoDispose<IUserGroupsController>((ref) {
+      final service = ref.read(userGroupsServiceProvider);
+      final controller = UserGroupsControllerImpl(service);
+      return controller;
+    });

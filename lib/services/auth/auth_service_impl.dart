@@ -1,6 +1,6 @@
+import 'package:konstudy/services/auth/iauth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:konstudy/services/auth/iauth_service.dart';
-
 
 class AuthService extends IAuthService {
   final SupabaseClient _client = Supabase.instance.client;
@@ -34,7 +34,7 @@ class AuthService extends IAuthService {
   Future<void> signOut() => _client.auth.signOut();
 
   @override
-  Future<void> exchangeSession(Uri uri) async{
+  Future<void> exchangeSession(Uri uri) async {
     await Supabase.instance.client.auth.exchangeCodeForSession(uri.toString());
   }
 

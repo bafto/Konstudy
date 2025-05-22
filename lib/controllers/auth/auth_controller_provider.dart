@@ -5,7 +5,6 @@ import 'package:konstudy/services/auth/iauth_service.dart';
 import 'package:konstudy/controllers/auth/iauth_controller.dart';
 import 'package:konstudy/controllers/auth/auth_controller_impl.dart';
 
-
 final authServiceProvider = Provider<IAuthService>((ref) {
   return AuthService();
 });

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/routes/routes_paths.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -91,18 +89,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       _passwordController.text.trim(),
                                     );
 
-                            // Wenn kein Fehler: Zur HomePage weiterleiten
-                            context.go(RoutesPaths.home);
-                          } catch (e) {
-                            // Fehler abfangen und anzeigen
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(content: Text('Fehler: ${e.toString()}')),
-                            );
-                          }
-                        }
-                      },
-                      child: const Text("Login"),
-                    ),
+                                // Wenn kein Fehler: Zur HomePage weiterleiten
+                                if (context.mounted) {
+                                  HomeScreenRoute().go(context);
+                                } else {
+                                  debugPrint('context not mounted');
+                                }
+                              } catch (e) {
+                                // Fehler abfangen und anzeigen
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Fehler: ${e.toString()}'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text("Login"),
+                        ),
                   ],
                 ),
               ),

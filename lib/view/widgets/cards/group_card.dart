@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/routes/routes_paths.dart';
-import 'package:go_router/go_router.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/initials_icon.dart';
 
 class GroupCard extends StatelessWidget {
@@ -35,10 +34,8 @@ class GroupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        context.go(
-          RoutesPaths.group + "/" + name,
-        );
+      onTap: () {
+        GroupPageRoute(groupName: name).push<void>(context);
       }, //Aktion bei Klick
       child: Card(
         child: IntrinsicHeight(

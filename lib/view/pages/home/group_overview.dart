@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/routes/routes_paths.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/group_card.dart';
 
 class Groupoverview extends ConsumerStatefulWidget {
@@ -14,12 +15,6 @@ class Groupoverview extends ConsumerStatefulWidget {
 }
 
 class _GroupoverviewState extends ConsumerState<Groupoverview> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(ref.read(userGroupsControllerProvider).loadGroups);
-  }
-
   Widget _buildGroupCard(final Group group) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
@@ -38,12 +33,23 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
     return Scaffold(
-      body: ListView(
-        children: groupsController.groups.map(_buildGroupCard).toList(),
+      body: FutureBuilder(
+        future: groupsController.getGroups(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return ListView(
+            children: snapshot.data!.map(_buildGroupCard).toList(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          CreateGroupPageRoute().push<void>(context);
+        },
         child: Icon(Icons.add),
-        onPressed: () => context.push(RoutesPaths.createGroup),
       ),
     );
   }

@@ -13,24 +13,25 @@ class MedianCollectionPage extends ConsumerStatefulWidget {
 
 class _MedianCollectionPage extends ConsumerState<MedianCollectionPage> {
   @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      ref.read(groupControllerProvider).loadMedians();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final controller = ref.watch(groupControllerProvider);
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: controller.medians.length,
-        itemBuilder: (context, index) {
-          final media = controller.medians[index];
-          return MediaCard(filename: media.fileName);
+      body: FutureBuilder(
+        future: controller.getMedia(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final media = snapshot.data!;
+          return ListView.builder(
+            itemCount: media.length,
+            itemBuilder: (context, index) {
+              final m = media[index];
+              return MediaCard(filename: m.fileName);
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

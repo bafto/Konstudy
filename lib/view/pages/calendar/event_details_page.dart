@@ -1,165 +1,185 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
 import 'package:konstudy/models/calendar/calendar_event.dart';
-import 'package:konstudy/routes/routes_paths.dart';
+import 'package:konstudy/models/calendar/repeat_type.dart';
+import 'package:konstudy/routes/app_routes.dart';
 
 class EventDetailsPage extends ConsumerWidget {
-  final CalendarEventData event;
+  final int eventId;
 
-  const EventDetailsPage({super.key, required this.event});
+  const EventDetailsPage({super.key, required this.eventId});
 
-  String _getRepeatText(CalendarEventData event) {
-    final recurrence = event.recurrenceSettings;
-    if (recurrence == null ||
-        recurrence.frequency == RepeatFrequency.doNotRepeat) {
-      return 'Keine Wiederholung';
-    }
-
-    switch (recurrence.frequency) {
-      case RepeatFrequency.daily:
+  String _getRepeatText(CalendarEvent event) {
+    switch (event.repeat) {
+      case RepeatType.daily:
         return 'Täglich';
-      case RepeatFrequency.weekly:
+      case RepeatType.weekly:
         return 'Wöchentlich';
-      case RepeatFrequency.monthly:
+      case RepeatType.monthly:
         return 'Monatlich';
-      case RepeatFrequency.yearly:
+      case RepeatType.yearly:
         return 'Jährlich';
-      default:
-        return 'Wiederholt sich';
+      case RepeatType.none:
+        return 'Wiederholt sich nicht';
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CalendarEvent myevent = event.event as CalendarEvent;
+    final myevent = ref.watch(calendarControllerProvider).getEventById(eventId);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Event Details"),
         actions: [
           // Dropdown-Menü in der AppBar
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              // Aktionen basierend auf der Auswahl durchführen
-              if (value == 'Bearbeiten') {
-                // Logik zum Bearbeiten des Events
-                context.push(
-                  RoutesPaths.editEvent,
-                  extra: event,
-                );
-              } else if (value == 'Löschen') {
-                // Event löschen
-                _deleteEvent(context, ref);
-
-                //fenster muss nach Löschen sich selber schließen
+          FutureBuilder(
+            future: myevent,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
               }
-            },
-            itemBuilder: (BuildContext context) {
-              return ['Bearbeiten', 'Löschen'].map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+              return PopupMenuButton<String>(
+                onSelected: (value) {
+                  // Aktionen basierend auf der Auswahl durchführen
+                  if (value == 'Bearbeiten') {
+                    // Logik zum Bearbeiten des Events
+                    EditEventPageRoute(
+                      eventId: snapshot.data!.id,
+                    ).push<void>(context);
+                  } else if (value == 'Löschen') {
+                    // Event löschen
+                    _deleteEvent(context, ref, snapshot.data!);
+
+                    //fenster muss nach Löschen sich selber schließen
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return ['Bearbeiten', 'Löschen'].map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              );
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
+      body: FutureBuilder(
+        future: myevent,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.title, color: Colors.blue),
-                    const SizedBox(width: 8),
-                    Expanded(
+                    Row(
+                      children: [
+                        const Icon(Icons.title, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            snapshot.data!.title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_today, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Start: ${DateFormat.yMMMMd().add_Hm().format(snapshot.data!.start)}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (snapshot.data?.end != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.event, color: Colors.red),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Ende: ${DateFormat.yMMMMd().add_Hm().format(snapshot.data!.end)}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.repeat, color: Colors.purple),
+                        const SizedBox(width: 8),
+                        Text(
+                          _getRepeatText(snapshot.data!),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Beschreibung:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      constraints: const BoxConstraints(minHeight: 80),
                       child: Text(
-                        event.title ?? 'Kein Titel',
+                        snapshot.data!.description,
                         style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black87,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today, color: Colors.green),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Start: ${DateFormat.yMMMMd().add_Hm().format(event.startTime!)}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (event.endTime != null)
-                  Row(
-                    children: [
-                      const Icon(Icons.event, color: Colors.red),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Ende: ${DateFormat.yMMMMd().add_Hm().format(event.endTime!)}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Icon(Icons.repeat, color: Colors.purple),
-                    const SizedBox(width: 8),
-                    Text(
-                      _getRepeatText(event),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Beschreibung:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  constraints: const BoxConstraints(minHeight: 80),
-                  child: Text(
-                    myevent.description ?? '',
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
   // Methode zum Löschen des Events
-  void _deleteEvent(BuildContext context, WidgetRef ref) {
+  void _deleteEvent(
+    BuildContext context,
+    WidgetRef ref,
+    CalendarEvent myevent,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -173,8 +193,6 @@ class EventDetailsPage extends ConsumerWidget {
 
                 // Hole den CalendarController aus dem Riverpod-Provider
                 final controller = ref.read(calendarControllerProvider);
-
-                CalendarEvent myevent = event.event as CalendarEvent;
 
                 // Event löschen
                 await controller.deleteEvent(myevent.id);

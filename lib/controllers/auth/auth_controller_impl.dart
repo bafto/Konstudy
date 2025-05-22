@@ -1,10 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/iauth_controller.dart';
+import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/services/auth/iauth_service.dart';
-import 'package:konstudy/routes/routes_paths.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
     implements IAuthController {
@@ -44,7 +43,9 @@ class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
   }
 
   @override
-  Future<void> handleVerificationCallBackAndRedirect(BuildContext context) async {
+  Future<void> handleVerificationCallBackAndRedirect(
+    BuildContext context,
+  ) async {
     state = const AsyncValue.loading();
     final uri = Uri.base;
 
@@ -60,7 +61,7 @@ class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
 
       // Nach erfolgreichem Login weiterleiten
       if (context.mounted) {
-        context.go(RoutesPaths.home);
+        HomeScreenRoute().go(context);
       }
     } catch (e, st) {
       // Fehler setzen

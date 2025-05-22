@@ -1,5 +1,5 @@
 import 'package:konstudy/models/group/media.dart';
-import 'package:konstudy/models/group/Note.dart';
+import 'package:konstudy/models/group/note.dart';
 import 'package:konstudy/services/group/igroup_service.dart';
 
 class GroupService implements IGroupService {
@@ -16,7 +16,7 @@ class GroupService implements IGroupService {
   }
 
   @override
-  Future<List<Media>> fetchMedian() async {
+  Future<List<Media>> fetchMedia() async {
     await Future.delayed(
       Duration(seconds: 1),
     ); //simulation eines Netzwerkaufruf
