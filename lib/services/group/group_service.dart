@@ -16,7 +16,7 @@ class GroupService implements IGroupService {
   }
 
   @override
-  Future<List<Media>> fetchMedian() async {
+  Future<List<Media>> fetchMedia() async {
     await Future.delayed(
       Duration(seconds: 1),
     ); //simulation eines Netzwerkaufruf

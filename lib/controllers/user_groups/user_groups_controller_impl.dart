@@ -7,13 +7,6 @@ class UserGroupsControllerImpl implements IUserGroupsController {
 
   UserGroupsControllerImpl(this._service);
 
-  List<Group> _groups = [];
-
   @override
-  List<Group> get groups => _groups;
-
-  @override
-  Future<void> loadGroups() async {
-    _groups = await _service.fetchGroups();
-  }
+  Future<List<Group>> getGroups() => _service.fetchGroups();
 }

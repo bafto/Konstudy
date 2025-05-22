@@ -12,12 +12,6 @@ class Groupoverview extends ConsumerStatefulWidget {
 }
 
 class _GroupoverviewState extends ConsumerState<Groupoverview> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(ref.read(userGroupsControllerProvider).loadGroups);
-  }
-
   Widget _buildGroupCard(final Group group) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
@@ -37,14 +31,14 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
     final groupsController = ref.watch(userGroupsControllerProvider);
     return Scaffold(
       body: FutureBuilder(
-        future: ref.read(userGroupsControllerProvider).loadGroups(),
+        future: groupsController.getGroups(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(child: CircularProgressIndicator());
           }
 
           return ListView(
-            children: groupsController.groups.map(_buildGroupCard).toList(),
+            children: snapshot.data!.map(_buildGroupCard).toList(),
           );
         },
       ),

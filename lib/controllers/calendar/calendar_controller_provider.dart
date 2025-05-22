@@ -12,6 +12,5 @@ final calendarControllerProvider =
     ChangeNotifierProvider.autoDispose<ICalendarController>((ref) {
       final service = ref.read(calendarServiceProvider);
       final controller = CalendarControllerImpl(service);
-      controller.loadEvents(); // automatisch beim Erstellen laden
       return controller;
     });

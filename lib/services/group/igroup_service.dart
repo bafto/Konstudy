@@ -3,5 +3,5 @@ import 'package:konstudy/models/group/note.dart';
 
 abstract class IGroupService {
   Future<List<Note>> fetchNotes();
-  Future<List<Media>> fetchMedian();
+  Future<List<Media>> fetchMedia();
 }

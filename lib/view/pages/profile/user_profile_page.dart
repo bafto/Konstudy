@@ -20,7 +20,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   void initState() {
     super.initState();
     final controller = ref.read(userProfilControllerProvider);
-    _userFuture = controller.fetchUserProfil();
+    _userFuture = controller.fetchUserProfile();
   }
 
   @override

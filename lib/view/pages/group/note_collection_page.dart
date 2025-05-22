@@ -12,24 +12,25 @@ class NoteCollectionPage extends ConsumerStatefulWidget {
 
 class _NoteCollectionPage extends ConsumerState<NoteCollectionPage> {
   @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      ref.read(groupControllerProvider).loadNotes();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final controller = ref.watch(groupControllerProvider);
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: controller.notes.length,
-        itemBuilder: (context, index) {
-          final note = controller.notes[index];
-          return NoteCard(name: note.name, description: note.description);
+      body: FutureBuilder(
+        future: controller.getNotes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final notes = snapshot.data!;
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              final note = notes[index];
+              return NoteCard(name: note.name, description: note.description);
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
