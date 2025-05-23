@@ -1,60 +1,72 @@
 import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/services/calendar/icalendar_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 class CalendarService implements ICalendarService {
-  //In-Memory-Liste als Datenbank
-  final List<CalendarEvent> _eventList = [
-    CalendarEvent(
-      id: 1,
-      title: 'Meeting mit Max',
-      start: DateTime.now().add(Duration(hours: 1)),
-      end: DateTime.now().add(Duration(hours: 2)),
-    ),
-  ];
+  final SupabaseClient _client = Supabase.instance.client;
 
   @override
-  Future<List<CalendarEvent>> fetchEvents() async {
-    await Future.delayed(Duration(seconds: 1)); //Simuliert Netwerkaufruf
-    return List.unmodifiable(_eventList);
+  Future<List<CalendarEvent>> fetchEvents(String? groupId) async {
+    final userId = _client.auth.currentUser!.id;
+    final query = _client.from('calendar_events').select();
+
+    if(groupId != null){
+      query.eq('group_id', groupId);
+    }else{
+      query.eq('owner_id', userId);
+    }
+
+    final response = await query;
+    return (response as List).map((e) => CalendarEvent.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   @override
-  Future<void> saveEvent(CalendarEvent event) async {
-    await Future.delayed(Duration(seconds: 1)); //Simuliert Netwerkaufruf
+  Future<CalendarEvent> fetchEvent(String eventId) async{
+    final response = await _client
+        .from('calendar_events')
+        .select()
+        .eq('id', eventId)
+        .maybeSingle(); // gibt null zurück statt Exception bei 0 Treffern
 
-    // Neue ID berechnen (max ID + 1)
-    final nextId =
-        _eventList.isEmpty
-            ? 1
-            : _eventList.map((e) => e.id).reduce((a, b) => a > b ? a : b) + 1;
+    if (response == null) {
+      throw Exception('Event mit ID $eventId nicht gefunden');
+    }
 
-    // Neues Event mit gesetzter ID
-    final newEvent = CalendarEvent(
-      id: nextId,
-      title: event.title,
-      start: event.start,
-      end: event.end,
-      repeat: event.repeat,
-    );
-    _eventList.add(newEvent);
-    print("Event gespeichert: ${newEvent.title} & ${newEvent.repeat}");
+    return CalendarEvent.fromJson(response);
   }
 
   @override
-  Future<void> deleteEvent(int eventId) async {
-    await Future.delayed(Duration(seconds: 1)); //Simuliert Netwerkaufruf
-    _eventList.removeWhere((event) => event.id == eventId);
+  Future<void> saveEvent(CalendarEvent event, String? groupId) async {
+    final userId = _client.auth.currentUser!.id;
+    final insertData = groupId != null
+        ? event.toJson(userId: userId, groupId: groupId)
+        : event.toJson(userId: userId);
+
+    final response = await _client
+        .from('calendar_events')
+        .insert(insertData);
+
+
+  }
+
+  @override
+  Future<void> deleteEvent(String eventId) async {
+    final response = await _client
+        .from('calendar_events')
+        .delete()
+        .eq('id', eventId);
+
+
   }
 
   @override
   Future<void> updateEvent(CalendarEvent newEvent) async {
-    await Future.delayed(Duration(seconds: 1)); // Simuliert Netzwerkaufruf
+    final response = await _client
+        .from('calendar_events')
+        .update(newEvent.toUpdateJson())
+        .eq('id', newEvent.id);
 
-    final index = _eventList.indexWhere((event) => event.id == newEvent.id);
-    if (index != -1) {
-      _eventList[index] = newEvent;
-    } else {
-      throw Exception('Event mit ID ${newEvent.id} nicht gefunden');
-    }
+
   }
 }

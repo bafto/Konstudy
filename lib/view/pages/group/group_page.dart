@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/view/pages/group/group_calendar_page.dart';
 import 'package:konstudy/view/pages/group/media_collection_page.dart';
 import 'package:konstudy/view/pages/group/note_collection_page.dart';
+import 'package:konstudy/view/pages/calendar/calendar_page.dart';
 
 class GroupPage extends StatefulWidget {
-  const GroupPage({super.key, required this.groupName});
+  const GroupPage({super.key, required this.groupName, required this.groupId});
   final String groupName;
+  final String groupId;
 
   @override
   State<GroupPage> createState() => _GroupPageState();
@@ -14,18 +15,22 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends State<GroupPage> {
   int _selectedIndex = 1;
-
-  // Liste der Seiten, die angezeigt werden
-  static const List<Widget> _pages = <Widget>[
-    GroupCalendarPage(),
-    NoteCollectionPage(),
-    MedianCollectionPage(),
-  ];
+  late final List<Widget> _pages;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+  @override
+  void initState() {
+    super.initState();
+    //Liste aller Seiten die angezeigt werden
+    _pages = [
+      CalendarPage(groupId: widget.groupId),
+      NoteCollectionPage(),
+      MedianCollectionPage(),
+    ];
   }
 
   @override

@@ -19,6 +19,7 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
       child: GroupCard(
+        groupId: group.id,
         name: group.name,
         description: group.description ?? '',
         members: List.generate(

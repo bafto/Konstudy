@@ -6,7 +6,8 @@ import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
 
 class AddEventPage extends ConsumerStatefulWidget {
-  const AddEventPage({super.key});
+  final String? groupId;
+  const AddEventPage({super.key, this.groupId});
 
   @override
   ConsumerState<AddEventPage> createState() => _AddEventPageState();
@@ -167,7 +168,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
 
                   // neues Event bauen
                   final newEvent = CalendarEvent(
-                    id: 0,
+                    id: '0',
                     title: _titleController.text,
                     start: _startDateTime!,
                     end: _endDateTime!,
@@ -175,7 +176,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                     description: _descriptionController.text,
                   );
 
-                  await eventController.addEvent(newEvent);
+                  await eventController.addEvent(newEvent, groupId: widget.groupId);
                   context.pop();
                 },
                 child: const Text('Event speichern'),

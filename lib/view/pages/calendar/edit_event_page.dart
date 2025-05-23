@@ -7,7 +7,7 @@ import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
 
 class EditEventPage extends ConsumerStatefulWidget {
-  final int eventId;
+  final String eventId;
 
   const EditEventPage({super.key, required this.eventId});
 

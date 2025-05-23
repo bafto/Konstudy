@@ -12,19 +12,19 @@ class CalendarControllerImpl extends ChangeNotifier
   List<CalendarEvent> _events = [];
 
   @override
-  Future<List<CalendarEvent>> getEvents() async {
-    _events = await _service.fetchEvents();
+  Future<List<CalendarEvent>> getEvents({String? groupId}) async {
+    _events = await _service.fetchEvents(groupId);
     return _events;
   }
 
   @override
-  Future<void> addEvent(CalendarEvent event) async {
-    await _service.saveEvent(event);
+  Future<void> addEvent(CalendarEvent event, {String? groupId}) async {
+    await _service.saveEvent(event, groupId);
     notifyListeners();
   }
 
   @override
-  Future<void> deleteEvent(int eventId) async {
+  Future<void> deleteEvent(String eventId) async {
     await _service.deleteEvent(eventId);
     notifyListeners();
   }
@@ -36,9 +36,9 @@ class CalendarControllerImpl extends ChangeNotifier
   }
 
   @override
-  Future<CalendarEvent> getEventById(int eventId) async {
+  Future<CalendarEvent> getEventById(String eventId) async {
     if (_events.isEmpty) {
-      await getEvents();
+      await _service.fetchEvent(eventId);
     }
     return _events.firstWhere((event) => event.id == eventId);
   }

@@ -4,12 +4,14 @@ import 'package:konstudy/view/widgets/initials_icon.dart';
 
 class GroupCard extends StatelessWidget {
   const GroupCard({
+    required this.groupId,
     required this.name,
     required this.description,
     required this.members,
     super.key,
   });
 
+  final String groupId;
   final String name;
   final String description;
   final List<Icon> members;
@@ -35,7 +37,7 @@ class GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        GroupPageRoute(groupName: name).push<void>(context);
+        GroupPageRoute(groupName: name, groupId: groupId).push<void>(context);
       }, //Aktion bei Klick
       child: Card(
         child: IntrinsicHeight(
