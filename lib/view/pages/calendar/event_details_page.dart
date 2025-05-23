@@ -8,7 +8,7 @@ import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class EventDetailsPage extends ConsumerWidget {
-  final int eventId;
+  final String eventId;
 
   const EventDetailsPage({super.key, required this.eventId});
 

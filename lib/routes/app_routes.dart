@@ -40,11 +40,12 @@ class HomeScreenRoute extends GoRouteData {
 
 class GroupPageRoute extends GoRouteData {
   final String groupName;
-  const GroupPageRoute({required this.groupName});
+  final String groupId;
+  const GroupPageRoute({required this.groupName, required this.groupId});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return GroupPage(groupName: groupName);
+    return GroupPage(groupName: groupName, groupId: groupId);
   }
 }
 
@@ -58,16 +59,17 @@ class CreateGroupPageRoute extends GoRouteData {
 }
 
 class AddEventPageRoute extends GoRouteData {
-  const AddEventPageRoute();
+  final String? groupId;
+  const AddEventPageRoute({required this.groupId});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AddEventPage();
+    return AddEventPage(groupId: groupId);
   }
 }
 
 class EventDetailsPageRoute extends GoRouteData {
-  final int eventId;
+  final String eventId;
   const EventDetailsPageRoute({required this.eventId});
 
   @override
@@ -77,7 +79,7 @@ class EventDetailsPageRoute extends GoRouteData {
 }
 
 class EditEventPageRoute extends GoRouteData {
-  final int eventId;
+  final String eventId;
   const EditEventPageRoute({required this.eventId});
 
   @override

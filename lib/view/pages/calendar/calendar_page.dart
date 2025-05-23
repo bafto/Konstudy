@@ -9,7 +9,8 @@ import 'package:konstudy/view/widgets/views/custom_month_view.dart';
 import 'package:konstudy/view/widgets/views/custom_week_view.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
-  const CalendarPage({super.key});
+  final String? groupId;
+  const CalendarPage({super.key, this.groupId});
 
   @override
   ConsumerState<CalendarPage> createState() => _CalendarPageState();
@@ -43,7 +44,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
             ],
           ),
           FutureBuilder(
-            future: controller.getEvents(),
+            future: controller.getEvents(groupId: widget.groupId),
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const Center(child: CircularProgressIndicator());
@@ -84,7 +85,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          AddEventPageRoute().push<void>(context);
+          AddEventPageRoute(groupId: widget.groupId).push<void>(context);
         },
       ),
     );

@@ -78,11 +78,15 @@ extension $HomeScreenRouteExtension on HomeScreenRoute {
 }
 
 extension $GroupPageRouteExtension on GroupPageRoute {
-  static GroupPageRoute _fromState(GoRouterState state) =>
-      GroupPageRoute(groupName: state.pathParameters['groupName']!);
+  static GroupPageRoute _fromState(GoRouterState state) => GroupPageRoute(
+    groupName: state.pathParameters['groupName']!,
+    groupId: state.uri.queryParameters['group-id']!,
+  );
 
-  String get location =>
-      GoRouteData.$location('/group/${Uri.encodeComponent(groupName)}');
+  String get location => GoRouteData.$location(
+    '/group/${Uri.encodeComponent(groupName)}',
+    queryParams: {'group-id': groupId},
+  );
 
   void go(BuildContext context) => context.go(location);
 
@@ -96,9 +100,12 @@ extension $GroupPageRouteExtension on GroupPageRoute {
 
 extension $AddEventPageRouteExtension on AddEventPageRoute {
   static AddEventPageRoute _fromState(GoRouterState state) =>
-      const AddEventPageRoute();
+      AddEventPageRoute(groupId: state.uri.queryParameters['group-id']);
 
-  String get location => GoRouteData.$location('/addEvent');
+  String get location => GoRouteData.$location(
+    '/addEvent',
+    queryParams: {if (groupId != null) 'group-id': groupId},
+  );
 
   void go(BuildContext context) => context.go(location);
 
@@ -112,13 +119,11 @@ extension $AddEventPageRouteExtension on AddEventPageRoute {
 
 extension $EventDetailsPageRouteExtension on EventDetailsPageRoute {
   static EventDetailsPageRoute _fromState(GoRouterState state) =>
-      EventDetailsPageRoute(
-        eventId: int.parse(state.uri.queryParameters['event-id']!)!,
-      );
+      EventDetailsPageRoute(eventId: state.uri.queryParameters['event-id']!);
 
   String get location => GoRouteData.$location(
     '/detailsEvent',
-    queryParams: {'event-id': eventId.toString()},
+    queryParams: {'event-id': eventId},
   );
 
   void go(BuildContext context) => context.go(location);
@@ -133,14 +138,10 @@ extension $EventDetailsPageRouteExtension on EventDetailsPageRoute {
 
 extension $EditEventPageRouteExtension on EditEventPageRoute {
   static EditEventPageRoute _fromState(GoRouterState state) =>
-      EditEventPageRoute(
-        eventId: int.parse(state.uri.queryParameters['event-id']!)!,
-      );
+      EditEventPageRoute(eventId: state.uri.queryParameters['event-id']!);
 
-  String get location => GoRouteData.$location(
-    '/editEvent',
-    queryParams: {'event-id': eventId.toString()},
-  );
+  String get location =>
+      GoRouteData.$location('/editEvent', queryParams: {'event-id': eventId});
 
   void go(BuildContext context) => context.go(location);
 
