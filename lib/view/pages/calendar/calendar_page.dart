@@ -62,6 +62,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
                         e.start,
                       ),
                       event: e,
+                      color: e.eventColor ?? Colors.grey,
                     );
                   }).toList();
 

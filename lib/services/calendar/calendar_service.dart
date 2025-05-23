@@ -1,7 +1,7 @@
 import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/services/calendar/icalendar_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'package:flutter/material.dart';
 
 class CalendarService implements ICalendarService {
   final SupabaseClient _client = Supabase.instance.client;
@@ -11,15 +11,57 @@ class CalendarService implements ICalendarService {
     final userId = _client.auth.currentUser!.id;
     final query = _client.from('calendar_events').select();
 
-    if(groupId != null){
-      query.eq('group_id', groupId);
-    }else{
-      query.eq('owner_id', userId);
+    if (groupId != null) {
+      final membersResponse = await _client
+          .from('group_members')
+          .select('user_id')
+          .eq('group_id', groupId);
+
+      final memberIds = (membersResponse as List)
+          .map((e) => e['user_id'] as String)
+          .toList();
+
+      final memberIdsFilter = memberIds.map((id) => "'$id'").join(',');
+
+      query.or(
+        'group_id.eq.$groupId,'
+            'and(group_id.is.null,owner_id.in.($memberIdsFilter))',
+      );
+    } else {
+      final groupsResponse = await _client
+          .from('group_members')
+          .select('group_id')
+          .eq('user_id', userId);
+
+      final groupIds = (groupsResponse as List)
+          .map((e) => e['group_id'] as String)
+          .toList();
+
+      final groupIdsFilter = groupIds.map((id) => "'$id'").join(',');
+
+      query.or(
+        'owner_id.eq.$userId,'
+            'group_id.in.($groupIdsFilter)',
+      );
     }
 
     final response = await query;
-    return (response as List).map((e) => CalendarEvent.fromJson(e as Map<String, dynamic>)).toList();
+
+    final events = (response as List)
+        .map((e) => CalendarEvent.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    for (var event in events) {
+      event.eventColor = _getEventColor(
+        currentUserId: userId,
+        ownerId: event.ownerId,
+        groupId: event.groupId,
+      );
+    }
+
+    return events;
   }
+
 
   @override
   Future<CalendarEvent> fetchEvent(String eventId) async{
@@ -46,8 +88,6 @@ class CalendarService implements ICalendarService {
     final response = await _client
         .from('calendar_events')
         .insert(insertData);
-
-
   }
 
   @override
@@ -56,8 +96,6 @@ class CalendarService implements ICalendarService {
         .from('calendar_events')
         .delete()
         .eq('id', eventId);
-
-
   }
 
   @override
@@ -68,5 +106,21 @@ class CalendarService implements ICalendarService {
         .eq('id', newEvent.id);
 
 
+  }
+
+  Color _getEventColor({
+    required String currentUserId,
+    String? ownerId,
+    String? groupId,
+  }) {
+    if (currentUserId == ownerId && groupId == null) {
+      return Colors.blue;
+    } else if (currentUserId == ownerId && groupId != null) {
+      return Colors.green;
+    } else if (currentUserId != ownerId && groupId != null) {
+      return Colors.orange;
+    } else {
+      return Colors.purple;
+    }
   }
 }
