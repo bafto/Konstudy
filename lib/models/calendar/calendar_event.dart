@@ -1,4 +1,6 @@
 import 'package:konstudy/models/calendar/repeat_type.dart';
+import 'package:flutter/material.dart';
+
 
 class CalendarEvent {
   final String id;
@@ -7,6 +9,9 @@ class CalendarEvent {
   final DateTime end;
   final RepeatType repeat;
   final String description;
+  final String? ownerId;
+  final String? groupId;
+  Color? eventColor;
 
   CalendarEvent({
     required this.id,
@@ -15,6 +20,9 @@ class CalendarEvent {
     required this.end,
     this.repeat = RepeatType.none,
     this.description = "",
+    this.eventColor,
+    this.ownerId,
+    this.groupId,
   });
 
   // Optional: Für JSON-Speicherung
@@ -29,6 +37,8 @@ class CalendarEvent {
         orElse: () => RepeatType.none,
       ),
       description: json['description'] as String,
+      ownerId: json['owner_id'] as String?,
+      groupId: json['group_id'] as String?
     );
   }
 
@@ -59,6 +69,9 @@ class CalendarEvent {
     DateTime? start,
     DateTime? end,
     RepeatType? repeat,
+    String? ownerId,
+    String? groupId,
+    Color? eventcolor,
   }) {
     return CalendarEvent(
       id: id ?? this.id,
@@ -67,6 +80,9 @@ class CalendarEvent {
       start: start ?? this.start,
       end: end ?? this.end,
       repeat: repeat ?? this.repeat,
+      ownerId: ownerId ?? this.ownerId,
+      groupId: groupId ?? this.groupId,
+      eventColor: eventcolor ?? this.eventColor,
     );
   }
 }
