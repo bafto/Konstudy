@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/routes/app_routes.dart';
+
+
 
 class NoteCard extends StatelessWidget {
-  const NoteCard({required this.name, required this.description, super.key});
+  const NoteCard({required this.note , super.key});
 
-  final String name;
-  final String description;
+  final Note note;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        NoteEditorPageRoute(noteId: note.id, groupId: note.groupId).push<void>(context);
+      },
       child: Card(
         child: IntrinsicHeight(
           child: Row(
@@ -19,13 +25,13 @@ class NoteCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      note.title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
-                    Text(description),
+                    Text("Bearbeitet von"),
                   ],
                 ),
               ),

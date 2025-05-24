@@ -58,6 +58,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
 
       factory: $CreateGroupPageRouteExtension._fromState,
     ),
+    GoRouteData.$route(
+      path: 'noteEditor',
+
+      factory: $NoteEditorPageRouteExtension._fromState,
+    ),
   ],
 );
 
@@ -222,6 +227,28 @@ extension $CreateGroupPageRouteExtension on CreateGroupPageRoute {
       const CreateGroupPageRoute();
 
   String get location => GoRouteData.$location('/createGroup');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $NoteEditorPageRouteExtension on NoteEditorPageRoute {
+  static NoteEditorPageRoute _fromState(GoRouterState state) =>
+      NoteEditorPageRoute(
+        noteId: state.uri.queryParameters['note-id'],
+        groupId: state.uri.queryParameters['group-id']!,
+      );
+
+  String get location => GoRouteData.$location(
+    '/noteEditor',
+    queryParams: {if (noteId != null) 'note-id': noteId, 'group-id': groupId},
+  );
 
   void go(BuildContext context) => context.go(location);
 

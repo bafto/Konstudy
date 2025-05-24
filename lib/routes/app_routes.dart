@@ -7,6 +7,7 @@ import 'package:konstudy/view/pages/auth/verify_email_page.dart';
 import 'package:konstudy/view/pages/calendar/add_event_page.dart';
 import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
 import 'package:konstudy/view/pages/calendar/event_details_page.dart';
+import 'package:konstudy/view/pages/group/editor/note_editor_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/group_create_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
@@ -27,6 +28,7 @@ part 'app_routes.g.dart';
     TypedGoRoute<VerifyEmailPageRoute>(path: 'verifyEmail'),
     TypedGoRoute<UserProfilePageRoute>(path: 'userProfile'),
     TypedGoRoute<CreateGroupPageRoute>(path: 'createGroup'),
+    TypedGoRoute<NoteEditorPageRoute>(path: 'noteEditor'),
   ],
 )
 class HomeScreenRoute extends GoRouteData {
@@ -118,6 +120,17 @@ class UserProfilePageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const UserProfilePage();
+  }
+}
+
+class NoteEditorPageRoute extends GoRouteData {
+  const NoteEditorPageRoute({this.noteId, required this.groupId});
+  final String? noteId;
+  final String groupId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return NoteEditorPage(noteId: noteId, groupId: groupId);
   }
 }
 
