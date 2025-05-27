@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class MediaCard extends StatelessWidget {
   final String filename;
+  final String filePath;
 
-  const MediaCard({super.key, required this.filename});
+  const MediaCard({super.key, required this.filename, required this.filePath});
 
   @override
   Widget build(BuildContext context) {

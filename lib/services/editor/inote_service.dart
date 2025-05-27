@@ -1,4 +1,4 @@
-import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/models/editor/note.dart';
 
 abstract class INoteService{
   Future<List<Note>> fetchNotes(String groupId);

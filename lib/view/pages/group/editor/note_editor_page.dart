@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/controllers/editor/note_controller_provider.dart';
 
 class NoteEditorPage extends ConsumerStatefulWidget {

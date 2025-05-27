@@ -1,4 +1,4 @@
-import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/services/editor/inote_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

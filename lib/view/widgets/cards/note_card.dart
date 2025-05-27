@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/models/editor/note.dart';
 
 abstract class INoteController extends ChangeNotifier{
   Future<Note> getNoteById(String id);
