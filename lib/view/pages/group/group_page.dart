@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/pages/group/media_collection_page.dart';
-import 'package:konstudy/view/pages/group/note_collection_page.dart';
+import 'package:konstudy/view/pages/group/editor/note_collection_page.dart';
 import 'package:konstudy/view/pages/calendar/calendar_page.dart';
 
 class GroupPage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _GroupPageState extends State<GroupPage> {
     //Liste aller Seiten die angezeigt werden
     _pages = [
       CalendarPage(groupId: widget.groupId),
-      NoteCollectionPage(),
+      NoteCollectionPage(groupId: widget.groupId),
       MedianCollectionPage(),
     ];
   }

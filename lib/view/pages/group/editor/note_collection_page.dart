@@ -1,41 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/group/group_controller_provider.dart';
+import 'package:konstudy/controllers/editor/note_controller_provider.dart';
 import 'package:konstudy/view/widgets/cards/note_card.dart';
+import 'package:konstudy/models/group/editor/note.dart';
+import 'package:konstudy/routes/app_routes.dart';
 
 class NoteCollectionPage extends ConsumerStatefulWidget {
-  const NoteCollectionPage({super.key});
+  final String groupId;
+  const NoteCollectionPage({super.key, required this.groupId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NoteCollectionPage();
 }
 
 class _NoteCollectionPage extends ConsumerState<NoteCollectionPage> {
+
+  Widget _buildNoteCard(final Note note){
+    return Padding(
+      padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+      child: NoteCard(note: note),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(groupControllerProvider);
+    final controller = ref.watch(noteControllerProvider);
 
     return Scaffold(
       body: FutureBuilder(
-        future: controller.getNotes(),
+        future: controller.loadNotes(widget.groupId),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final notes = snapshot.data!;
-          return ListView.builder(
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              final note = notes[index];
-              return NoteCard(name: note.name, description: note.description);
-            },
+          return ListView(
+            children: snapshot.data!.map(_buildNoteCard).toList(),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => debugPrint("new note"),
+        onPressed: () {
+          NoteEditorPageRoute(groupId: widget.groupId).push<void>(context);
+        },
       ),
     );
   }
