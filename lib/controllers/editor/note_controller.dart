@@ -1,4 +1,3 @@
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:konstudy/models/group/editor/note.dart';
 import 'package:konstudy/services/editor/inote_service.dart';
 import 'package:konstudy/controllers/editor/inote_controller.dart';

@@ -14,7 +14,6 @@ class Note {
   );
 
   Map<String, dynamic> toMap() => {
-    'id': id,
     'group_id': groupId,
     'title': title,
     'content': content,

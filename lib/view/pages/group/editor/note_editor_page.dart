@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:konstudy/models/group/editor/note.dart';
 import 'package:konstudy/controllers/editor/note_controller_provider.dart';
@@ -24,12 +24,11 @@ class NoteEditorPage extends ConsumerStatefulWidget {
 
 class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
   final _titleController = TextEditingController();
-  EditorState? _editorState;
+  late QuillController _quillController;
   bool _saving = false;
   bool _isLoading = true;
   Note? _note;
 
-  final FocusNode _editorFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -45,9 +44,13 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
       _titleController.text = _note!.title;
 
       final docJson = jsonDecode(_note!.content);
-      _editorState = EditorState(document: Document.fromJson(docJson as Map<String, dynamic>));
+      final doc = Document.fromJson(docJson as List<dynamic>);
+      _quillController = QuillController(
+        document: doc,
+        selection: const TextSelection.collapsed(offset: 0),
+      );
     } else {
-      _editorState = EditorState.blank(withInitialText: true);
+      _quillController = QuillController.basic();
     }
 
     setState(() {
@@ -58,7 +61,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
   @override
   void dispose() {
     _titleController.dispose();
-    _editorFocusNode.dispose();
+    _quillController.dispose();
     super.dispose();
   }
 
@@ -66,7 +69,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
     setState(() => _saving = true);
     final controller = ref.read(noteControllerProvider);
 
-    final contentJson = jsonEncode(_editorState!.document.toJson());
+    final contentJson = jsonEncode(_quillController.document.toDelta().toJson());
 
     await controller.saveNotes(
       id: _note?.id,
@@ -81,7 +84,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading || _editorState == null) {
+    if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
@@ -109,13 +112,20 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
           children: [
             TextFormField(
               controller: _titleController,
+              focusNode: FocusNode(),
               decoration: const InputDecoration(labelText: 'Titel'),
             ),
             const SizedBox(height: 12),
+            QuillSimpleToolbar(controller: _quillController),
+            const SizedBox(height: 8),
             Expanded(
-              child: AppFlowyEditor(
-                editorState: _editorState!,
-                focusNode: _editorFocusNode,
+              child: QuillEditor(
+                controller: _quillController,
+                focusNode: FocusNode(),
+                scrollController: ScrollController(),
+                config: new QuillEditorConfig(
+                  autoFocus: true,
+                ),
               ),
             ),
           ],
@@ -124,4 +134,5 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
     );
   }
 }
+
 
