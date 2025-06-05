@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:konstudy/controllers/user_groups/iuser_groups_controller.dart';
 import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserGroupsControllerImpl extends ChangeNotifier
     implements IUserGroupsController {
@@ -10,23 +9,27 @@ class UserGroupsControllerImpl extends ChangeNotifier
 
   UserGroupsControllerImpl(this._service);
 
+  @override
   List<Map<String, dynamic>> searchResult = [];
+  @override
   List<Map<String, dynamic>> selectedUsers = [];
 
   @override
   Future<List<Group>> getGroups() => _service.fetchGroups();
 
   @override
-  Future<bool> groupCreate({
-    required String name,
-    String? beschreibung,
-  }) async {
-    if(name.isEmpty){
-      return false;
+  Future<bool> groupCreate({required String name, String? beschreibung}) async {
+    if (name.isEmpty) {
+      return Future.error("Name darf nicht leer sein");
     }
 
     final userIds = selectedUsers.map((u) => u['id'] as String).toList();
-    await _service.createGroup(name, beschreibung, userIds);
+    try {
+      await _service.createGroup(name, beschreibung, userIds);
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
 
     selectedUsers.clear();
     searchResult.clear();
@@ -35,14 +38,14 @@ class UserGroupsControllerImpl extends ChangeNotifier
   }
 
   @override
-  Future<void> searchUser(String query) async{
+  Future<void> searchUser(String query) async {
     searchResult = await _service.searchUsers(query);
     notifyListeners();
   }
 
   @override
   void addUser(Map<String, dynamic> user) {
-    if(!selectedUsers.any((n) => n['id'] == user['id'])){
+    if (!selectedUsers.any((n) => n['id'] == user['id'])) {
       selectedUsers.add(user);
       notifyListeners();
     }
@@ -53,5 +56,4 @@ class UserGroupsControllerImpl extends ChangeNotifier
     selectedUsers.removeWhere((n) => n['id'] == user['id']);
     notifyListeners();
   }
-
 }

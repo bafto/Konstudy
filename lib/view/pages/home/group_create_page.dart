@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
+import 'package:konstudy/routes/app_routes.dart';
 
 class CreateGroupPage extends ConsumerStatefulWidget {
-  const CreateGroupPage({Key? key}) : super(key: key);
+  const CreateGroupPage({super.key});
 
   @override
   ConsumerState<CreateGroupPage> createState() => _CreateGroupPageState();
@@ -42,8 +41,14 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(controller: _nameController, decoration: InputDecoration(labelText: 'Name')),
-            TextField(controller: _descController, decoration: InputDecoration(labelText: 'Beschreibung')),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: _descController,
+              decoration: InputDecoration(labelText: 'Beschreibung'),
+            ),
             TextField(
               controller: _searchController,
               decoration: InputDecoration(labelText: 'Nutzer suchen'),
@@ -58,14 +63,22 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
                 itemCount: controller.searchResult.length,
                 itemBuilder: (context, index) {
                   final nutzer = controller.searchResult[index];
-                  final selected = controller.selectedUsers.any((n) => n['id'] == nutzer['id']);
+                  final selected = controller.selectedUsers.any(
+                    (n) => n['id'] == nutzer['id'],
+                  );
                   return ListTile(
                     title: Text(nutzer['name'].toString()),
                     subtitle: Text(nutzer['email'].toString()),
                     trailing: IconButton(
-                      icon: Icon(selected ? Icons.check_box : Icons.check_box_outline_blank),
+                      icon: Icon(
+                        selected
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                      ),
                       onPressed: () {
-                        final controllerNotifier = ref.read(userGroupsControllerProvider);
+                        final controllerNotifier = ref.read(
+                          userGroupsControllerProvider,
+                        );
                         if (selected) {
                           controllerNotifier.removeUser(nutzer);
                         } else {
@@ -79,20 +92,24 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final success = await controller.groupCreate(
-                  name: _nameController.text.trim(),
-                  beschreibung: _descController.text.trim(),
-                );
-                if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Gruppe wurde erstellt')),
-                  );
-                  context.pop();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Bitte Namen und Nutzer angeben')),
-                  );
-                }
+                await controller
+                    .groupCreate(
+                      name: _nameController.text.trim(),
+                      beschreibung: _descController.text.trim(),
+                    )
+                    .then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Gruppe wurde erstellt')),
+                      );
+                      HomeScreenRoute().go(context);
+                    })
+                    .catchError((e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Bitte Namen und Nutzer angeben'),
+                        ),
+                      );
+                    });
               },
               child: Text('Gruppe erstellen'),
             ),
