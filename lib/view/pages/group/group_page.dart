@@ -46,7 +46,7 @@ class _GroupPageState extends State<GroupPage> {
         title: Center(child: Text(widget.groupName)),
         actions: [
           IconButton(
-            onPressed: () => debugPrint("here"),
+            onPressed: () => GroupProfilPageRoute(groupId: widget.groupId).push<void>(context),
             icon: Icon(Icons.group),
           ),
         ],

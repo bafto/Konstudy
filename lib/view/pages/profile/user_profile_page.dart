@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:konstudy/controllers/profile/user_profil_controller_provider.dart';
+import 'package:konstudy/controllers/profile/user/user_profil_controller_provider.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
-  const UserProfilePage({super.key});
+  final String? userId; // Wenn null, dann aktueller User
+
+  const UserProfilePage({super.key, this.userId});
 
   @override
   ConsumerState<UserProfilePage> createState() => _UserProfilePageState();
@@ -20,7 +22,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   void initState() {
     super.initState();
     final controller = ref.read(userProfilControllerProvider);
-    _userFuture = controller.fetchUserProfile();
+    // Hier userId mitgeben, wenn vorhanden
+    _userFuture = controller.fetchUserProfile(userId: widget.userId);
   }
 
   @override
@@ -31,49 +34,60 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           onPressed: () {
             context.pop();
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        title: Center(child: Text("UserProfil")),
+        title: const Center(child: Text("UserProfil")),
         actions: [
-          // Dropdown-Menü in der AppBar
-          PopupMenuButton<String>(
-            onSelected: (value) async {
-              // Aktionen basierend auf der Auswahl durchführen
-              if (value == 'Bearbeiten') {
-                // Logik zum Bearbeiten des Events
-                debugPrint("Profil bearbeiten");
-              } else if (value == 'Ausloggen') {
-                // Event Ausloggen
-                debugPrint("User logt sich aus");
-                final authController = ref.read(
-                  authControllerProvider.notifier,
-                );
+          FutureBuilder<UserProfil>(
+            future: _userFuture,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const SizedBox.shrink();
 
-                try {
-                  await authController.logout();
-                  if (context.mounted) {
-                    AuthPageRoute().go(context);
+              final user = snapshot.data!;
+              return PopupMenuButton<String>(
+                onSelected: (value) async {
+                  if (value == 'Bearbeiten') {
+                    debugPrint("Profil bearbeiten");
+                    // hier navigieren oder bearbeiten
+                  } else if (value == 'Ausloggen') {
+                    debugPrint("User loggt sich aus");
+                    final authController = ref.read(authControllerProvider.notifier);
+                    try {
+                      await authController.logout();
+                      if (context.mounted) {
+                        AuthPageRoute().go(context);
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Fehler beim Ausloggen: $e")),
+                      );
+                    }
+                  } else if (value == 'Löschen') {
+                    debugPrint("Account Löschen");
+                  } else if (value == 'Nachricht senden') {
+                    debugPrint("Nachricht an ${user.name} senden");
+                  } else if (value == 'Profil melden') {
+                    debugPrint("Profil melden");
                   }
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Fehler beim Ausloggen: $e")),
-                  );
-                }
-              } else if (value == 'Löschen') {
-                //Event Löschen
-                //fenster muss nach Löschen sich selber schließen
-                debugPrint("Account Löschen");
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return ['Bearbeiten', 'Ausloggen', 'Löschen'].map((
-                String choice,
-              ) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+                },
+                itemBuilder: (BuildContext context) {
+                  if (user.isCurrentUser) {
+                    return ['Bearbeiten', 'Ausloggen', 'Löschen'].map((choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  } else {
+                    return ['Nachricht senden', 'Profil melden'].map((choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  }
+                },
+              );
             },
           ),
         ],
@@ -84,7 +98,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (snapshot.hasError) {
             return Center(child: Text('Fehler: ${snapshot.error}'));
           }

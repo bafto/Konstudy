@@ -11,6 +11,7 @@ import 'package:konstudy/view/pages/group/editor/note_editor_page.dart';
 import 'package:konstudy/view/pages/group/group_page.dart';
 import 'package:konstudy/view/pages/home/group_create_page.dart';
 import 'package:konstudy/view/pages/home/home_page.dart';
+import 'package:konstudy/view/pages/profile/group_profile_page.dart';
 import 'package:konstudy/view/pages/profile/user_profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -27,6 +28,7 @@ part 'app_routes.g.dart';
     TypedGoRoute<VerificationCallBackPageRoute>(path: 'verificationCallback'),
     TypedGoRoute<VerifyEmailPageRoute>(path: 'verifyEmail'),
     TypedGoRoute<UserProfilePageRoute>(path: 'userProfile'),
+    TypedGoRoute<GroupProfilPageRoute>(path: 'groupProfile'),
     TypedGoRoute<CreateGroupPageRoute>(path: 'createGroup'),
     TypedGoRoute<NoteEditorPageRoute>(path: 'noteEditor'),
   ],
@@ -116,10 +118,20 @@ class VerifyEmailPageRoute extends GoRouteData {
 }
 
 class UserProfilePageRoute extends GoRouteData {
-  const UserProfilePageRoute();
+  final String? userId;
+  const UserProfilePageRoute({this.userId});
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const UserProfilePage();
+    return UserProfilePage(userId: userId);
+  }
+}
+
+class GroupProfilPageRoute extends GoRouteData{
+  final String groupId;
+  const GroupProfilPageRoute({required this.groupId});
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return GroupProfilePage(groupId: groupId);
   }
 }
 

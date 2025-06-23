@@ -54,6 +54,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
       factory: $UserProfilePageRouteExtension._fromState,
     ),
     GoRouteData.$route(
+      path: 'groupProfile',
+
+      factory: $GroupProfilPageRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
       path: 'createGroup',
 
       factory: $CreateGroupPageRouteExtension._fromState,
@@ -208,9 +213,31 @@ extension $VerifyEmailPageRouteExtension on VerifyEmailPageRoute {
 
 extension $UserProfilePageRouteExtension on UserProfilePageRoute {
   static UserProfilePageRoute _fromState(GoRouterState state) =>
-      const UserProfilePageRoute();
+      UserProfilePageRoute(userId: state.uri.queryParameters['user-id']);
 
-  String get location => GoRouteData.$location('/userProfile');
+  String get location => GoRouteData.$location(
+    '/userProfile',
+    queryParams: {if (userId != null) 'user-id': userId},
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $GroupProfilPageRouteExtension on GroupProfilPageRoute {
+  static GroupProfilPageRoute _fromState(GoRouterState state) =>
+      GroupProfilPageRoute(groupId: state.uri.queryParameters['group-id']!);
+
+  String get location => GoRouteData.$location(
+    '/groupProfile',
+    queryParams: {'group-id': groupId},
+  );
 
   void go(BuildContext context) => context.go(location);
 
