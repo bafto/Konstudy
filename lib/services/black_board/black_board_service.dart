@@ -25,4 +25,15 @@ class BlackBoardService implements IBlackBoardService {
       'description': description,
     });
   }
+
+  @override
+  Future<BlackBoardEntry> getEntryById({required String id}) async {
+    final result =
+        await _client
+            .from('black_board_entries')
+            .select('*')
+            .eq('id', id)
+            .single();
+    return BlackBoardEntry.fromJson(result);
+  }
 }

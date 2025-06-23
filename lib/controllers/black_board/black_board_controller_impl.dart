@@ -33,4 +33,16 @@ class BlackBoardControllerImpl extends ChangeNotifier
     notifyListeners();
     return;
   }
+
+  @override
+  Future<BlackBoardEntry> getEntryById({required String id}) {
+    try {
+      return _service.getEntryById(id: id);
+    } catch (e) {
+      debugPrint(e.toString());
+      return Future.error(e);
+    } finally {
+      notifyListeners();
+    }
+  }
 }

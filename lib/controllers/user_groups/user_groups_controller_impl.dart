@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:konstudy/controllers/user_groups/iuser_groups_controller.dart';
+import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
 
@@ -10,31 +11,33 @@ class UserGroupsControllerImpl extends ChangeNotifier
   UserGroupsControllerImpl(this._service);
 
   @override
-  List<Map<String, dynamic>> searchResult = [];
+  List<UserProfil> searchResult = [];
   @override
-  List<Map<String, dynamic>> selectedUsers = [];
+  List<UserProfil> selectedUsers = [];
 
   @override
   Future<List<Group>> getGroups() => _service.fetchGroups();
 
   @override
-  Future<bool> groupCreate({required String name, String? beschreibung}) async {
+  Future<Group> groupCreate({
+    required String name,
+    String? beschreibung,
+  }) async {
     if (name.isEmpty) {
       return Future.error("Name darf nicht leer sein");
     }
 
-    final userIds = selectedUsers.map((u) => u['id'] as String).toList();
+    final userIds = selectedUsers.map((u) => u.id).toList();
     try {
-      await _service.createGroup(name, beschreibung, userIds);
+      return await _service.createGroup(name, beschreibung, userIds);
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      return Future.error(e);
+    } finally {
+      selectedUsers.clear();
+      searchResult.clear();
+      notifyListeners();
     }
-
-    selectedUsers.clear();
-    searchResult.clear();
-    notifyListeners();
-    return true;
   }
 
   @override
@@ -44,16 +47,22 @@ class UserGroupsControllerImpl extends ChangeNotifier
   }
 
   @override
-  void addUser(Map<String, dynamic> user) {
-    if (!selectedUsers.any((n) => n['id'] == user['id'])) {
+  void addUser(UserProfil user) {
+    if (!selectedUsers.any((n) => n.id == user.id)) {
       selectedUsers.add(user);
       notifyListeners();
     }
   }
 
   @override
-  void removeUser(Map<String, dynamic> user) {
-    selectedUsers.removeWhere((n) => n['id'] == user['id']);
+  void removeUser(UserProfil user) {
+    selectedUsers.removeWhere((n) => n.id == user.id);
+    notifyListeners();
+  }
+
+  @override
+  removeAllUsers() {
+    selectedUsers.clear();
     notifyListeners();
   }
 }

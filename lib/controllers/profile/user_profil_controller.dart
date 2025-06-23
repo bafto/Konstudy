@@ -11,4 +11,9 @@ class UserProfilController implements IUserProfilController {
   Future<UserProfil> fetchUserProfile() {
     return _service.fetchUserProfile();
   }
+
+  @override
+  Future<UserProfil> fetchUserProfileById({required String id}) {
+    return _service.fetchUserProfileById(id: id);
+  }
 }

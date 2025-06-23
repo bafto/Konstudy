@@ -64,11 +64,11 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
                 itemBuilder: (context, index) {
                   final nutzer = controller.searchResult[index];
                   final selected = controller.selectedUsers.any(
-                    (n) => n['id'] == nutzer['id'],
+                    (n) => n.id == nutzer.id,
                   );
                   return ListTile(
-                    title: Text(nutzer['name'].toString()),
-                    subtitle: Text(nutzer['email'].toString()),
+                    title: Text(nutzer.name),
+                    subtitle: Text(nutzer.email),
                     trailing: IconButton(
                       icon: Icon(
                         selected
