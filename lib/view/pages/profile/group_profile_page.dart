@@ -6,6 +6,7 @@ import 'package:konstudy/controllers/user_groups/user_groups_controller_provider
 import 'package:konstudy/models/profile/group_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/user_card.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GroupProfilePage extends ConsumerStatefulWidget {
   final String groupId;
@@ -29,6 +30,7 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
   @override
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
+    final client = Supabase.instance.client;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +60,10 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                     HomeScreenRoute().go(context);
                   } else if (value == 'Verlassen') {
                     debugPrint("Gruppe verlassen");
-                    // TODO: Gruppe verlassen Logik hier ergänzen
+                    groupsController.removeUserFromGroup(
+                      client.auth.currentUser!.id,
+                      widget.groupId,
+                    );
                   }
                 },
                 itemBuilder: (context) {

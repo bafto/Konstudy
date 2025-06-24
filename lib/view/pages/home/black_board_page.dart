@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
+import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/black_board/black_board_entry.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/black_board_entry_card.dart';
@@ -22,13 +23,19 @@ class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final groupsController = ref.watch(blackBoardControllerProvider);
+    final controller = ref.watch(blackBoardControllerProvider);
+    final groupsController = ref.watch(userGroupsControllerProvider);
+
     return Scaffold(
       body: FutureBuilder(
-        future: groupsController.getEntries(),
+        future: controller.getEntries(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.data == null || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Keine Einträge'));
           }
 
           return ListView(

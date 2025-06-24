@@ -81,4 +81,10 @@ class UserGroupsControllerImpl extends ChangeNotifier
     await _service.deleteGroup(id);
     notifyListeners();
   }
+
+  @override
+  void removeUserFromGroup(String userId, String groupId) async {
+    await _service.removeUserFromGroup(userId, groupId);
+    notifyListeners();
+  }
 }

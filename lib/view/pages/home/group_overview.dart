@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/routes/app_routes.dart';
@@ -31,6 +32,8 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
   @override
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
+    final authController = ref.watch(authControllerProvider);
+
     return Scaffold(
       body: FutureBuilder(
         future: groupsController.getGroups(),

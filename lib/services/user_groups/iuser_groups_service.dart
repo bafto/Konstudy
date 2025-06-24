@@ -15,4 +15,5 @@ abstract class IUserGroupsService {
     required String groupId,
   });
   Future<void> deleteGroup(String id);
+  Future<void> removeUserFromGroup(String userId, String groupId);
 }

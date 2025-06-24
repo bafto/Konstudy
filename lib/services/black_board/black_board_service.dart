@@ -7,15 +7,29 @@ class BlackBoardService implements IBlackBoardService {
 
   @override
   Future<List<BlackBoardEntry>> fetchEntries() async {
-    final entries = await _client
+    final groupIds = (await _client
+        .from('group_members')
+        .select()
+        .eq(
+          'user_id',
+          _client.auth.currentUser!.id,
+        )).map((e) => e['group_id'] as String);
+
+    // debugPrint(groupIds.toString());
+
+    final entriesResponse = await _client
         .from('black_board_entries')
         .select('*')
-        .not('creatorId', 'eq', _client.auth.currentUser!.id);
-    return List<BlackBoardEntry>.from(
-      (entries as List).map(
+        .neq('creatorId', _client.auth.currentUser!.id);
+
+    final entries = List<BlackBoardEntry>.from(
+      (entriesResponse as List).map(
         (e) => BlackBoardEntry.fromJson(e as Map<String, dynamic>),
       ),
     );
+
+    // return entries;
+    return entries.where((e) => !groupIds.contains(e.groupId)).toList();
   }
 
   @override
