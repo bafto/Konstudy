@@ -13,4 +13,5 @@ abstract class IUserGroupsController extends ChangeNotifier {
   void removeUser(UserProfil user);
   void removeAllUsers();
   void addUserToGroup({required String userId, required String groupId});
+  void deleteGroup(String id);
 }

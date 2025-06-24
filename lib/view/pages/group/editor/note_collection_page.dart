@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/editor/note_controller_provider.dart';
-import 'package:konstudy/view/widgets/cards/note_card.dart';
 import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/view/widgets/cards/note_card.dart';
 
 class NoteCollectionPage extends ConsumerStatefulWidget {
   final String groupId;
@@ -14,14 +14,12 @@ class NoteCollectionPage extends ConsumerStatefulWidget {
 }
 
 class _NoteCollectionPage extends ConsumerState<NoteCollectionPage> {
-
-  Widget _buildNoteCard(final Note note){
+  Widget _buildNoteCard(final Note note) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
       child: NoteCard(note: note),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +31,10 @@ class _NoteCollectionPage extends ConsumerState<NoteCollectionPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.data!.isEmpty) {
+            return const Center(child: Text('Keine Notizen'));
           }
 
           return ListView(

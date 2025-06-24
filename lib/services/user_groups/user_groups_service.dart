@@ -129,4 +129,9 @@ class UserGroupsService implements IUserGroupsService {
       'user_id': userId,
     });
   }
+
+  @override
+  Future<void> deleteGroup(String id) {
+    return _client.from('groups').delete().eq('id', id);
+  }
 }

@@ -12,27 +12,29 @@ class GroupControllerImpl implements IGroupFileController {
   GroupControllerImpl(this._service);
 
   @override
-  Future<List<Media>> listFiles(String groupId) async => _service.listFiles(groupId);
+  Future<List<Media>> listFiles(String groupId) async =>
+      _service.listFiles(groupId);
 
   @override
-  Future<void> deleteFile(String filePath) async => _service.deleteFile(filePath);
+  Future<void> deleteFile(String filePath) async =>
+      _service.deleteFile(filePath);
 
   @override
-  Future<void> downloadFile(String filePath, String fileName) async{
+  Future<void> downloadFile(String filePath, String fileName) async {
     final bytes = await _service.downloadFile(filePath);
 
-    if(bytes != null){
+    if (bytes != null) {
       final dirctory = await getApplicationDocumentsDirectory();
       final file = File('${dirctory.path}/$fileName');
 
       await file.writeAsBytes(bytes);
       await OpenFile.open(file.path);
-    }else{
+    } else {
       throw Exception('Fehler beim Herunterladen der Datei');
     }
   }
 
   @override
-  Future<void> uploadFile(String groupId, File file) async => _service.uploadFile(groupId, file);
-
+  Future<void> uploadFile(String groupId, File file) async =>
+      _service.uploadFile(groupId, file);
 }

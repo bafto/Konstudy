@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konstudy/models/profile/group_profil.dart';
-import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/controllers/profile/group/group_profil_controller_provider.dart';
+import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
+import 'package:konstudy/models/profile/group_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/user_card.dart';
 
 class GroupProfilePage extends ConsumerStatefulWidget {
   final String groupId;
 
-  const GroupProfilePage({Key? key, required this.groupId}) : super(key: key);
+  const GroupProfilePage({super.key, required this.groupId});
 
   @override
   ConsumerState<GroupProfilePage> createState() => _GroupProfilePageState();
@@ -28,6 +28,8 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final groupsController = ref.watch(userGroupsControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gruppenprofil'),
@@ -52,7 +54,8 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                     // TODO: Edit-Funktionalität hier ergänzen
                   } else if (value == 'Löschen') {
                     debugPrint("Gruppe löschen");
-                    // TODO: Lösch-Logik hier ergänzen
+                    groupsController.deleteGroup(widget.groupId);
+                    HomeScreenRoute().go(context);
                   } else if (value == 'Verlassen') {
                     debugPrint("Gruppe verlassen");
                     // TODO: Gruppe verlassen Logik hier ergänzen
@@ -60,15 +63,23 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                 },
                 itemBuilder: (context) {
                   if (isAdmin) {
-                    return ['Bearbeiten', 'Löschen'].map((choice) => PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    )).toList();
+                    return ['Bearbeiten', 'Löschen']
+                        .map(
+                          (choice) => PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          ),
+                        )
+                        .toList();
                   } else {
-                    return ['Verlassen'].map((choice) => PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    )).toList();
+                    return ['Verlassen']
+                        .map(
+                          (choice) => PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          ),
+                        )
+                        .toList();
                   }
                 },
               );
@@ -94,17 +105,22 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                 const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Mitglieder', style: Theme.of(context).textTheme.titleLarge),
+                  child: Text(
+                    'Mitglieder',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                ...group.members.map<Widget>((user) => UserCard(
-                  name: user.name,
-                  email: user.email,
-                  imageUrl: user.profileImageUrl,
-                  onTap: () {
-                    UserProfilePageRoute(userId: user.id).push<void>(context);
-                  },
-                )).toList(),
+                ...group.members.map<Widget>(
+                  (user) => UserCard(
+                    name: user.name,
+                    email: user.email,
+                    imageUrl: user.profileImageUrl,
+                    onTap: () {
+                      UserProfilePageRoute(userId: user.id).push<void>(context);
+                    },
+                  ),
+                ),
               ],
             ),
           );
@@ -120,12 +136,14 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: group.imageUrl != null && group.imageUrl!.isNotEmpty
-                ? NetworkImage(group.imageUrl!)
-                : null,
-            child: group.imageUrl == null || group.imageUrl!.isEmpty
-                ? const Icon(Icons.group, size: 40)
-                : null,
+            backgroundImage:
+                group.imageUrl != null && group.imageUrl!.isNotEmpty
+                    ? NetworkImage(group.imageUrl!)
+                    : null,
+            child:
+                group.imageUrl == null || group.imageUrl!.isEmpty
+                    ? const Icon(Icons.group, size: 40)
+                    : null,
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -134,7 +152,10 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
               children: [
                 Text(
                   group.name,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -151,4 +172,3 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
     );
   }
 }
-
