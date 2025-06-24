@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BlackBoardEntryPage extends ConsumerStatefulWidget {
   final String entryId;
@@ -20,7 +20,7 @@ class _BlackBoardEntryPageState extends ConsumerState<BlackBoardEntryPage> {
   Widget build(BuildContext context) {
     final entry = ref.watch(blackBoardEntryProvider(widget.entryId));
     final groupController = ref.watch(userGroupsControllerProvider);
-    final client = Supabase.instance.client;
+    final userId = ref.watch(authControllerProvider.notifier).currentUser!.id;
 
     return entry.when(
       data:
@@ -30,11 +30,8 @@ class _BlackBoardEntryPageState extends ConsumerState<BlackBoardEntryPage> {
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.check),
               onPressed: () async {
-                debugPrint(
-                  'adding ${client.auth.currentUser!.id} to ${entry.groupId}',
-                );
                 groupController.addUserToGroup(
-                  userId: client.auth.currentUser!.id,
+                  userId: userId,
                   groupId: entry.groupId,
                 );
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
+import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
 import 'package:konstudy/controllers/profile/group/group_profil_controller_provider.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/profile/group_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/user_card.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GroupProfilePage extends ConsumerStatefulWidget {
   final String groupId;
@@ -30,7 +31,10 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
   @override
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
-    final client = Supabase.instance.client;
+    final _ = ref.watch(
+      blackBoardControllerProvider,
+    ); // to refetch the black board entries when group membership changes
+    final userId = ref.watch(authControllerProvider.notifier).currentUser!.id;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +65,7 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                   } else if (value == 'Verlassen') {
                     debugPrint("Gruppe verlassen");
                     groupsController.removeUserFromGroup(
-                      client.auth.currentUser!.id,
+                      userId,
                       widget.groupId,
                     );
                   }

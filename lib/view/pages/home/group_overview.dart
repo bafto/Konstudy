@@ -32,7 +32,9 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
   @override
   Widget build(BuildContext context) {
     final groupsController = ref.watch(userGroupsControllerProvider);
-    final authController = ref.watch(authControllerProvider);
+    final _ = ref.watch(
+      authControllerProvider.notifier,
+    ); // to refresh groups when a user logs out and logs back in as another user
 
     return Scaffold(
       body: FutureBuilder(
