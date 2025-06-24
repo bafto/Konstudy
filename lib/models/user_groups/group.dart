@@ -14,9 +14,10 @@ class Group {
   });
 
   factory Group.fromJson(Map<String, dynamic> json) {
-    final members = (json['group_members'] as List)
-        .map((m) => GroupMember.fromJson(m as Map<String, dynamic>))
-        .toList();
+    final members =
+        (json['group_members'] as List)
+            .map((m) => GroupMember.fromJson(m as Map<String, dynamic>))
+            .toList();
 
     return Group(
       id: json['id'] as String,

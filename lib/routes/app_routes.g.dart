@@ -19,6 +19,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
       factory: $GroupPageRouteExtension._fromState,
     ),
     GoRouteData.$route(
+      path: 'blackBoard/:entryId',
+
+      factory: $BlackBoardEntryPageRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
       path: 'addEvent',
 
       factory: $AddEventPageRouteExtension._fromState,
@@ -64,6 +69,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
       factory: $CreateGroupPageRouteExtension._fromState,
     ),
     GoRouteData.$route(
+      path: 'createBlackBoardEntry',
+
+      factory: $CreateBlackBoardEntryPageRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
       path: 'noteEditor',
 
       factory: $NoteEditorPageRouteExtension._fromState,
@@ -97,6 +107,23 @@ extension $GroupPageRouteExtension on GroupPageRoute {
     '/group/${Uri.encodeComponent(groupName)}',
     queryParams: {'group-id': groupId},
   );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $BlackBoardEntryPageRouteExtension on BlackBoardEntryPageRoute {
+  static BlackBoardEntryPageRoute _fromState(GoRouterState state) =>
+      BlackBoardEntryPageRoute(entryId: state.pathParameters['entryId']!);
+
+  String get location =>
+      GoRouteData.$location('/blackBoard/${Uri.encodeComponent(entryId)}');
 
   void go(BuildContext context) => context.go(location);
 
@@ -254,6 +281,23 @@ extension $CreateGroupPageRouteExtension on CreateGroupPageRoute {
       const CreateGroupPageRoute();
 
   String get location => GoRouteData.$location('/createGroup');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateBlackBoardEntryPageRouteExtension
+    on CreateBlackBoardEntryPageRoute {
+  static CreateBlackBoardEntryPageRoute _fromState(GoRouterState state) =>
+      const CreateBlackBoardEntryPageRoute();
+
+  String get location => GoRouteData.$location('/createBlackBoardEntry');
 
   void go(BuildContext context) => context.go(location);
 

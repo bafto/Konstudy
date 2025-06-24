@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/models/user_groups/group.dart';
+import 'package:konstudy/models/user_groups/group_member.dart';
 import 'package:konstudy/services/user_groups/iuser_groups_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,11 +19,10 @@ class UserGroupsService implements IUserGroupsService {
         .eq('user_id', userId);
 
     //2. Extrahiere die Ids
-    final groupIds = (groupIdResult as List)
-        .map((e) => e['group_id'] as String)
-        .toList();
+    final groupIds =
+        (groupIdResult as List).map((e) => e['group_id'] as String).toList();
 
-    if(groupIds.isEmpty){
+    if (groupIds.isEmpty) {
       return [];
     }
 
@@ -32,42 +34,74 @@ class UserGroupsService implements IUserGroupsService {
 
     // 4. Daten in Group umwandeln
     return List<Group>.from(
-        (groupData as List).map((e) => Group.fromJson(e as Map<String, dynamic>))
+      (groupData as List).map((e) => Group.fromJson(e as Map<String, dynamic>)),
     );
   }
 
   @override
-  Future<void> createGroup(String name, String? description, List<String> gruppenmitglieder) async{
-    final response = await _client.from('groups')
-        .insert({
-          'name': name,
-          'description': description,
-          'created_by': _client.auth.currentUser!.id,
-        }).select();
+  Future<Group> getGroupById(String id) async {
+    final response =
+        await _client.from('groups').select('*').eq('id', id).single();
 
-    final insertedgroupId = response[0]['id'];
+    final members = await _client
+        .from('group_members')
+        .select()
+        .eq('group_id', id);
 
-    await _client.from('group_members')
-        .insert({
-          'group_id': insertedgroupId,
-          'user_id': _client.auth.currentUser!.id,
-          'is_admin': true,
-        });
-
-    if(gruppenmitglieder.isNotEmpty){
-      for(final id in gruppenmitglieder){
-        await _client.from('group_members')
-            .insert({
-              'group_id': insertedgroupId,
-              'user_id': id,
-            });
-      }
-    }
+    response['group_members'] = members;
+    return Group.fromJson(response);
   }
 
   @override
-  Future<List<Map<String, dynamic>>> searchUsers(String query) async{
-    if(query.isEmpty){
+  Future<Group> createGroup(
+    String name,
+    String? description,
+    List<String> gruppenmitglieder,
+  ) async {
+    final members = gruppenmitglieder.toSet();
+
+    final response =
+        await _client
+            .from('groups')
+            .insert({
+              'name': name,
+              'description': description,
+              'created_by': _client.auth.currentUser!.id,
+            })
+            .select()
+            .single();
+
+    final createdId = response['id'] as String;
+    response['group_members'] =
+        members
+            .map((g) => GroupMember(userId: g, groupId: createdId).toJson())
+            .toList();
+    debugPrint(response.toString());
+    final createdGroup = Group.fromJson(response);
+
+    await _client.from('group_members').insert({
+      'group_id': createdGroup.id,
+      'user_id': _client.auth.currentUser!.id,
+      'is_admin': true,
+    });
+
+    if (members.isNotEmpty) {
+      for (final id in members.where(
+        (m) => m != _client.auth.currentUser!.id,
+      )) {
+        await _client.from('group_members').insert({
+          'group_id': createdGroup.id,
+          'user_id': id,
+        });
+      }
+    }
+
+    return createdGroup;
+  }
+
+  @override
+  Future<List<UserProfil>> searchUsers(String query) async {
+    if (query.isEmpty) {
       return [];
     }
 
@@ -78,10 +112,21 @@ class UserGroupsService implements IUserGroupsService {
           .ilike('name', '%$query%')
           .limit(10);
 
-      return List<Map<String, dynamic>>.from(data);
+      return data.map(UserProfil.fromJson).toList();
     } catch (error) {
       // Optional: Logging oder Error-Handling
       throw Exception('Fehler bei der Nutzersuche: $error');
     }
+  }
+
+  @override
+  Future<void> addUserToGroup({
+    required String userId,
+    required String groupId,
+  }) {
+    return _client.from('group_members').insert({
+      'group_id': groupId,
+      'user_id': userId,
+    });
   }
 }

@@ -4,6 +4,8 @@ import 'package:konstudy/controllers/auth/auth_notifier.dart';
 import 'package:konstudy/view/pages/auth/auth_page.dart';
 import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
 import 'package:konstudy/view/pages/auth/verify_email_page.dart';
+import 'package:konstudy/view/pages/black_board/black_board_entry_page.dart';
+import 'package:konstudy/view/pages/black_board/create_black_board_entry_page.dart';
 import 'package:konstudy/view/pages/calendar/add_event_page.dart';
 import 'package:konstudy/view/pages/calendar/edit_event_page.dart';
 import 'package:konstudy/view/pages/calendar/event_details_page.dart';
@@ -21,6 +23,7 @@ part 'app_routes.g.dart';
   path: '/',
   routes: [
     TypedGoRoute<GroupPageRoute>(path: 'group/:groupName'),
+    TypedGoRoute<BlackBoardEntryPageRoute>(path: 'blackBoard/:entryId'),
     TypedGoRoute<AddEventPageRoute>(path: 'addEvent'),
     TypedGoRoute<EventDetailsPageRoute>(path: 'detailsEvent'),
     TypedGoRoute<EditEventPageRoute>(path: 'editEvent'),
@@ -30,6 +33,7 @@ part 'app_routes.g.dart';
     TypedGoRoute<UserProfilePageRoute>(path: 'userProfile'),
     TypedGoRoute<GroupProfilPageRoute>(path: 'groupProfile'),
     TypedGoRoute<CreateGroupPageRoute>(path: 'createGroup'),
+    TypedGoRoute<CreateBlackBoardEntryPageRoute>(path: 'createBlackBoardEntry'),
     TypedGoRoute<NoteEditorPageRoute>(path: 'noteEditor'),
   ],
 )
@@ -59,6 +63,25 @@ class CreateGroupPageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return CreateGroupPage();
+  }
+}
+
+class BlackBoardEntryPageRoute extends GoRouteData {
+  final String entryId;
+  const BlackBoardEntryPageRoute({required this.entryId});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return BlackBoardEntryPage(entryId: entryId);
+  }
+}
+
+class CreateBlackBoardEntryPageRoute extends GoRouteData {
+  const CreateBlackBoardEntryPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateBlackBoardEntryPage();
   }
 }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/view/pages/group/groupfiles/media_collection_page.dart';
-import 'package:konstudy/view/pages/group/editor/note_collection_page.dart';
 import 'package:konstudy/view/pages/calendar/calendar_page.dart';
+import 'package:konstudy/view/pages/group/editor/note_collection_page.dart';
+import 'package:konstudy/view/pages/group/groupfiles/media_collection_page.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key, required this.groupName, required this.groupId});
@@ -22,6 +22,7 @@ class _GroupPageState extends State<GroupPage> {
       _selectedIndex = index;
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +30,7 @@ class _GroupPageState extends State<GroupPage> {
     _pages = [
       CalendarPage(groupId: widget.groupId),
       NoteCollectionPage(groupId: widget.groupId),
-      MedianCollectionPage(groupId: widget.groupId,),
+      MedianCollectionPage(groupId: widget.groupId),
     ];
   }
 
