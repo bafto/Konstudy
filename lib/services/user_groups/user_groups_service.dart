@@ -39,6 +39,20 @@ class UserGroupsService implements IUserGroupsService {
   }
 
   @override
+  Future<Group> getGroupById(String id) async {
+    final response =
+        await _client.from('groups').select('*').eq('id', id).single();
+
+    final members = await _client
+        .from('group_members')
+        .select()
+        .eq('group_id', id);
+
+    response['group_members'] = members;
+    return Group.fromJson(response);
+  }
+
+  @override
   Future<Group> createGroup(
     String name,
     String? description,

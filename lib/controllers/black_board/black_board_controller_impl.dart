@@ -43,8 +43,6 @@ class BlackBoardControllerImpl extends ChangeNotifier
     } catch (e) {
       debugPrint(e.toString());
       return Future.error(e);
-    } finally {
-      notifyListeners();
     }
   }
 }

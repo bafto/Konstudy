@@ -19,6 +19,11 @@ class UserGroupsControllerImpl extends ChangeNotifier
   Future<List<Group>> getGroups() => _service.fetchGroups();
 
   @override
+  Future<Group> getGroupById(String id) {
+    return _service.getGroupById(id);
+  }
+
+  @override
   Future<Group> groupCreate({
     required String name,
     String? beschreibung,
@@ -43,7 +48,6 @@ class UserGroupsControllerImpl extends ChangeNotifier
   @override
   Future<void> searchUser(String query) async {
     searchResult = await _service.searchUsers(query);
-    notifyListeners();
   }
 
   @override
@@ -67,10 +71,8 @@ class UserGroupsControllerImpl extends ChangeNotifier
   }
 
   @override
-  Future<void> addUserToGroup({
-    required String userId,
-    required String groupId,
-  }) {
-    return _service.addUserToGroup(userId: userId, groupId: groupId);
+  void addUserToGroup({required String userId, required String groupId}) async {
+    await _service.addUserToGroup(userId: userId, groupId: groupId);
+    notifyListeners();
   }
 }
