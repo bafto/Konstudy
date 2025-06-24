@@ -43,7 +43,7 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
           }
 
           return ListView(
-            children: snapshot.data!.map(_buildGroupCard).toList(),
+            children: snapshot.data?.map(_buildGroupCard).toList() ?? [],
           );
         },
       ),
