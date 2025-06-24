@@ -5,6 +5,7 @@ import 'package:konstudy/controllers/profile/user_profil_controller_provider.dar
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/models/black_board/black_board_entry.dart';
 import 'package:konstudy/routes/app_routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BlackBoardEntryPage extends ConsumerStatefulWidget {
   final String entryId;
@@ -22,6 +23,7 @@ class _BlackBoardEntryPageState extends ConsumerState<BlackBoardEntryPage> {
     final controller = ref.watch(blackBoardControllerProvider);
     final groupController = ref.watch(userGroupsControllerProvider);
     final userController = ref.watch(userProfilControllerProvider);
+    final client = Supabase.instance.client;
 
     return FutureBuilder<BlackBoardEntry>(
       future: controller.getEntryById(id: widget.entryId),
@@ -53,6 +55,11 @@ class _BlackBoardEntryPageState extends ConsumerState<BlackBoardEntryPage> {
               final group = await groupController.groupCreate(
                 name: entry.title,
                 beschreibung: entry.description,
+              );
+
+              groupController.addUserToGroup(
+                userId: client.auth.currentUser!.id,
+                groupId: entry.groupId,
               );
               GroupPageRoute(
                 groupName: group.name,

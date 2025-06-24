@@ -104,4 +104,15 @@ class UserGroupsService implements IUserGroupsService {
       throw Exception('Fehler bei der Nutzersuche: $error');
     }
   }
+
+  @override
+  Future<void> addUserToGroup({
+    required String userId,
+    required String groupId,
+  }) {
+    return _client.from('group_members').insert({
+      'group_id': groupId,
+      'user_id': userId,
+    });
+  }
 }

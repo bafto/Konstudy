@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
+import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class CreateBlackBoardEntryPage extends ConsumerStatefulWidget {
@@ -32,7 +33,8 @@ class _CreateBlackBoardEntryPageState
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(blackBoardControllerProvider);
+    final blackBoardController = ref.watch(blackBoardControllerProvider);
+    final groupsController = ref.watch(userGroupsControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text('Eintrag erstellen')),
@@ -51,10 +53,17 @@ class _CreateBlackBoardEntryPageState
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () async {
-                await controller
+                groupsController.removeAllUsers();
+                final group = await groupsController.groupCreate(
+                  name: _nameController.text.trim(),
+                  beschreibung: _descController.text.trim(),
+                );
+
+                await blackBoardController
                     .createEntry(
-                      name: _nameController.text.trim(),
-                      description: _descController.text.trim(),
+                      name: group.name,
+                      description: group.description!,
+                      groupId: group.id,
                     )
                     .then((_) {
                       ScaffoldMessenger.of(context).showSnackBar(

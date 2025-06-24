@@ -7,7 +7,10 @@ class BlackBoardService implements IBlackBoardService {
 
   @override
   Future<List<BlackBoardEntry>> fetchEntries() async {
-    final entries = await _client.from('black_board_entries').select('*');
+    final entries = await _client
+        .from('black_board_entries')
+        .select('*')
+        .not('creatorId', 'eq', _client.auth.currentUser!.id);
     return List<BlackBoardEntry>.from(
       (entries as List).map(
         (e) => BlackBoardEntry.fromJson(e as Map<String, dynamic>),
@@ -16,14 +19,25 @@ class BlackBoardService implements IBlackBoardService {
   }
 
   @override
-  Future<void> createEntry(String title, String description) async {
+  Future<BlackBoardEntry> createEntry(
+    String title,
+    String description,
+    String groupId,
+  ) async {
     final userId = _client.auth.currentUser!.id;
 
-    return _client.from('black_board_entries').insert({
-      'creatorId': userId,
-      'title': title,
-      'description': description,
-    });
+    return BlackBoardEntry.fromJson(
+      await _client
+          .from('black_board_entries')
+          .insert({
+            'creatorId': userId,
+            'title': title,
+            'description': description,
+            'groupId': groupId,
+          })
+          .select()
+          .single(),
+    );
   }
 
   @override

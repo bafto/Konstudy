@@ -65,4 +65,12 @@ class UserGroupsControllerImpl extends ChangeNotifier
     selectedUsers.clear();
     notifyListeners();
   }
+
+  @override
+  Future<void> addUserToGroup({
+    required String userId,
+    required String groupId,
+  }) {
+    return _service.addUserToGroup(userId: userId, groupId: groupId);
+  }
 }

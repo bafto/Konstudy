@@ -32,7 +32,7 @@ class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
           }
 
           return ListView(
-            children: snapshot.data!.map(_buildGroupCard).toList(),
+            children: snapshot.data?.map(_buildGroupCard).toList() ?? [],
           );
         },
       ),

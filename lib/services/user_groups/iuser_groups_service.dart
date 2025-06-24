@@ -9,4 +9,8 @@ abstract class IUserGroupsService {
     List<String> gruppenmitglieder,
   );
   Future<List<UserProfil>> searchUsers(String query);
+  Future<void> addUserToGroup({
+    required String userId,
+    required String groupId,
+  });
 }

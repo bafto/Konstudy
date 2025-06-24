@@ -13,25 +13,27 @@ class BlackBoardControllerImpl extends ChangeNotifier
   Future<List<BlackBoardEntry>> getEntries() => _service.fetchEntries();
 
   @override
-  Future<void> createEntry({
+  Future<BlackBoardEntry> createEntry({
     required String name,
     required String description,
+    required String groupId,
   }) async {
     if (name.isEmpty || description.isEmpty) {
       return Future.error("Name und Beschreibung dürfen nicht leer sein");
     }
 
     try {
-      await _service.createEntry(name, description).catchError((e) {
+      return await _service.createEntry(name, description, groupId).catchError((
+        e,
+      ) {
         debugPrint(e.toString());
       });
     } catch (e) {
       debugPrint(e.toString());
-      return;
+      return Future.error(e);
+    } finally {
+      notifyListeners();
     }
-
-    notifyListeners();
-    return;
   }
 
   @override
