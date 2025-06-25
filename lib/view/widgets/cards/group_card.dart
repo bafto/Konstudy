@@ -47,7 +47,7 @@ class GroupCard extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Padding(
                   padding: EdgeInsets.only(left: 10, right: 5, top: 10),
-                  child: InitialsIcon(initials: _getInitials()),
+                  child: InitialsIcon(initials: _getInitials(),backgroundColor: Colors.black,),
                 ),
               ),
               Padding(

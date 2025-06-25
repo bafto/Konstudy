@@ -22,100 +22,124 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
+      body: Stack(
+        children: [
+          // 🔹 Hintergrundbild
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/Imperia.png', // <-- Stelle sicher, dass dein Bild hier liegt!
+              fit: BoxFit.cover,
+            ),
+          ),
 
-              // 🔹 Headline / App-Name
-              const Text(
-                "KonStudy", // App-Name hier anpassen
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-              ),
+          // 🔹 Dunkler Overlay für bessere Lesbarkeit
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.3),
+            ),
+          ),
 
-              const SizedBox(height: 40),
-
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // Name
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(labelText: "Name"),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Name darf nicht leer sein';
-                        }
-                        return null;
-                      },
+          // 🔹 Scrollbarer, zentrierter Inhalt
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-
-                    // E-Mail
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(labelText: "E-Mail"),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'E-Mail darf nicht leer sein';
-                        }
-                        const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                        if (!RegExp(pattern).hasMatch(value)) {
-                          return 'Ungültige E-Mail-Adresse';
-                        }
-                        return null;
-                      },
+                    child: const Text(
+                      "KonStudy",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(2, 2),
+                            blurRadius: 6.0,
+                            color: Colors.black54,
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 40),
 
-                    // Passwort
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(labelText: "Passwort"),
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Mindestens 6 Zeichen';
-                        }
-                        return null;
-                      },
-                    ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _nameController,
+                          label: "Name",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Name darf nicht leer sein';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
 
-                    const SizedBox(height: 20),
+                        _buildTextField(
+                          controller: _emailController,
+                          label: "E-Mail",
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'E-Mail darf nicht leer sein';
+                            }
+                            const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                            if (!RegExp(pattern).hasMatch(value)) {
+                              return 'Ungültige E-Mail-Adresse';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
 
-                    state.isLoading
-                        ? const CircularProgressIndicator()
-                        : ElevatedButton(
+                        _buildTextField(
+                          controller: _passwordController,
+                          label: "Passwort",
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.length < 6) {
+                              return 'Mindestens 6 Zeichen';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24),
+
+                        state.isLoading
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final scaffoldMessenger = ScaffoldMessenger.of(
-                                context,
-                              );
+                              final scaffoldMessenger =
+                              ScaffoldMessenger.of(context);
 
                               try {
-                                // Registrierung, ebenfalls Future<void> und Exception bei Fehler
                                 await ref
-                                    .read(authControllerProvider.notifier)
+                                    .read(
+                                    authControllerProvider.notifier)
                                     .signUp(
-                                      _emailController.text.trim(),
-                                      _passwordController.text.trim(),
-                                      _nameController.text.trim(),
-                                    );
+                                  _emailController.text.trim(),
+                                  _passwordController.text.trim(),
+                                  _nameController.text.trim(),
+                                );
 
-                                // Wenn kein Fehler: Zur HomePage weiterleiten
                                 HomeScreenRoute().go(context);
                               } catch (e) {
-                                // Fehler anzeigen
                                 scaffoldMessenger.showSnackBar(
                                   SnackBar(
-                                    content: Text('Fehler: ${e.toString()}'),
+                                    content:
+                                    Text('Fehler: ${e.toString()}'),
                                   ),
                                 );
                               }
@@ -123,13 +147,47 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           },
                           child: const Text("Registrieren"),
                         ),
-                  ],
-                ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  // 🔧 Wiederverwendbare Methode für Felder
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+    bool obscureText = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      style: const TextStyle(color: Colors.black),
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black87),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.85),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.black26),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.black87),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
+      validator: validator,
     );
   }
 }
