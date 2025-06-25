@@ -21,85 +21,120 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
+      body: Stack(
+        children: [
+          // 🔹 Hintergrundbild über ganze Fläche
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/Imperia.png',
+              fit: BoxFit.cover,
+            ),
+          ),
 
-              // 🔹 Headline / App-Name
-              const Text(
-                "KonStudy", // <<< deinen App-Namen hier
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-              ),
+          // 🔹 Optionaler dunkler Overlay für bessere Lesbarkeit
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.3),
+            ),
+          ),
 
-              const SizedBox(height: 40),
-
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(labelText: "E-Mail"),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'E-Mail darf nicht leer sein';
-                        }
-                        const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                        if (!RegExp(pattern).hasMatch(value)) {
-                          return 'Ungültige E-Mail-Adresse';
-                        }
-                        return null;
-                      },
+          // 🔹 Inhalt: mittig und scrollbar
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(labelText: "Passwort"),
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Mindestens 6 Zeichen';
-                        }
-                        return null;
-                      },
+                    child: const Text(
+                      "KonStudy",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(2, 2),
+                            blurRadius: 6.0,
+                            color: Colors.black54,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    state.isLoading
-                        ? const CircularProgressIndicator()
-                        : ElevatedButton(
+                  ),
+                  const SizedBox(height: 40),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          style: const TextStyle(color: Colors.black), // Eingabetext
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            labelText: "E-Mail",
+                            labelStyle: const TextStyle(color: Colors.black87),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.85),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black87),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          style: const TextStyle(color: Colors.black),
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            labelText: "Passwort",
+                            labelStyle: const TextStyle(color: Colors.black87),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.85),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black87),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        state.isLoading
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final scaffoldMessenger = ScaffoldMessenger.of(
-                                context,
-                              );
-
+                              final scaffoldMessenger =
+                              ScaffoldMessenger.of(context);
                               try {
-                                // Login-Methode, die Future<void> zurückgibt und bei Fehler wirft
                                 await ref
                                     .read(authControllerProvider.notifier)
                                     .login(
-                                      _emailController.text.trim(),
-                                      _passwordController.text.trim(),
-                                    );
+                                  _emailController.text.trim(),
+                                  _passwordController.text.trim(),
+                                );
 
-                                // Wenn kein Fehler: Zur HomePage weiterleiten
                                 if (context.mounted) {
                                   HomeScreenRoute().go(context);
-                                } else {
-                                  debugPrint('context not mounted');
                                 }
                               } catch (e) {
-                                // Fehler abfangen und anzeigen
                                 scaffoldMessenger.showSnackBar(
                                   SnackBar(
-                                    content: Text('Fehler: ${e.toString()}'),
+                                    content: Text('Fehler: $e'),
                                   ),
                                 );
                               }
@@ -107,13 +142,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           },
                           child: const Text("Login"),
                         ),
-                  ],
-                ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
+
+
 }
