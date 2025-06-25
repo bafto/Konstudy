@@ -48,6 +48,7 @@ class UserGroupsControllerImpl extends ChangeNotifier
   @override
   Future<void> searchUser(String query) async {
     searchResult = await _service.searchUsers(query);
+    notifyListeners();
   }
 
   @override
