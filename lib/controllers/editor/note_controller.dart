@@ -1,12 +1,10 @@
+import 'package:flutter/foundation.dart';
+import 'package:konstudy/controllers/editor/inote_controller.dart';
 import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/services/editor/inote_service.dart';
-import 'package:konstudy/controllers/editor/inote_controller.dart';
-import 'package:flutter/foundation.dart';
 
-
-class NoteController extends ChangeNotifier  implements INoteController {
+class NoteController extends ChangeNotifier implements INoteController {
   final INoteService _service;
-
 
   NoteController(this._service);
 
@@ -16,13 +14,13 @@ class NoteController extends ChangeNotifier  implements INoteController {
     required String groupId,
     required String title,
     required String contentJson,
-    required bool isNew
+    required bool isNew,
   }) async {
     final note = Note(
-        id: id ?? '',
-        groupId: groupId,
-        title: title.trim(),
-        content: contentJson
+      id: id ?? '',
+      groupId: groupId,
+      title: title.trim(),
+      content: contentJson,
     );
 
     if (isNew) {
@@ -30,20 +28,20 @@ class NoteController extends ChangeNotifier  implements INoteController {
     } else {
       await _service.updateNote(note);
     }
+    notifyListeners();
   }
 
   @override
   Future<List<Note>> loadNotes(String groupId) => _service.fetchNotes(groupId);
 
   @override
-  Future<void> deleteNote(String id) async{
+  Future<void> deleteNote(String id) async {
     await _service.deleteNote(id);
+    notifyListeners();
   }
 
   @override
-  Future<Note> getNoteById(String id) async{
+  Future<Note> getNoteById(String id) async {
     return await _service.fetchNoteById(id);
   }
-
-
 }
