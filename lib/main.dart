@@ -23,11 +23,64 @@ class Konstudy extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // HTWG Farben
+    const htwgRed = Color(0xFFBD0034);
+    const htwgDark = Color(0xFF232323);
+    const htwgLightGrey = Color(0xFFE5E5E5);
+    const htwgWhite = Colors.white;
+
     return MaterialApp.router(
       title: 'KonStudy',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: htwgRed,
+          onPrimary: Colors.white,
+          secondary: htwgDark,
+          onSecondary: Colors.white,
+          background: htwgWhite,
+          onBackground: htwgDark,
+          surface: htwgLightGrey,
+          onSurface: htwgDark,
+          error: Colors.red,
+          onError: Colors.white,
+        ),
+        scaffoldBackgroundColor: htwgWhite,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: htwgDark,
+          foregroundColor: Colors.white,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: htwgRed,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.dark(
+          primary: htwgRed,
+          onPrimary: Colors.white,
+          secondary: htwgDark,
+          onSecondary: Colors.white,
+          background: htwgDark,
+          onBackground: htwgWhite,
+          surface: Color(0xFF1E1E1E),
+          onSurface: htwgWhite,
+          error: Colors.red,
+          onError: Colors.black,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: htwgDark,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      themeMode: ThemeMode.system,
       localizationsDelegates: const [
         FlutterQuillLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
