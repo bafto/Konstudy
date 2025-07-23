@@ -24,7 +24,9 @@ class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(blackBoardControllerProvider);
-    final groupsController = ref.watch(userGroupsControllerProvider);
+    final _ = ref.watch(
+      userGroupsControllerProvider,
+    ); // update entries when user joins black board group
 
     return Scaffold(
       body: FutureBuilder(
@@ -32,6 +34,12 @@ class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Es gab einen Fehler beim Laden der Einträge'),
+            );
           }
 
           if (snapshot.data == null || snapshot.data!.isEmpty) {

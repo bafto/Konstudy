@@ -14,6 +14,7 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
   late final TextEditingController _nameController;
   late final TextEditingController _descController;
   late final TextEditingController _searchController;
+  Future<void> searching = Future.value();
 
   @override
   void initState() {
@@ -54,44 +55,70 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
               decoration: InputDecoration(labelText: 'Nutzer suchen'),
               onChanged: (value) {
                 // ruft Suche im Controller auf
-                ref.read(userGroupsControllerProvider).searchUser(value);
+                searching = ref
+                    .read(userGroupsControllerProvider)
+                    .searchUser(value);
               },
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemCount: controller.searchResult.length,
-                itemBuilder: (context, index) {
-                  final nutzer = controller.searchResult[index];
-                  final selected = controller.selectedUsers.any(
-                    (n) => n.id == nutzer.id,
-                  );
-                  return ListTile(
-                    title: Text(nutzer.name),
-                    subtitle: Text(nutzer.email),
-                    trailing: IconButton(
-                      icon: Icon(
-                        selected
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
+              child: FutureBuilder(
+                future: searching,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text(
+                        "Es gab einen Fehler beim Suchen nach Nutzern",
                       ),
-                      onPressed: () {
-                        final controllerNotifier = ref.read(
-                          userGroupsControllerProvider,
-                        );
-                        if (selected) {
-                          controllerNotifier.removeUser(nutzer);
-                        } else {
-                          controllerNotifier.addUser(nutzer);
-                        }
-                      },
-                    ),
-                  );
+                    );
+                  }
+
+                  return controller.searchResult.isEmpty
+                      ? const Center(
+                        child: Text("Keine passenden Nutzer gefunden"),
+                      )
+                      : ListView.builder(
+                        itemCount: controller.searchResult.length,
+                        itemBuilder: (context, index) {
+                          final nutzer = controller.searchResult[index];
+                          final selected = controller.selectedUsers.any(
+                            (n) => n.id == nutzer.id,
+                          );
+                          return ListTile(
+                            title: Text(nutzer.name),
+                            subtitle: Text(nutzer.email),
+                            trailing: IconButton(
+                              icon: Icon(
+                                selected
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                              ),
+                              onPressed: () {
+                                final controllerNotifier = ref.read(
+                                  userGroupsControllerProvider,
+                                );
+                                if (selected) {
+                                  controllerNotifier.removeUser(nutzer);
+                                } else {
+                                  controllerNotifier.addUser(nutzer);
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      );
                 },
               ),
             ),
             ElevatedButton(
               onPressed: () async {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Center(child: CircularProgressIndicator())),
+                );
                 await controller
                     .groupCreate(
                       name: _nameController.text.trim(),
@@ -106,7 +133,9 @@ class _CreateGroupPageState extends ConsumerState<CreateGroupPage> {
                     .catchError((e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Bitte Namen und Nutzer angeben'),
+                          content: Text(
+                            'Es gab einen Fehler beim Erstellen der Gruppe',
+                          ),
                         ),
                       );
                     });

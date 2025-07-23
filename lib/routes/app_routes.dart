@@ -149,7 +149,7 @@ class UserProfilePageRoute extends GoRouteData {
   }
 }
 
-class GroupProfilPageRoute extends GoRouteData{
+class GroupProfilPageRoute extends GoRouteData {
   final String groupId;
   const GroupProfilPageRoute({required this.groupId});
   @override

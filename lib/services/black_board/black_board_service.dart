@@ -15,8 +15,6 @@ class BlackBoardService implements IBlackBoardService {
           _client.auth.currentUser!.id,
         )).map((e) => e['group_id'] as String);
 
-    // debugPrint(groupIds.toString());
-
     final entriesResponse = await _client
         .from('black_board_entries')
         .select('*')

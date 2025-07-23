@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
 import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
+import 'package:konstudy/models/user_groups/group.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
 class CreateBlackBoardEntryPage extends ConsumerStatefulWidget {
@@ -54,10 +55,23 @@ class _CreateBlackBoardEntryPageState
             ElevatedButton(
               onPressed: () async {
                 groupsController.removeAllUsers();
-                final group = await groupsController.groupCreate(
-                  name: _nameController.text.trim(),
-                  beschreibung: _descController.text.trim(),
-                );
+                late Group group;
+                try {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Center(child: CircularProgressIndicator()),
+                    ),
+                  );
+                  group = await groupsController.groupCreate(
+                    name: _nameController.text.trim(),
+                    beschreibung: _descController.text.trim(),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                  return;
+                }
 
                 await blackBoardController
                     .createEntry(

@@ -176,8 +176,27 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                     description: _descriptionController.text,
                   );
 
-                  await eventController.addEvent(newEvent, groupId: widget.groupId);
-                  context.pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Center(child: CircularProgressIndicator()),
+                    ),
+                  );
+                  await eventController
+                      .addEvent(newEvent, groupId: widget.groupId)
+                      .then((_) {
+                        if (context.mounted) {
+                          context.pop();
+                        }
+                      })
+                      .catchError((e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Es gab einen Fehler beim erstellen des Events",
+                            ),
+                          ),
+                        );
+                      });
                 },
                 child: const Text('Event speichern'),
               ),

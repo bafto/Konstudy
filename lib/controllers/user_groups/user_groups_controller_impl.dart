@@ -29,7 +29,7 @@ class UserGroupsControllerImpl extends ChangeNotifier
     String? beschreibung,
   }) async {
     if (name.isEmpty) {
-      return Future.error("Name darf nicht leer sein");
+      return Future.error("Der Name darf nicht leer sein");
     }
 
     final userIds = selectedUsers.map((u) => u.id).toList();
@@ -47,8 +47,16 @@ class UserGroupsControllerImpl extends ChangeNotifier
 
   @override
   Future<void> searchUser(String query) async {
-    searchResult = await _service.searchUsers(query);
-    notifyListeners();
+    try {
+      return _service.searchUsers(query).then((r) {
+        searchResult = r;
+      });
+    } catch (e) {
+      searchResult = [];
+      return Future.error(e);
+    } finally {
+      notifyListeners();
+    }
   }
 
   @override
