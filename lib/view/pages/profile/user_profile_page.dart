@@ -51,7 +51,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                     // hier navigieren oder bearbeiten
                   } else if (value == 'Ausloggen') {
                     debugPrint("User loggt sich aus");
-                    final authController = ref.read(authControllerProvider.notifier);
+                    final authController = ref.read(
+                      authControllerProvider.notifier,
+                    );
                     try {
                       await authController.logout();
                       if (context.mounted) {
@@ -59,15 +61,21 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Fehler beim Ausloggen: $e")),
+                        SnackBar(
+                          content: Text("Es gab einen Fehler beim Ausloggen"),
+                        ),
                       );
                     }
                   } else if (value == 'Löschen') {
                     debugPrint("Account Löschen");
                   } else if (value == 'Nachricht senden') {
-                    debugPrint("Nachricht an ${user.name} senden");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Feature wird noch eingebaut')),
+                    );
                   } else if (value == 'Profil melden') {
-                    debugPrint("Profil melden");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Feature wird noch eingebaut')),
+                    );
                   }
                 },
                 itemBuilder: (BuildContext context) {
@@ -99,7 +107,9 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Fehler: ${snapshot.error}'));
+            return Center(
+              child: Text('Es gab einen Fehler beim Laden des Nutzer Profils'),
+            );
           }
 
           final user = snapshot.data!;

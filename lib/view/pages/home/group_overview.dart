@@ -44,6 +44,12 @@ class _GroupoverviewState extends ConsumerState<Groupoverview> {
             return Center(child: CircularProgressIndicator());
           }
 
+          if (snapshot.data?.isEmpty ?? true) {
+            return const Center(
+              child: Text("Keine Gruppen gefunden, bist du online?"),
+            );
+          }
+
           return ListView(
             children: snapshot.data?.map(_buildGroupCard).toList() ?? [],
           );

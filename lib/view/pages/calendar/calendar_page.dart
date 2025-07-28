@@ -47,7 +47,17 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
             future: controller.getEvents(groupId: widget.groupId),
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(child: CircularProgressIndicator());
+                return Expanded(
+                  child: const Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return Expanded(
+                  child: const Center(
+                    child: Text('Es gab einen Fehler beim Laden des Kalenders'),
+                  ),
+                );
               }
 
               final events =

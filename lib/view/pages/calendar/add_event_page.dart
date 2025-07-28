@@ -189,27 +189,27 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                     description: _descriptionController.text,
                   );
 
-                  // optional: Ladeanzeige vorübergehend anzeigen
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 1),
+                    SnackBar(
                       content: Center(child: CircularProgressIndicator()),
                     ),
                   );
-
-                  try {
-                    await ref.read(calendarControllerProvider).addEvent(newEvent, groupId: widget.groupId);
-
-                    if (context.mounted) {
-                      context.pop();
-                    }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Es gab einen Fehler beim Erstellen des Events"),
-                      ),
-                    );
-                  }
+                  await eventController
+                      .addEvent(newEvent, groupId: widget.groupId)
+                      .then((_) {
+                        if (context.mounted) {
+                          context.pop();
+                        }
+                      })
+                      .catchError((e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Es gab einen Fehler beim erstellen des Events",
+                            ),
+                          ),
+                        );
+                      });
                 },
                 child: const Text('Event speichern'),
               ),
