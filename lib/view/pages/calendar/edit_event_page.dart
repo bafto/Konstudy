@@ -174,6 +174,20 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                     onPressed: () async {
                       if (!_formKey.currentState!.validate()) return;
 
+                      if (_startDateTime == null || _endDateTime == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Bitte Start- und Endzeit angeben')),
+                        );
+                        return;
+                      }
+
+                      if (_endDateTime!.isBefore(_startDateTime!)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen')),
+                        );
+                        return;
+                      }
+
                       final updated = _myevent.copyWith(
                         title: _titleController.text,
                         description: _descriptionController.text,
@@ -182,11 +196,18 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                         repeat: _selectedRepeat,
                       );
 
-                      await eventController.updateEvent(updated);
-                      context.pop();
+                      try {
+                        await ref.read(calendarControllerProvider).updateEvent(updated);
+                        if (context.mounted) context.pop();
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Fehler beim Aktualisieren des Events')),
+                        );
+                      }
                     },
                     child: const Text('Änderungen speichern'),
                   ),
+
                 ],
               ),
             ),

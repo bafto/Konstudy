@@ -166,7 +166,20 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
 
-                  // neues Event bauen
+                  if (_startDateTime == null || _endDateTime == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Bitte Start- und Endzeit angeben')),
+                    );
+                    return;
+                  }
+
+                  if (_endDateTime!.isBefore(_startDateTime!)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen')),
+                    );
+                    return;
+                  }
+
                   final newEvent = CalendarEvent(
                     id: '0',
                     title: _titleController.text,
@@ -176,11 +189,31 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                     description: _descriptionController.text,
                   );
 
-                  await eventController.addEvent(newEvent, groupId: widget.groupId);
-                  context.pop();
+                  // optional: Ladeanzeige vorübergehend anzeigen
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 1),
+                      content: Center(child: CircularProgressIndicator()),
+                    ),
+                  );
+
+                  try {
+                    await ref.read(calendarControllerProvider).addEvent(newEvent, groupId: widget.groupId);
+
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Es gab einen Fehler beim Erstellen des Events"),
+                      ),
+                    );
+                  }
                 },
                 child: const Text('Event speichern'),
               ),
+
             ],
           ),
         ),
