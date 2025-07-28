@@ -11,4 +11,14 @@ class UserProfilController implements IUserProfilController {
   Future<UserProfil> fetchUserProfile({String? userId}) {
     return _service.fetchUserProfile(userId: userId);
   }
+
+  @override
+  Future<bool> deleteAccount() {
+    return _service.deleteOwnAccount();
+  }
+
+  @override
+  Future<void> updateUserProfil({required String userId, String? name, String? description, String? profileImageUrl}) {
+    return _service.updateUserProfil(userId: userId, name: name, description: description, profileImageUrl: profileImageUrl);
+  }
 }
