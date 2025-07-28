@@ -5,6 +5,7 @@ import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
 import 'package:konstudy/controllers/profile/user/user_profil_controller_provider.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
+import 'package:konstudy/view/widgets/dialog/confirmation_dialog.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   final String? userId; // Wenn null, dann aktueller User
@@ -67,7 +68,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       );
                     }
                   } else if (value == 'Löschen') {
-                    debugPrint("Account Löschen");
+                    _deleteAccount(context, ref);
                   } else if (value == 'Nachricht senden') {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Feature wird noch eingebaut')),
@@ -118,6 +119,22 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       ),
     );
   }
+
+  void _deleteAccount(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showConfirmationDialog(
+      context: context,
+      title: 'Account löschen?',
+      content: 'Bist du sicher, dass du deinen Account löschen möchtest?\nAlle Gruppen in den du Admin bist werden auch gelöscht',
+      cancelText: 'Nein',
+      confirmText: 'Ja',
+    );
+
+    if (confirmed == true) {
+      final controller = ref.read(userProfilControllerProvider);
+      controller.deleteAccount();
+    }
+  }
+
 }
 
 class _UserProfileContent extends StatelessWidget {
@@ -174,4 +191,5 @@ class _UserProfileContent extends StatelessWidget {
       ),
     );
   }
+
 }
