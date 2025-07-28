@@ -34,6 +34,7 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
     super.initState();
     final controller = ref.read(calendarControllerProvider);
     loadingFuture = controller.getEventById(widget.eventId).then((e) {
+      _myevent = e;
       setState(() {
         _titleController = TextEditingController(text: _myevent.title);
         _descriptionController = TextEditingController(
