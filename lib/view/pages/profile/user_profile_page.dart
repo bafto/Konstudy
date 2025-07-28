@@ -69,9 +69,13 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   } else if (value == 'Löschen') {
                     debugPrint("Account Löschen");
                   } else if (value == 'Nachricht senden') {
-                    debugPrint("Nachricht an ${user.name} senden");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Feature wird noch eingebaut')),
+                    );
                   } else if (value == 'Profil melden') {
-                    debugPrint("Profil melden");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Feature wird noch eingebaut')),
+                    );
                   }
                 },
                 itemBuilder: (BuildContext context) {

@@ -134,7 +134,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   _nameController.text.trim(),
                                 );
 
-                                HomeScreenRoute().go(context);
+                                scaffoldMessenger.showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben.',
+                                    ),
+                                    duration: Duration(seconds: 5),
+                                  ),
+                                );
                               } catch (e) {
                                 scaffoldMessenger.showSnackBar(
                                   SnackBar(
