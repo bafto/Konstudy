@@ -50,6 +50,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   if (value == 'Bearbeiten') {
                     debugPrint("Profil bearbeiten");
                     // hier navigieren oder bearbeiten
+                    UserProfileEditorPageRoute().push<void>(context);
                   } else if (value == 'Ausloggen') {
                     debugPrint("User loggt sich aus");
                     final authController = ref.read(

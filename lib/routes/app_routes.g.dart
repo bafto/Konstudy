@@ -78,6 +78,11 @@ RouteBase get $homeScreenRoute => GoRouteData.$route(
 
       factory: $NoteEditorPageRouteExtension._fromState,
     ),
+    GoRouteData.$route(
+      path: 'editUser',
+
+      factory: $UserProfileEditorPageRouteExtension._fromState,
+    ),
   ],
 );
 
@@ -320,6 +325,22 @@ extension $NoteEditorPageRouteExtension on NoteEditorPageRoute {
     '/noteEditor',
     queryParams: {if (noteId != null) 'note-id': noteId, 'group-id': groupId},
   );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $UserProfileEditorPageRouteExtension on UserProfileEditorPageRoute {
+  static UserProfileEditorPageRoute _fromState(GoRouterState state) =>
+      UserProfileEditorPageRoute();
+
+  String get location => GoRouteData.$location('/editUser');
 
   void go(BuildContext context) => context.go(location);
 

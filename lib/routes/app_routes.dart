@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_notifier.dart';
+import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/view/pages/auth/auth_page.dart';
 import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
 import 'package:konstudy/view/pages/auth/verify_email_page.dart';
@@ -16,6 +17,8 @@ import 'package:konstudy/view/pages/home/home_page.dart';
 import 'package:konstudy/view/pages/profile/group_profile_page.dart';
 import 'package:konstudy/view/pages/profile/user_profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../view/pages/profile/user_profile_edit_page.dart';
 
 part 'app_routes.g.dart';
 
@@ -35,6 +38,7 @@ part 'app_routes.g.dart';
     TypedGoRoute<CreateGroupPageRoute>(path: 'createGroup'),
     TypedGoRoute<CreateBlackBoardEntryPageRoute>(path: 'createBlackBoardEntry'),
     TypedGoRoute<NoteEditorPageRoute>(path: 'noteEditor'),
+    TypedGoRoute<UserProfileEditorPageRoute>(path: 'editUser'),
   ],
 )
 class HomeScreenRoute extends GoRouteData {
@@ -166,6 +170,14 @@ class NoteEditorPageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return NoteEditorPage(noteId: noteId, groupId: groupId);
+  }
+}
+
+class UserProfileEditorPageRoute extends GoRouteData {
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return UserProfilEditPage();
   }
 }
 

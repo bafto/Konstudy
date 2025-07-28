@@ -58,9 +58,27 @@ class UserProfilService implements IUserProfilService {
   }
 
 
-  @override
-  Future<void> updateUserProfile(UserProfil profil) {
-    // TODO: implement updateUserProfile
-    throw UnimplementedError();
+  Future<void> updateUserProfil({
+    required String userId,
+    String? name,
+    String? description,
+    String? profileImageUrl,
+  }) async {
+    final updates = <String, dynamic>{
+      'id': userId,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (profileImageUrl != null) 'avatar_url': profileImageUrl,
+    };
+
+    final result = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', userId)
+        .select()
+        .single();
+
+
+
   }
 }
