@@ -166,7 +166,20 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) return;
 
-                  // neues Event bauen
+                  if (_startDateTime == null || _endDateTime == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Bitte Start- und Endzeit angeben')),
+                    );
+                    return;
+                  }
+
+                  if (_endDateTime!.isBefore(_startDateTime!)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen')),
+                    );
+                    return;
+                  }
+
                   final newEvent = CalendarEvent(
                     id: '0',
                     title: _titleController.text,
@@ -200,6 +213,7 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                 },
                 child: const Text('Event speichern'),
               ),
+
             ],
           ),
         ),

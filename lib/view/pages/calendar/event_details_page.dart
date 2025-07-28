@@ -198,7 +198,9 @@ class EventDetailsPage extends ConsumerWidget {
                 await controller.deleteEvent(myevent.id);
 
                 // Optional: Zurück zur vorherigen Seite navigieren, wenn Event gelöscht wurde
-                context.pop();
+                if (context.mounted) {
+                  context.pop(); // geht zurück zur Kalenderübersicht
+                }
               },
               child: const Text('Ja'),
             ),
