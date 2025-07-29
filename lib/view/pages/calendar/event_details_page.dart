@@ -7,6 +7,8 @@ import 'package:konstudy/models/calendar/calendar_event.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
+import '../../../provider/auth_provider.dart';
+
 class EventDetailsPage extends ConsumerWidget {
   final String eventId;
 
@@ -42,6 +44,16 @@ class EventDetailsPage extends ConsumerWidget {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const Center(child: CircularProgressIndicator());
               }
+              final event = snapshot.data!;
+              final currentUserId = ref.watch(authControllerProvider.notifier).getCurrentUserId();
+
+              final bool canEditOrDelete = (event.groupId != null) ||
+                  (event.groupId == null && event.ownerId == currentUserId);
+
+              if (!canEditOrDelete) {
+                return const SizedBox(); // Kein Menü, wenn nicht berechtigt
+              }
+
               return PopupMenuButton<String>(
                 onSelected: (value) {
                   // Aktionen basierend auf der Auswahl durchführen
