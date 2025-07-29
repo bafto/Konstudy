@@ -48,6 +48,13 @@ class _MedianCollectionPage extends ConsumerState<MedianCollectionPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Datei-Upload wird bald verfügbar sein.'),
+            ),
+          );
+          // TODO: Wegen Supabase Policies erstmal raus genommen
+          /*
           final result = await FilePicker.platform.pickFiles();
 
           if (result != null && result.files.isNotEmpty) {
@@ -77,6 +84,7 @@ class _MedianCollectionPage extends ConsumerState<MedianCollectionPage> {
               );
             }
           }
+          */
         },
       ),
     );
