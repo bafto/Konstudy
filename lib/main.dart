@@ -23,10 +23,10 @@ class Konstudy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // HTWG Farben
-    const htwgRed = Color(0xFFBD0034);
-    const htwgDark = Color(0xFF232323);
-    const htwgLightGrey = Color(0xFFE5E5E5);
-    const htwgWhite = Colors.white;
+    const KonstudyRed = Color(0xFFBD0034);
+    const KonstudyDark = Color(0xFF232323);
+    const KonstudyLightGrey = Color(0xFFE5E5E5);
+    const KonstudyWhite = Colors.white;
 
     return MaterialApp.router(
       title: 'KonStudy',
@@ -34,25 +34,25 @@ class Konstudy extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme(
           brightness: Brightness.light,
-          primary: htwgRed,
+          primary: KonstudyRed,
           onPrimary: Colors.white,
-          secondary: htwgDark,
+          secondary: KonstudyDark,
           onSecondary: Colors.white,
-          background: htwgWhite,
-          onBackground: htwgDark,
-          surface: htwgLightGrey,
-          onSurface: htwgDark,
+          background: KonstudyWhite,
+          onBackground: KonstudyDark,
+          surface: KonstudyLightGrey,
+          onSurface: KonstudyDark,
           error: Colors.red,
           onError: Colors.white,
         ),
-        scaffoldBackgroundColor: htwgWhite,
+        scaffoldBackgroundColor: KonstudyWhite,
         appBarTheme: const AppBarTheme(
-          backgroundColor: htwgDark,
+          backgroundColor: KonstudyDark,
           foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: htwgRed,
+            backgroundColor: KonstudyRed,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -63,19 +63,19 @@ class Konstudy extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.dark(
-          primary: htwgRed,
+          primary: KonstudyRed,
           onPrimary: Colors.white,
-          secondary: htwgDark,
+          secondary: KonstudyDark,
           onSecondary: Colors.white,
-          background: htwgDark,
-          onBackground: htwgWhite,
+          background: KonstudyDark,
+          onBackground: KonstudyWhite,
           surface: Color(0xFF1E1E1E),
-          onSurface: htwgWhite,
+          onSurface: KonstudyWhite,
           error: Colors.red,
           onError: Colors.black,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: htwgDark,
+          backgroundColor: KonstudyDark,
           foregroundColor: Colors.white,
         ),
       ),
