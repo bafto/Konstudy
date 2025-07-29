@@ -14,6 +14,14 @@ class BlackBoardPage extends ConsumerStatefulWidget {
 }
 
 class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
+  final _filter = TextEditingController();
+
+  @override
+  void dispose() {
+    _filter.dispose();
+    super.dispose();
+  }
+
   Widget _buildGroupCard(final BlackBoardEntry entry) {
     return Padding(
       padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
@@ -29,27 +37,45 @@ class _BlackBoardPageState extends ConsumerState<BlackBoardPage> {
     ); // update entries when user joins black board group
 
     return Scaffold(
-      body: FutureBuilder(
-        future: controller.getEntries(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: SearchBar(
+              controller: _filter,
+              hintText: "tags",
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future:
+                  _filter.text.isEmpty
+                      ? controller.getEntries()
+                      : controller.getEntriesByHashTag(hashTag: _filter.text),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Es gab einen Fehler beim Laden der Einträge'),
-            );
-          }
+                if (snapshot.hasError) {
+                  debugPrint(snapshot.error.toString());
+                  return const Center(
+                    child: Text('Es gab einen Fehler beim Laden der Einträge'),
+                  );
+                }
 
-          if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Keine Einträge'));
-          }
+                if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Keine Einträge'));
+                }
 
-          return ListView(
-            children: snapshot.data?.map(_buildGroupCard).toList() ?? [],
-          );
-        },
+                return ListView(
+                  children: snapshot.data?.map(_buildGroupCard).toList() ?? [],
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

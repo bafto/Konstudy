@@ -17,17 +17,18 @@ class BlackBoardControllerImpl extends ChangeNotifier
     required String name,
     required String description,
     required String groupId,
+    required List<String> hashTags,
   }) async {
     if (name.isEmpty || description.isEmpty) {
       return Future.error("Name und Beschreibung dürfen nicht leer sein");
     }
 
     try {
-      return await _service.createEntry(name, description, groupId).catchError((
-        e,
-      ) {
-        debugPrint(e.toString());
-      });
+      return await _service
+          .createEntry(name, description, groupId, hashTags)
+          .catchError((e) {
+            debugPrint(e.toString());
+          });
     } catch (e) {
       debugPrint(e.toString());
       return Future.error(e);
@@ -40,6 +41,25 @@ class BlackBoardControllerImpl extends ChangeNotifier
   Future<BlackBoardEntry> getEntryById({required String id}) {
     try {
       return _service.getEntryById(id: id);
+    } catch (e) {
+      debugPrint(e.toString());
+      return Future.error(e);
+    }
+  }
+
+  @override
+  Future<List<BlackBoardEntry>> getEntriesByHashTag({
+    required String hashTag,
+  }) async {
+    try {
+      final entries = await getEntries();
+      return entries
+          .where(
+            (e) =>
+                e.hashTags.contains(hashTag) ||
+                e.hashTags.any((e) => e.startsWith(hashTag)),
+          )
+          .toList();
     } catch (e) {
       debugPrint(e.toString());
       return Future.error(e);

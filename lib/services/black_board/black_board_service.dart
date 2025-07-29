@@ -35,6 +35,7 @@ class BlackBoardService implements IBlackBoardService {
     String title,
     String description,
     String groupId,
+    List<String> hashTags,
   ) async {
     final userId = _client.auth.currentUser!.id;
 
@@ -46,6 +47,7 @@ class BlackBoardService implements IBlackBoardService {
             'title': title,
             'description': description,
             'groupId': groupId,
+            'hashTags': hashTags,
           })
           .select()
           .single(),

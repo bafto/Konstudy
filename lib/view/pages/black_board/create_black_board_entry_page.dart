@@ -17,18 +17,21 @@ class _CreateBlackBoardEntryPageState
     extends ConsumerState<CreateBlackBoardEntryPage> {
   late final TextEditingController _nameController;
   late final TextEditingController _descController;
+  late final TextEditingController _hashTagController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _descController = TextEditingController();
+    _hashTagController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _descController.dispose();
+    _hashTagController.dispose();
     super.dispose();
   }
 
@@ -45,11 +48,24 @@ class _CreateBlackBoardEntryPageState
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(
+                labelText: 'Name',
+                hintText: 'Meine Gruppe',
+              ),
             ),
             TextField(
               controller: _descController,
-              decoration: InputDecoration(labelText: 'Beschreibung'),
+              decoration: InputDecoration(
+                labelText: 'Beschreibung',
+                hintText: 'Eine Beschreibung',
+              ),
+            ),
+            TextField(
+              controller: _hashTagController,
+              decoration: InputDecoration(
+                labelText: 'Tags',
+                hintText: 'deutsch informatik mathe1',
+              ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -78,6 +94,7 @@ class _CreateBlackBoardEntryPageState
                       name: group.name,
                       description: group.description!,
                       groupId: group.id,
+                      hashTags: _hashTagController.text.split(" "),
                     )
                     .then((_) {
                       ScaffoldMessenger.of(context).showSnackBar(

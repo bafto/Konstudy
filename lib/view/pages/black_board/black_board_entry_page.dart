@@ -26,7 +26,14 @@ class _BlackBoardEntryPageState extends ConsumerState<BlackBoardEntryPage> {
       data:
           (entry) => Scaffold(
             appBar: AppBar(title: Text(entry.title)),
-            body: Center(child: Column(children: [Text(entry.description)])),
+            body: Center(
+              child: Column(
+                children: [
+                  Text(entry.description),
+                  Text(entry.hashTags.join(" ")),
+                ],
+              ),
+            ),
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.check),
               onPressed: () async {

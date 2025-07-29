@@ -6,6 +6,7 @@ abstract class IBlackBoardService {
     String name,
     String description,
     String groupId,
+    List<String> hashTags,
   );
   Future<BlackBoardEntry> getEntryById({required String id});
 }

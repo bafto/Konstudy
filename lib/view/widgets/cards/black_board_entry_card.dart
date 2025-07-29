@@ -29,6 +29,13 @@ class BlackBoardEntryCard extends StatelessWidget {
                         fontSize: 20,
                       ),
                     ),
+                    Text(
+                      entry.hashTags.join(' '),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
                     Text(entry.description),
                   ],
                 ),
