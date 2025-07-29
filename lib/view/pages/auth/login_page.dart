@@ -25,17 +25,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         children: [
           // 🔹 Hintergrundbild über ganze Fläche
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/Imperia.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/images/Imperia.png', fit: BoxFit.cover),
           ),
 
           // 🔹 Optionaler dunkler Overlay für bessere Lesbarkeit
           Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.3),
-            ),
+            child: Container(color: Colors.black.withValues(alpha: 0.3)),
           ),
 
           // 🔹 Inhalt: mittig und scrollbar
@@ -46,9 +41,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
@@ -74,19 +72,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       children: [
                         TextFormField(
                           controller: _emailController,
-                          style: const TextStyle(color: Colors.black), // Eingabetext
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ), // Eingabetext
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
                             labelText: "E-Mail",
                             labelStyle: const TextStyle(color: Colors.black87),
                             filled: true,
-                            fillColor: Colors.white.withOpacity(0.85),
+                            fillColor: Colors.white.withValues(alpha: 0.85),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black26),
+                              borderSide: const BorderSide(
+                                color: Colors.black26,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black87),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
@@ -101,13 +105,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             labelText: "Passwort",
                             labelStyle: const TextStyle(color: Colors.black87),
                             filled: true,
-                            fillColor: Colors.white.withOpacity(0.85),
+                            fillColor: Colors.white.withValues(alpha: 0.85),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black26),
+                              borderSide: const BorderSide(
+                                color: Colors.black26,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black87),
+                              borderSide: const BorderSide(
+                                color: Colors.black87,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
@@ -116,32 +124,30 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         state.isLoading
                             ? const CircularProgressIndicator()
                             : ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final scaffoldMessenger =
-                              ScaffoldMessenger.of(context);
-                              try {
-                                await ref
-                                    .read(authControllerProvider.notifier)
-                                    .login(
-                                  _emailController.text.trim(),
-                                  _passwordController.text.trim(),
-                                );
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final scaffoldMessenger =
+                                      ScaffoldMessenger.of(context);
+                                  try {
+                                    await ref
+                                        .read(authControllerProvider.notifier)
+                                        .login(
+                                          _emailController.text.trim(),
+                                          _passwordController.text.trim(),
+                                        );
 
-                                if (context.mounted) {
-                                  HomeScreenRoute().go(context);
+                                    if (context.mounted) {
+                                      HomeScreenRoute().go(context);
+                                    }
+                                  } catch (e) {
+                                    scaffoldMessenger.showSnackBar(
+                                      SnackBar(content: Text('Fehler: $e')),
+                                    );
+                                  }
                                 }
-                              } catch (e) {
-                                scaffoldMessenger.showSnackBar(
-                                  SnackBar(
-                                    content: Text('Fehler: $e'),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: const Text("Login"),
-                        ),
+                              },
+                              child: const Text("Login"),
+                            ),
                       ],
                     ),
                   ),
@@ -153,6 +159,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-
-
 }

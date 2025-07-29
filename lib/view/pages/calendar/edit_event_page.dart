@@ -92,7 +92,7 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    final eventController = ref.read(calendarControllerProvider);
+    final _ = ref.read(calendarControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Event bearbeiten")),
@@ -177,14 +177,20 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
 
                       if (_startDateTime == null || _endDateTime == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Bitte Start- und Endzeit angeben')),
+                          const SnackBar(
+                            content: Text('Bitte Start- und Endzeit angeben'),
+                          ),
                         );
                         return;
                       }
 
                       if (_endDateTime!.isBefore(_startDateTime!)) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen')),
+                          const SnackBar(
+                            content: Text(
+                              'Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen',
+                            ),
+                          ),
                         );
                         return;
                       }
@@ -198,17 +204,22 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                       );
 
                       try {
-                        await ref.read(calendarControllerProvider).updateEvent(updated);
+                        await ref
+                            .read(calendarControllerProvider)
+                            .updateEvent(updated);
                         if (context.mounted) context.pop();
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Fehler beim Aktualisieren des Events')),
+                          const SnackBar(
+                            content: Text(
+                              'Fehler beim Aktualisieren des Events',
+                            ),
+                          ),
                         );
                       }
                     },
                     child: const Text('Änderungen speichern'),
                   ),
-
                 ],
               ),
             ),

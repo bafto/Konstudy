@@ -3,16 +3,17 @@ import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:konstudy/services/profile/group/igroup_profil_service.dart';
 
-class GroupProfilService implements IGroupProfilService{
+class GroupProfilService implements IGroupProfilService {
   final supabase = Supabase.instance.client;
 
   @override
   Future<GroupProfil> fetchGroupProfile(String groupId) async {
     final currentUserId = supabase.auth.currentUser?.id ?? '';
 
-    final response = await supabase
-        .from('groups')
-        .select('''
+    final response =
+        await supabase
+            .from('groups')
+            .select('''
           name,
           description,
           profile_image_url,
@@ -26,31 +27,33 @@ class GroupProfilService implements IGroupProfilService{
             )
           )
         ''')
-        .eq('id', groupId)
-        .single();
+            .eq('id', groupId)
+            .single();
 
     // Mitglieder extrahieren
     final memberData = response['group_members'] as List<dynamic>? ?? [];
 
-    final members = memberData.map((entry) {
-      final user = entry['users'];
-      return UserProfil(
-        id: user['id'] as String,
-        name: user['name'] as String,
-        email: user['email'] as String,
-        description: user['description'] as String?,
-        profileImageUrl: user['image_url'] as String?,
-      );
-    }).toList();
-    
-    final adminData = await supabase
-        .from('group_members')
-        .select('is_admin')
-        .eq('group_id', groupId)
-        .eq('user_id', currentUserId)
-        .single();
+    final members =
+        memberData.map((entry) {
+          final user = entry['users'];
+          return UserProfil(
+            id: user['id'] as String,
+            name: user['name'] as String,
+            email: user['email'] as String,
+            description: user['description'] as String?,
+            profileImageUrl: user['image_url'] as String?,
+          );
+        }).toList();
 
-    final isAdmin = adminData != null ? adminData['is_admin'] as bool : false;
+    final adminData =
+        await supabase
+            .from('group_members')
+            .select('is_admin')
+            .eq('group_id', groupId)
+            .eq('user_id', currentUserId)
+            .single();
+
+    final isAdmin = adminData['is_admin'] as bool;
 
     return GroupProfil(
       name: response['name'] as String,
@@ -59,7 +62,5 @@ class GroupProfilService implements IGroupProfilService{
       members: members,
       isCurrentUserAdmin: isAdmin,
     );
-
   }
-
 }

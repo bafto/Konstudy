@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
 class VerifyEmailPage extends StatelessWidget {
-
-  const VerifyEmailPage({Key? key}) : super(key: key);
+  const VerifyEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('E-Mail Verifizierung'),
-      ),
+      appBar: AppBar(title: const Text('E-Mail Verifizierung')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -27,7 +24,7 @@ class VerifyEmailPage extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Wir haben eine E-Mail an die Adresse gesendet die du angegeben hast.\n'
-                  'Klicke auf den Link in der Mail, um deinen Account zu aktivieren.',
+              'Klicke auf den Link in der Mail, um deinen Account zu aktivieren.',
               style: textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),

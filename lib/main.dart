@@ -5,7 +5,6 @@ import 'package:konstudy/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -85,7 +84,7 @@ class Konstudy extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
+        GlobalCupertinoLocalizations.delegate,
       ],
 
       supportedLocales: const [

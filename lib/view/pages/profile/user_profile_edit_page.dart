@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/controllers/profile/user/user_profil_controller_provider.dart';
 
-
 class UserProfilEditPage extends ConsumerStatefulWidget {
-
   const UserProfilEditPage({super.key});
 
   @override
@@ -36,7 +33,9 @@ class _UserProfilEditPageState extends ConsumerState<UserProfilEditPage> {
       setState(() {
         profil = loadedProfil;
         nameController = TextEditingController(text: profil?.name);
-        descriptionController = TextEditingController(text: profil?.description);
+        descriptionController = TextEditingController(
+          text: profil?.description,
+        );
         isLoading = false;
       });
     } catch (e) {
@@ -66,22 +65,20 @@ class _UserProfilEditPageState extends ConsumerState<UserProfilEditPage> {
       );
       if (context.mounted) Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fehler: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Fehler: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (error != null) {
-      return Scaffold(
-        body: Center(child: Text('Fehler beim Laden: $error')),
-      );
+      return Scaffold(body: Center(child: Text('Fehler beim Laden: $error')));
     }
 
     return Scaffold(
@@ -94,23 +91,33 @@ class _UserProfilEditPageState extends ConsumerState<UserProfilEditPage> {
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Profilbild ändern wird bald verfügbar sein.'),
+                    content: Text(
+                      'Profilbild ändern wird bald verfügbar sein.',
+                    ),
                   ),
                 );
               },
               child: CircleAvatar(
                 radius: 40,
-                backgroundImage: profil!.profileImageUrl != null
-                    ? NetworkImage(profil!.profileImageUrl!)
-                    : null,
-                child: profil!.profileImageUrl == null
-                    ? const Icon(Icons.person, size: 40)
-                    : null,
+                backgroundImage:
+                    profil!.profileImageUrl != null
+                        ? NetworkImage(profil!.profileImageUrl!)
+                        : null,
+                child:
+                    profil!.profileImageUrl == null
+                        ? const Icon(Icons.person, size: 40)
+                        : null,
               ),
             ),
             const SizedBox(height: 16),
-            TextFormField(controller: nameController, decoration: const InputDecoration(labelText: 'Name')),
-            TextFormField(controller: descriptionController, decoration: const InputDecoration(labelText: 'Beschreibung')),
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextFormField(
+              controller: descriptionController,
+              decoration: const InputDecoration(labelText: 'Beschreibung'),
+            ),
             const SizedBox(height: 24),
             ElevatedButton(onPressed: _save, child: const Text('Speichern')),
           ],

@@ -34,13 +34,14 @@ class UserProfilService implements IUserProfilService {
 
   @override
   Future<bool> deleteOwnAccount() async {
-
     // 1. Hole den aktuellen JWT (Access Token)
     final jwt = supabase.auth.currentSession?.accessToken ?? '';
 
     // 2. Endpoint der Edge Function aufrufen
     final response = await http.post(
-      Uri.parse('https://vdwxhiuzrltxosgufkdu.supabase.co/functions/v1/delete_user'),
+      Uri.parse(
+        'https://vdwxhiuzrltxosgufkdu.supabase.co/functions/v1/delete_user',
+      ),
       headers: {
         'Authorization': 'Bearer $jwt',
         'Content-Type': 'application/json',
@@ -54,10 +55,9 @@ class UserProfilService implements IUserProfilService {
     } else {
       throw Exception('Fehler: ${response.body}');
     }
-
   }
 
-
+  @override
   Future<void> updateUserProfil({
     required String userId,
     String? name,
@@ -71,14 +71,11 @@ class UserProfilService implements IUserProfilService {
       if (profileImageUrl != null) 'avatar_url': profileImageUrl,
     };
 
-    final result = await supabase
+    await supabase
         .from('users')
         .update(updates)
         .eq('id', userId)
         .select()
         .single();
-
-
-
   }
 }

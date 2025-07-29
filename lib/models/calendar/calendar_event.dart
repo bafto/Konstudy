@@ -1,7 +1,6 @@
 import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:flutter/material.dart';
 
-
 class CalendarEvent {
   final String id;
   final String title;
@@ -38,7 +37,7 @@ class CalendarEvent {
       ),
       description: json['description'] as String,
       ownerId: json['owner_id'] as String?,
-      groupId: json['group_id'] as String?
+      groupId: json['group_id'] as String?,
     );
   }
 
@@ -82,7 +81,7 @@ class CalendarEvent {
       repeat: repeat ?? this.repeat,
       ownerId: ownerId ?? this.ownerId,
       groupId: groupId ?? this.groupId,
-      eventColor: eventcolor ?? this.eventColor,
+      eventColor: eventcolor ?? eventColor,
     );
   }
 }

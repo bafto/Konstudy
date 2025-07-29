@@ -7,12 +7,12 @@ class UserCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   const UserCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.email,
     this.imageUrl,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,8 @@ class UserCard extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: InkWell(   // InkWell für Tap-Erkennung und Ripple-Effekt
+      child: InkWell(
+        // InkWell für Tap-Erkennung und Ripple-Effekt
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Padding(
@@ -31,10 +32,13 @@ class UserCard extends StatelessWidget {
                 radius: 28,
                 backgroundColor: Colors.grey[200],
                 backgroundImage:
-                imageUrl != null && imageUrl!.isNotEmpty ? NetworkImage(imageUrl!) : null,
-                child: imageUrl == null || imageUrl!.isEmpty
-                    ? const Icon(Icons.person, size: 28, color: Colors.grey)
-                    : null,
+                    imageUrl != null && imageUrl!.isNotEmpty
+                        ? NetworkImage(imageUrl!)
+                        : null,
+                child:
+                    imageUrl == null || imageUrl!.isEmpty
+                        ? const Icon(Icons.person, size: 28, color: Colors.grey)
+                        : null,
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -43,7 +47,10 @@ class UserCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(

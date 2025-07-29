@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:konstudy/routes/app_routes.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -34,9 +33,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
           // 🔹 Dunkler Overlay für bessere Lesbarkeit
           Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.3),
-            ),
+            child: Container(color: Colors.black.withValues(alpha: 0.3)),
           ),
 
           // 🔹 Scrollbarer, zentrierter Inhalt
@@ -47,9 +44,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
@@ -119,41 +119,41 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         state.isLoading
                             ? const CircularProgressIndicator()
                             : ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final scaffoldMessenger =
-                              ScaffoldMessenger.of(context);
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final scaffoldMessenger =
+                                      ScaffoldMessenger.of(context);
 
-                              try {
-                                await ref
-                                    .read(
-                                    authControllerProvider.notifier)
-                                    .signUp(
-                                  _emailController.text.trim(),
-                                  _passwordController.text.trim(),
-                                  _nameController.text.trim(),
-                                );
+                                  try {
+                                    await ref
+                                        .read(authControllerProvider.notifier)
+                                        .signUp(
+                                          _emailController.text.trim(),
+                                          _passwordController.text.trim(),
+                                          _nameController.text.trim(),
+                                        );
 
-                                scaffoldMessenger.showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben.',
-                                    ),
-                                    duration: Duration(seconds: 5),
-                                  ),
-                                );
-                              } catch (e) {
-                                scaffoldMessenger.showSnackBar(
-                                  SnackBar(
-                                    content:
-                                    Text('Fehler: ${e.toString()}'),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: const Text("Registrieren"),
-                        ),
+                                    scaffoldMessenger.showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben.',
+                                        ),
+                                        duration: Duration(seconds: 5),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    scaffoldMessenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Fehler: ${e.toString()}',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              child: const Text("Registrieren"),
+                            ),
                       ],
                     ),
                   ),
@@ -184,7 +184,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black87),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.85),
+        fillColor: Colors.white.withValues(alpha: 0.85),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black26),
           borderRadius: BorderRadius.circular(12),

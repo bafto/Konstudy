@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konstudy/controllers/auth/auth_notifier.dart';
-import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/view/pages/auth/auth_page.dart';
-import 'package:konstudy/view/pages/auth/verification_CallBack_Page.dart';
+import 'package:konstudy/view/pages/auth/verification_call_back_page.dart';
 import 'package:konstudy/view/pages/auth/verify_email_page.dart';
 import 'package:konstudy/view/pages/black_board/black_board_entry_page.dart';
 import 'package:konstudy/view/pages/black_board/create_black_board_entry_page.dart';
@@ -174,7 +173,6 @@ class NoteEditorPageRoute extends GoRouteData {
 }
 
 class UserProfileEditorPageRoute extends GoRouteData {
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return UserProfilEditPage();

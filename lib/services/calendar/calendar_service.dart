@@ -111,20 +111,17 @@ class CalendarService implements ICalendarService {
             ? event.toJson(userId: userId, groupId: groupId)
             : event.toJson(userId: userId);
 
-    final response = await _client.from('calendar_events').insert(insertData);
+    await _client.from('calendar_events').insert(insertData);
   }
 
   @override
   Future<void> deleteEvent(String eventId) async {
-    final response = await _client
-        .from('calendar_events')
-        .delete()
-        .eq('id', eventId);
+    await _client.from('calendar_events').delete().eq('id', eventId);
   }
 
   @override
   Future<void> updateEvent(CalendarEvent newEvent) async {
-    final response = await _client
+    await _client
         .from('calendar_events')
         .update(newEvent.toUpdateJson())
         .eq('id', newEvent.id);

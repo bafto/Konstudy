@@ -24,11 +24,7 @@ class BlackBoardControllerImpl extends ChangeNotifier
     }
 
     try {
-      return await _service
-          .createEntry(name, description, groupId, hashTags)
-          .catchError((e) {
-            debugPrint(e.toString());
-          });
+      return await _service.createEntry(name, description, groupId, hashTags);
     } catch (e) {
       debugPrint(e.toString());
       return Future.error(e);

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konstudy/controllers/editor/note_controller_provider.dart';
 import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/routes/app_routes.dart';
-import 'package:konstudy/controllers/editor/note_controller_provider.dart';
-
-
-
-
 
 class NoteCard extends ConsumerWidget {
   const NoteCard({required this.note, super.key});
@@ -39,40 +35,55 @@ class NoteCard extends ConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
-                  title: const Text('Löschen', style: TextStyle(color: Colors.red)),
+                  title: const Text(
+                    'Löschen',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   onTap: () {
                     Navigator.of(context).pop();
 
                     showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Notiz löschen?'),
-                        content: const Text('Willst du die Notiz wirklich löschen?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Abbrechen'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.of(context).pop(); // Dialog schließen
+                      builder:
+                          (context) => AlertDialog(
+                            title: const Text('Notiz löschen?'),
+                            content: const Text(
+                              'Willst du die Notiz wirklich löschen?',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('Abbrechen'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.of(
+                                    context,
+                                  ).pop(); // Dialog schließen
 
-                              try {
-                                await ref.read(noteControllerProvider).deleteNote(note.id);
+                                  try {
+                                    await ref
+                                        .read(noteControllerProvider)
+                                        .deleteNote(note.id);
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Notiz gelöscht')),
-                                );
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Fehler: $e')),
-                                );
-                              }
-                            },
-                            child: const Text('Löschen', style: TextStyle(color: Colors.red)),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Notiz gelöscht'),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Fehler: $e')),
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'Löschen',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
                     );
                   },
                 ),
