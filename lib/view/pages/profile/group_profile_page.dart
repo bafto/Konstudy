@@ -58,6 +58,11 @@ class _GroupProfilePageState extends ConsumerState<GroupProfilePage> {
                   if (value == 'Bearbeiten') {
                     debugPrint("Gruppe bearbeiten");
                     // TODO: Edit-Funktionalität hier ergänzen
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Feature wird noch eingebaut'),
+                      ),
+                    );
                   } else if (value == 'Löschen') {
                     debugPrint("Gruppe löschen");
                     groupsController.deleteGroup(widget.groupId);
