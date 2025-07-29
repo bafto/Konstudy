@@ -10,4 +10,5 @@ abstract class IAuthController extends StateNotifier<AsyncValue<User?>> {
   Future<void> logout();
   Future<void> handleVerificationCallBackAndRedirect(BuildContext context);
   User? get currentUser;
+  String? getCurrentUserId();
 }

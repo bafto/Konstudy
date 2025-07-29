@@ -32,4 +32,10 @@ class FakeAuthController extends StateNotifier<AsyncValue<User?>> implements IAu
     // TODO: implement signUp
     throw UnimplementedError();
   }
+
+  @override
+  String? getCurrentUserId() {
+    // TODO: implement getCurrentUserId
+    throw UnimplementedError();
+  }
 }

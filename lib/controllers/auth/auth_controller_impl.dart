@@ -69,4 +69,7 @@ class AuthControllerImpl extends StateNotifier<AsyncValue<User?>>
       rethrow; // Optional weiterwerfen, falls du das willst
     }
   }
+
+  @override
+  String? getCurrentUserId() => _authService.getCurrentUserId();
 }
