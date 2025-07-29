@@ -1,67 +1,51 @@
 import 'package:konstudy/models/black_board/black_board_entry.dart';
 import 'package:konstudy/services/black_board/iblack_board_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../auth/iauth_service.dart';
+import '../persistence/iblack_board_entries_repository.dart';
 
 class BlackBoardService implements IBlackBoardService {
-  final SupabaseClient _client = Supabase.instance.client;
+  final IBlackBoardEntriesRepository _repository;
+  final IAuthService _authService;
+
+  BlackBoardService(this._repository, this._authService);
 
   @override
   Future<List<BlackBoardEntry>> fetchEntries() async {
-    final groupIds = (await _client
-        .from('group_members')
-        .select()
-        .eq(
-          'user_id',
-          _client.auth.currentUser!.id,
-        )).map((e) => e['group_id'] as String);
-
-    final entriesResponse = await _client
-        .from('black_board_entries')
-        .select('*')
-        .neq('creatorId', _client.auth.currentUser!.id);
-
-    final entries = List<BlackBoardEntry>.from(
-      (entriesResponse as List).map(
-        (e) => BlackBoardEntry.fromJson(e as Map<String, dynamic>),
-      ),
-    );
-
-    // return entries;
-    return entries.where((e) => !groupIds.contains(e.groupId)).toList();
+    final userId = await _authService.getCurrentUserId();
+    if (userId == null) {
+      throw Exception('Kein eingeloggter Benutzer');
+    }
+    return _repository.fetchEntriesForUser(userId);
   }
 
   @override
   Future<BlackBoardEntry> createEntry(
-    String title,
-    String description,
-    String groupId,
-    List<String> hashTags,
-  ) async {
-    final userId = _client.auth.currentUser!.id;
+      String title,
+      String description,
+      String groupId,
+      List<String> hashTags,
+      ) async {
+    final userId = await _authService.getCurrentUserId();
+    if (userId == null) {
+      throw Exception('Kein eingeloggter Benutzer gefunden');
+    }
 
-    return BlackBoardEntry.fromJson(
-      await _client
-          .from('black_board_entries')
-          .insert({
-            'creatorId': userId,
-            'title': title,
-            'description': description,
-            'groupId': groupId,
-            'hashTags': hashTags,
-          })
-          .select()
-          .single(),
+    final entry = BlackBoardEntry(
+      id: '', // leer, wird von DB gesetzt
+      creatorId: userId,
+      title: title,
+      description: description,
+      groupId: groupId,
+      hashTags: hashTags,
     );
+
+    return _repository.createEntry(entry);
   }
 
   @override
-  Future<BlackBoardEntry> getEntryById({required String id}) async {
-    final result =
-        await _client
-            .from('black_board_entries')
-            .select('*')
-            .eq('id', id)
-            .single();
-    return BlackBoardEntry.fromJson(result);
+  Future<BlackBoardEntry> getEntryById({required String id}) {
+    return _repository.getEntryById(id);
   }
 }
+

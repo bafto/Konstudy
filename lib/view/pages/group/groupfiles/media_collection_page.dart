@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/groupfiles/group_file_controller_provider.dart';
+import 'package:konstudy/provider/group_file_provider.dart';
 import 'package:konstudy/view/widgets/cards/media_card.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';

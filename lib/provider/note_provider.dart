@@ -4,8 +4,11 @@ import 'package:konstudy/controllers/editor/note_controller.dart';
 import 'package:konstudy/services/editor/inote_service.dart';
 import 'package:konstudy/services/editor/note_service.dart';
 
+import 'app_provider.dart';
+
 final noteServiceProvider = Provider<INoteService>((ref) {
-  return NoteService();
+  final repo = ref.watch(noteRepositoryProvider);
+  return NoteService(repo);
 });
 
 final noteControllerProvider =

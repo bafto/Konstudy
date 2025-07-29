@@ -10,4 +10,7 @@ abstract class IAuthService {
   Future<void> exchangeSession(Uri uri);
 
   User? getCurrentUser();
+
+  String? getCurrentUserId();
+  String getJwtToken();
 }

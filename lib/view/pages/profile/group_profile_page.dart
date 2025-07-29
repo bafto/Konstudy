@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:konstudy/controllers/black_board/black_board_controller_provider.dart';
-import 'package:konstudy/controllers/profile/group/group_profil_controller_provider.dart';
-import 'package:konstudy/controllers/user_groups/user_groups_controller_provider.dart';
+import 'package:konstudy/provider/auth_provider.dart';
+import 'package:konstudy/provider/black_board_provider.dart';
+import 'package:konstudy/provider/group_profil_provider.dart';
+import 'package:konstudy/provider/user_groups_provider.dart';
 import 'package:konstudy/models/profile/group_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/cards/user_card.dart';

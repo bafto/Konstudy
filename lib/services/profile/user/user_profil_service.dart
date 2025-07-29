@@ -1,60 +1,45 @@
 import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/services/profile/user/iuser_profil_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:http/http.dart' as http;
+
+import '../../auth/iauth_service.dart';
+import '../../persistence/iusers_repository.dart';
 
 class UserProfilService implements IUserProfilService {
-  final supabase = Supabase.instance.client;
+  final IUserRepository _userRepository;
+  final IAuthService _authService; // Abstraktion für Auth (für currentUser etc)
+
+  UserProfilService(this._userRepository, this._authService);
 
   @override
   Future<UserProfil> fetchUserProfile({String? userId}) async {
-    final currentUserId = supabase.auth.currentUser?.id;
+    final currentUserId = _authService.getCurrentUserId();
     if (currentUserId == null) {
-      throw Exception("Nicht Eingeloggt");
+      throw Exception("Nicht eingeloggt");
     }
 
     final effectiveUserId = userId ?? currentUserId;
 
-    final response =
-        await supabase
-            .from('users')
-            .select()
-            .eq('id', effectiveUserId)
-            .single();
+
+    final userProfil = await _userRepository.fetchUserProfil(effectiveUserId);
 
     return UserProfil(
-      id: response['id'] as String,
-      name: response['name'] as String,
-      email: response['email'] as String,
-      description: response['description'] as String?,
-      profileImageUrl: response['avatar_url'] as String?,
+      id: userProfil.id,
+      name: userProfil.name,
+      email: userProfil.email,
+      description: userProfil.description,
+      profileImageUrl: userProfil.profileImageUrl,
       isCurrentUser: effectiveUserId == currentUserId,
     );
   }
 
   @override
   Future<bool> deleteOwnAccount() async {
-    // 1. Hole den aktuellen JWT (Access Token)
-    final jwt = supabase.auth.currentSession?.accessToken ?? '';
-
-    // 2. Endpoint der Edge Function aufrufen
-    final response = await http.post(
-      Uri.parse(
-        'https://vdwxhiuzrltxosgufkdu.supabase.co/functions/v1/delete_user',
-      ),
-      headers: {
-        'Authorization': 'Bearer $jwt',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    // 3. Ergebnis prüfen
-    if (response.statusCode == 200) {
-      await supabase.auth.signOut();
-      return true;
-    } else {
-      throw Exception('Fehler: ${response.body}');
+    final jwt = _authService.getJwtToken();
+    final success = await _userRepository.deleteOwnAccount(jwt);
+    if (success) {
+      await _authService.signOut();
     }
+    return success;
   }
 
   @override
@@ -64,18 +49,12 @@ class UserProfilService implements IUserProfilService {
     String? description,
     String? profileImageUrl,
   }) async {
-    final updates = <String, dynamic>{
-      'id': userId,
-      if (name != null) 'name': name,
-      if (description != null) 'description': description,
-      if (profileImageUrl != null) 'avatar_url': profileImageUrl,
-    };
-
-    await supabase
-        .from('users')
-        .update(updates)
-        .eq('id', userId)
-        .select()
-        .single();
+    await _userRepository.updateUserProfil(
+      userId: userId,
+      name: name,
+      description: description,
+      profileImageUrl: profileImageUrl,
+    );
   }
 }
+

@@ -4,8 +4,13 @@ import 'package:konstudy/controllers/profile/group/igroup_profil_controller.dart
 import 'package:konstudy/services/profile/group/group_profil_service.dart';
 import 'package:konstudy/services/profile/group/igroup_profil_service.dart';
 
+import 'app_provider.dart';
+import 'auth_provider.dart';
+
 final groupProfilServiceProvider = Provider<IGroupProfilService>((ref) {
-  return GroupProfilService();
+  final groupRepo = ref.watch(groupRepositoryProvider);
+  final authService = ref.watch(authServiceProvider);
+  return GroupProfilService(groupRepo, authService);
 });
 
 final groupProfilControllerProvider = Provider<IGroupProfilController>((ref) {

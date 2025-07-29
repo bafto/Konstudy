@@ -1,42 +1,36 @@
 import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/services/editor/inote_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../persistence/igroup_notes_repository.dart';
 
 class NoteService implements INoteService {
-  final SupabaseClient _client = Supabase.instance.client;
+  final IGroupNotesRepository _noteRepository;
+
+  NoteService(this._noteRepository);
 
   @override
-  Future<List<Note>> fetchNotes(String groupId) async {
-    final res = await _client
-        .from('group_notes')
-        .select()
-        .eq('group_id', groupId);
-
-    return (res as List)
-        .map((e) => Note.fromMap(e as Map<String, dynamic>))
-        .toList();
+  Future<List<Note>> fetchNotes(String groupId) {
+    return _noteRepository.getNotesForGroup(groupId);
   }
 
   @override
-  Future<Note> fetchNoteById(String id) async {
-    final response =
-        await _client.from('group_notes').select().eq('id', id).single();
-
-    return Note.fromMap(response);
+  Future<Note> fetchNoteById(String id) {
+    return _noteRepository.getNoteById(id);
   }
 
   @override
-  Future<void> addNote(Note note) async {
-    await _client.from('group_notes').insert(note.toMap());
+  Future<void> addNote(Note note) {
+    return _noteRepository.createNote(note);
   }
 
   @override
-  Future<void> updateNote(Note note) async {
-    await _client.from('group_notes').update(note.toMap()).eq('id', note.id);
+  Future<void> updateNote(Note note) {
+    return _noteRepository.updateNote(note);
   }
 
   @override
-  Future<void> deleteNote(String id) async {
-    await _client.from('group_notes').delete().eq('id', id);
+  Future<void> deleteNote(String id) {
+    return _noteRepository.deleteNote(id);
   }
 }
+

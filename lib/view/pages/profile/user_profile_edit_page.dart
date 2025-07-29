@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
-import 'package:konstudy/controllers/profile/user/user_profil_controller_provider.dart';
+import 'package:konstudy/provider/user_profil_provider.dart';
 
 class UserProfilEditPage extends ConsumerStatefulWidget {
   const UserProfilEditPage({super.key});

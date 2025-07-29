@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
+import 'package:konstudy/provider/auth_provider.dart';
 
 class VerificationCallBackPage extends ConsumerWidget {
   const VerificationCallBackPage({super.key});

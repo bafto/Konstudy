@@ -5,8 +5,13 @@ import 'package:konstudy/models/black_board/black_board_entry.dart';
 import 'package:konstudy/services/black_board/black_board_service.dart';
 import 'package:konstudy/services/black_board/iblack_board_service.dart';
 
+import 'app_provider.dart';
+import 'auth_provider.dart';
+
 final blackBoardServiceProvider = Provider<IBlackBoardService>((ref) {
-  return BlackBoardService(); //echte Implementierung
+  final repo = ref.watch(blackBoardRepositoryProvider);
+  final authService = ref.watch(authServiceProvider);
+  return BlackBoardService(repo, authService); //echte Implementierung
 });
 
 final blackBoardControllerProvider =
