@@ -4,7 +4,12 @@ class Note {
   final String title;
   final String content;
 
-  Note({required this.id, required this.groupId, required this.title, required this.content});
+  Note({
+    required this.id,
+    required this.groupId,
+    required this.title,
+    required this.content,
+  });
 
   factory Note.fromMap(Map<String, dynamic> map) => Note(
     id: map['id'] as String,

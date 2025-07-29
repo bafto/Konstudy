@@ -9,19 +9,20 @@ Future<bool?> showConfirmationDialog({
 }) {
   return showDialog<bool>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(title),
-      content: Text(content),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(cancelText),
+    builder:
+        (context) => AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(cancelText),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(confirmText),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(confirmText),
-        ),
-      ],
-    ),
   );
 }

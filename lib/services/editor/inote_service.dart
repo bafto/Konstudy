@@ -1,6 +1,6 @@
 import 'package:konstudy/models/editor/note.dart';
 
-abstract class INoteService{
+abstract class INoteService {
   Future<List<Note>> fetchNotes(String groupId);
   Future<Note> fetchNoteById(String id);
   Future<void> addNote(Note note);

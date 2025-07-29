@@ -125,7 +125,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     final confirmed = await showConfirmationDialog(
       context: context,
       title: 'Account löschen?',
-      content: 'Bist du sicher, dass du deinen Account löschen möchtest?\nAlle Gruppen in den du Admin bist werden auch gelöscht',
+      content:
+          'Bist du sicher, dass du deinen Account löschen möchtest?\nAlle Gruppen in den du Admin bist werden auch gelöscht',
       cancelText: 'Nein',
       confirmText: 'Ja',
     );
@@ -135,7 +136,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       controller.deleteAccount();
     }
   }
-
 }
 
 class _UserProfileContent extends StatelessWidget {
@@ -192,5 +192,4 @@ class _UserProfileContent extends StatelessWidget {
       ),
     );
   }
-
 }

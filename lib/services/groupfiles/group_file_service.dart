@@ -13,12 +13,12 @@ class GroupFileService implements IGroupFileService {
   final String subfolder = 'media';
 
   @override
-  Future<void> deleteFile(String filePath) async{
+  Future<void> deleteFile(String filePath) async {
     await _client.storage.from(bucket).remove([filePath]);
   }
 
   @override
-  Future<Uint8List?> downloadFile(String filePath) async{
+  Future<Uint8List?> downloadFile(String filePath) async {
     return await _client.storage.from(bucket).download(filePath);
   }
 
@@ -30,26 +30,29 @@ class GroupFileService implements IGroupFileService {
 
     if (response.isEmpty) return [];
 
-    return response.map((item) => Media(
-      fileName: item.name,
-      filePath: '$groupId/$subfolder/${item.name}',
-    )).toList();
+    return response
+        .map(
+          (item) => Media(
+            fileName: item.name,
+            filePath: '$groupId/$subfolder/${item.name}',
+          ),
+        )
+        .toList();
   }
 
   @override
-  Future<void> uploadFile(String groupId, File file) async{
-   final fileName = file.uri.pathSegments.last;
-   final filePath = '$groupId/$subfolder/$fileName';
+  Future<void> uploadFile(String groupId, File file) async {
+    final fileName = file.uri.pathSegments.last;
+    final filePath = '$groupId/$subfolder/$fileName';
 
-   final bytes = await file.readAsBytes();
+    final bytes = await file.readAsBytes();
 
-   await _client.storage
-       .from(bucket)
-       .uploadBinary(
+    await _client.storage
+        .from(bucket)
+        .uploadBinary(
           filePath,
           bytes,
           fileOptions: const FileOptions(upsert: true),
-       );
+        );
   }
-
 }

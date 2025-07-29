@@ -2,10 +2,7 @@ class Media {
   final String fileName;
   final String filePath;
 
-  Media({
-    required this.fileName,
-    required this.filePath,
-  });
+  Media({required this.fileName, required this.filePath});
 
   factory Media.fromJson(Map<String, dynamic> json) {
     return Media(

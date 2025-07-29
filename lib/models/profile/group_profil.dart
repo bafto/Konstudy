@@ -1,6 +1,6 @@
 import 'package:konstudy/models/profile/user_profil.dart';
 
-class GroupProfil{
+class GroupProfil {
   final String name;
   final String? description;
   final String? imageUrl;

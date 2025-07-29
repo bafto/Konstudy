@@ -8,7 +8,7 @@ final groupProfilServiceProvider = Provider<IGroupProfilService>((ref) {
   return GroupProfilService();
 });
 
-final groupProfilControllerProvider = Provider<IGroupProfilController>((ref){
+final groupProfilControllerProvider = Provider<IGroupProfilController>((ref) {
   final service = ref.read(groupProfilServiceProvider);
   return GroupProfilController(service);
 });

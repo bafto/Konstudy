@@ -12,11 +12,7 @@ class NoteEditorPage extends ConsumerStatefulWidget {
   final String? noteId;
   final String groupId;
 
-  const NoteEditorPage({
-    super.key,
-    required this.groupId,
-    this.noteId,
-  });
+  const NoteEditorPage({super.key, required this.groupId, this.noteId});
 
   @override
   ConsumerState<NoteEditorPage> createState() => _NoteEditorPageState();
@@ -28,7 +24,6 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
   bool _saving = false;
   bool _isLoading = true;
   Note? _note;
-
 
   @override
   void initState() {
@@ -69,7 +64,9 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
     setState(() => _saving = true);
     final controller = ref.read(noteControllerProvider);
 
-    final contentJson = jsonEncode(_quillController.document.toDelta().toJson());
+    final contentJson = jsonEncode(
+      _quillController.document.toDelta().toJson(),
+    );
 
     await controller.saveNotes(
       id: _note?.id,
@@ -85,9 +82,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -95,13 +90,14 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
         title: Text(_note == null ? 'Neue Notiz' : 'Notiz bearbeiten'),
         actions: [
           IconButton(
-            icon: _saving
-                ? const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-                : const Icon(Icons.save),
+            icon:
+                _saving
+                    ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                    : const Icon(Icons.save),
             onPressed: _saving ? null : _saveNote,
           ),
         ],
@@ -123,9 +119,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
                 controller: _quillController,
                 focusNode: FocusNode(),
                 scrollController: ScrollController(),
-                config: new QuillEditorConfig(
-                  autoFocus: true,
-                ),
+                config: new QuillEditorConfig(autoFocus: true),
               ),
             ),
           ],
@@ -134,5 +128,3 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
     );
   }
 }
-
-

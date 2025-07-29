@@ -168,14 +168,20 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
 
                   if (_startDateTime == null || _endDateTime == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Bitte Start- und Endzeit angeben')),
+                      const SnackBar(
+                        content: Text('Bitte Start- und Endzeit angeben'),
+                      ),
                     );
                     return;
                   }
 
                   if (_endDateTime!.isBefore(_startDateTime!)) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen')),
+                      const SnackBar(
+                        content: Text(
+                          'Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen',
+                        ),
+                      ),
                     );
                     return;
                   }
@@ -213,7 +219,6 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
                 },
                 child: const Text('Event speichern'),
               ),
-
             ],
           ),
         ),

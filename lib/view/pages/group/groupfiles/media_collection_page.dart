@@ -33,7 +33,7 @@ class _MedianCollectionPage extends ConsumerState<MedianCollectionPage> {
             itemBuilder: (context, index) {
               final m = media[index];
               return MediaCard(
-                filename: m.fileName, 
+                filename: m.fileName,
                 onDownload: () async {
                   await controller.downloadFile(m.filePath, m.fileName);
                 },
