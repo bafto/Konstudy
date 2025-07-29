@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konstudy/controllers/auth/auth_controller_provider.dart';
-import 'package:konstudy/controllers/profile/user/user_profil_controller_provider.dart';
+import 'package:konstudy/provider/auth_provider.dart';
+import 'package:konstudy/provider/user_profil_provider.dart';
 import 'package:konstudy/models/profile/user_profil.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/dialog/confirmation_dialog.dart';

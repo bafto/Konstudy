@@ -1,7 +1,7 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/calendar/calendar_controller_provider.dart';
+import 'package:konstudy/provider/calendar_provider.dart';
 import 'package:konstudy/models/calendar/repeat_type.dart';
 import 'package:konstudy/routes/app_routes.dart';
 import 'package:konstudy/view/widgets/views/custom_day_view.dart';

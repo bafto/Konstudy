@@ -6,7 +6,10 @@ import 'package:konstudy/view/pages/home/group_overview.dart';
 import 'package:konstudy/view/pages/calendar/calendar_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.pageBuilders});
+
+  /// Optional: zum Ersetzen einzelner Seiten im Test
+  final List<WidgetBuilder>? pageBuilders;
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
@@ -15,13 +18,14 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 1;
 
-  static const List<Widget> _pages = <Widget>[
-    CalendarPage(),
-    Groupoverview(),
-    BlackBoardPage(),
-  ];
+  late final List<WidgetBuilder> _pages = widget.pageBuilders ??
+      [
+            (context) => CalendarPage(),
+            (context) => Groupoverview(),
+            (context) => BlackBoardPage(),
+      ];
 
-  static const List<String> _titles = <String>[
+  static const List<String> _titles = [
     'Mein Kalender',
     'Gruppen',
     'Schwarzes Brett',
@@ -41,11 +45,11 @@ class _HomePageState extends ConsumerState<HomePage> {
         actions: [
           IconButton(
             onPressed: () => UserProfilePageRoute().push<void>(context),
-            icon: Icon(Icons.account_circle),
+            icon: const Icon(Icons.account_circle),
           ),
         ],
       ),
-      body: _pages[_selectedIndex],
+      body: _pages[_selectedIndex](context),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -54,7 +58,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             icon: Icon(Icons.today),
             label: 'Mein Kalender',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.groups), label: 'Gruppen'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups),
+            label: 'Gruppen',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sticky_note_2_rounded),
             label: 'Schwarzes Brett',

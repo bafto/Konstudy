@@ -39,4 +39,18 @@ class AuthService extends IAuthService {
 
   @override
   User? getCurrentUser() => _client.auth.currentUser;
+
+  @override
+  String? getCurrentUserId() {
+    return _client.auth.currentUser?.id;
+  }
+
+  @override
+  String getJwtToken() {
+    final token = _client.auth.currentSession?.accessToken;
+    if (token == null) {
+      throw Exception('Kein JWT Token vorhanden. User wahrscheinlich nicht eingeloggt.');
+    }
+    return token;
+  }
 }

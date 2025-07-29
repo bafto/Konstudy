@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konstudy/controllers/editor/note_controller_provider.dart';
+import 'package:konstudy/provider/note_provider.dart';
 import 'package:konstudy/models/editor/note.dart';
 import 'package:konstudy/routes/app_routes.dart';
 
